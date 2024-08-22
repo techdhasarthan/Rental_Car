@@ -1,0 +1,30 @@
+/* UserProfile.css */
+.icon-edit-save,button {
+    transition: color 0.3s ease;
+    color:#000d6b;
+
+  }
+  
+  .icon-edit-save:hover,
+  .icon-edit-save:focus,button {
+    color: white;
+  
+  }
+   .large-text {
+    font-size: 1.1rem; /* Adjust the size as needed */
+  }
+  .profile-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+  }
+  
+  .profile-header .btn {
+    display: flex;
+    align-items: center;
+  }
+  
+  .profile-header .btn i {
+    margin-right: 5px;
+  }
+  

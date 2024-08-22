@@ -1,0 +1,67 @@
+.contact__btn {
+  padding: 12px 20px; /* Increase padding for better appearance */
+  background: #000d6b; /* Keep the background color */
+  color: #fff; /* Text color */
+  border: none;
+  outline: none;
+  border-radius: 5px; /* Rounded corners */
+  font-size: 1rem; /* Font size for button text */
+  font-weight: 500; /* Slightly bolder text */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.contact__btn:hover {
+  background: #002f6c; /* Darker background on hover */
+}
+
+@media only screen and (max-width: 768px) {
+  .contact__btn {
+    margin-bottom: 40px;
+    font-size: 0.9rem; /* Slightly adjusted font size on smaller screens */
+  }
+}
+.contact__form {
+  margin-bottom: 15px; /* Space between form fields */
+}
+
+.contact__form .textarea {
+  resize: none; /* Disable resizing of text area */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px; /* Padding inside the text area */
+  font-size: 1.1rem;
+  border-color: gray;
+  color: black;
+  width: 100%;
+
+}
+.contact__form .input {
+  resize: none; /* Disable resizing of text area */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px; /* Padding inside the text area */
+  font-size: 1rem;
+  border-color: gray;
+
+}
+
+.contact__info {
+  margin-top: 20px;
+}
+
+.contact__info p, .contact__info h6 {
+  margin-bottom: 10px; /* Space below paragraphs and headings */
+}
+
+.social__link-icon {
+  color: #000d6b; /* Color for social icons */
+  font-size: 1.5rem; /* Adjust size of social icons */
+  text-decoration: none;
+  transition: color 0.3s ease; /* Smooth color transition */
+}
+.social__link-icon {
+  transition: color 0.3s ease, transform 0.3s ease; /* Adjust duration and easing as needed */
+}
+.social__link-icon:hover {
+  color: #002f6c; /* Darker color on hover */
+  transform: translateY(-5px);
+}
