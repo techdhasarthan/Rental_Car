@@ -2,6 +2,12 @@
   border: 1px solid #7c8a9736;
   padding: 20px;
   border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.car__item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .car__item-info span i {
@@ -26,13 +32,14 @@
 .car__item-btn a:hover {
   color: #fff;
 }
+
 .car__btn-details {
   background: #f9a826;
-  border-radius:  4px 4px ;
+  border-radius: 4px 4px;
 }
 
 .car__btn-rent {
-  border-radius: 4px 0px ;
+  border-radius: 4px 0px;
 }
 
 .car__item-content h4 {

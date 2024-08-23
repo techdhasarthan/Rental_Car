@@ -1,21 +1,44 @@
-import React, { useEffect ,useState} from "react";
-import { Link , useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios"; // Import axios for API requests
 
 const SignIn = () => {
+  const backendUrl = process.env.Backend_URL;
 
   const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const [user, setUser] = useState({
+    phoneNumber: "",
+    password: "",
+  });
 
-    const handleSubmit = (event) => {
-        event.preventDefault(); // Prevent default form submission
-        setLoading(true); // Show loading message
+  const navigate = useNavigate();
 
-        // Simulate a 2-second delay
-        setTimeout(() => {
-            setLoading(false); // Hide loading message
-            navigate('/home'); // Redirect to /home
-        }, 2000);
-    };
+  const handleInputChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault(); // Prevent default form submission
+    setLoading(true); // Show loading message
+    setError(""); // Reset error message
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/auth/signin",
+        user
+      );
+      setLoading(false); // Hide loading message
+
+      // If successful, redirect to the home page
+      if (response.status === 200) {
+        navigate("/home", { state: { user: response.data } }); // Pass user data to the home page
+      }
+    } catch (error) {
+      setLoading(false); // Hide loading message
+      setError("Invalid phone number or password. Please try again.");
+    }
+  };
 
   useEffect(() => {
     // Get all input fields with labels
@@ -37,11 +60,9 @@ const SignIn = () => {
         <div className="inner-box">
           <div className="forms-wrap">
             <form
-              action="index.html"
               autoComplete="off"
               className="sign-in-form froms"
-              onSubmit={handleSubmit}
-            >
+              onSubmit={handleSubmit}>
               <div className="heading">
                 <h2>Welcome Back</h2>
                 <h6>Not registered yet?</h6>
@@ -50,35 +71,41 @@ const SignIn = () => {
               <div className="actual-form">
                 <div className="input-wrap">
                   <input
-                    type="text"
-                    minLength="4"
+                    type="tel"
+                    name="phoneNumber"
                     className="input-field"
                     autoComplete="off"
                     required
                     placeholder=" "
+                    value={user.phoneNumber}
+                    onChange={handleInputChange}
                   />
                   <label className="label" htmlFor="input">
-                    Name
+                    Phone Number
                   </label>
                 </div>
                 <div className="input-wrap">
                   <input
                     type="password"
+                    name="password"
                     minLength="4"
                     className="input-field"
                     autoComplete="off"
                     required
                     placeholder=" "
+                    value={user.password}
+                    onChange={handleInputChange}
                   />
                   <label className="label" htmlFor="input">
                     Password
                   </label>
                 </div>
-             
-          
+
                 <input type="submit" value="Sign In" className="sign-btn" />
-        
-               {loading && <div className="loading ">Signing in, please wait...</div>}
+                {loading && (
+                  <div className="loading ">Signing in, please wait...</div>
+                )}
+                {error && <div className="error">{error}</div>}
 
                 <p className="text  mt-3">
                   Forgotten your password or your login details?&nbsp;

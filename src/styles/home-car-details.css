@@ -1,0 +1,48 @@
+.location-selector-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    /* Aligns the select element to the right */
+    width: 100%;
+    /* Make sure the container takes the full width */
+    padding: 10px;
+    /* Optional: Add some padding */
+}
+
+.location-selector-item i {
+    font-size: 18px;
+    color: #fff;
+    margin-right: 8px;
+}
+
+.location-selector-item select {
+    border: none;
+    outline: none;
+    font-size: 16px;
+    border-radius: 5px;
+    background-color: #000d6b;
+    color: #fff;
+    cursor: pointer;
+    flex: 0;
+    /* Remove flex to prevent expansion */
+    padding: 10px;
+    margin-left: 10px;
+}
+
+.location-selector-item option {
+    padding: 8px;
+    background-color: #fff;
+    color: #000d6b;
+    font-size: 16px;
+}
+
+/* Optionally, add some styles for hover and focus */
+.location-selector-item option:hover {
+    background-color: #fff;
+    color: #000d6b;
+}
+
+.location-selector-item select:focus option {
+    background-color: #fff;
+    color: #000d6b;
+}

@@ -14,9 +14,9 @@ import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/CommonSection";
 import "remixicon/fonts/remixicon.css"; // Import Remix Icons stylesheet
 import "./UserProfile.css"; // Import your CSS file
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 const UserProfile = () => {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
@@ -24,8 +24,8 @@ const UserProfile = () => {
     name: "Kp Naveen",
     email: "kpnaveen1312@gmail.com",
     phone: "7339 510 541",
-    age:23,
-    alt_phone:'',
+    age: 23,
+    alt_phone: "",
   });
   const [originalUserInfo, setOriginalUserInfo] = useState(userInfo); // Store original user info for cancel
 
@@ -43,9 +43,9 @@ const UserProfile = () => {
 
   const handleSave = () => {
     setIsEditing(false);
-    toast.success('Profile updated successfully!', {
+    toast.success("Profile updated successfully!", {
       autoClose: 2000, // Show toast for 2 seconds
-      className: 'custom-toast', // Apply custom class for styling
+      className: "custom-toast", // Apply custom class for styling
     });
     // You would usually also send updated info to the server here
   };
@@ -55,13 +55,12 @@ const UserProfile = () => {
   };
   const handleSignOut = () => {
     // Logic for sign out
-    toast.error('Signed out successfully!',{
+    toast.error("Signed out successfully!", {
       autoClose: 1000,
     });
     setTimeout(() => {
       navigate("/sign-in");
-  }, 2000);
-    
+    }, 2000);
   };
 
   return (
@@ -69,7 +68,7 @@ const UserProfile = () => {
       <CommonSection title="Profile" />
       <section className="profile-section py-5">
         <Container>
-        <div className="profile-header">
+          <div className="profile-header">
             <Button color="warning" onClick={handleSignOut}>
               <i className="ri-logout-box-line"></i> Sign Out
             </Button>
@@ -81,31 +80,27 @@ const UserProfile = () => {
                   <h4 className="fw-bold mb-4">
                     Your Profile Information
                     {isEditing ? (
-                    <Button
-                      color="link"
-                      onClick={handleCancel}
-                      className="float-end button"
-                    >
-                     
+                      <Button
+                        color="link"
+                        onClick={handleCancel}
+                        className="float-end button">
                         <i
                           className="ri-close-fill icon-edit-save"
-                          aria-label="Cancel profile"
-                        ></i> </Button>
-                      ) : (
-                        <Button
-                      color="link"
-                      onClick={handleEditClick}
-                      className="float-end button"
-                    >
+                          aria-label="Cancel profile"></i>{" "}
+                      </Button>
+                    ) : (
+                      <Button
+                        color="link"
+                        onClick={handleEditClick}
+                        className="float-end button">
                         <i
                           className="ri-edit-2-fill icon-edit-save"
-                          aria-label="Edit profile"
-                        ></i>  </Button>
-                      )}
-                  
+                          aria-label="Edit profile"></i>{" "}
+                      </Button>
+                    )}
                   </h4>
                   {isEditing ? (
-                    <div  class="large-text px-4">
+                    <div class="large-text px-4">
                       <FormGroup className="mb-2">
                         <Label for="name">
                           <strong>Name:</strong>{" "}
@@ -134,7 +129,7 @@ const UserProfile = () => {
                       </FormGroup>
                       <FormGroup className="mb-2">
                         <Label for="phone">
-                          <strong>   Phone:</strong>{" "}
+                          <strong> Phone:</strong>{" "}
                         </Label>
                         <Input
                           type="text"
@@ -147,7 +142,7 @@ const UserProfile = () => {
                       </FormGroup>
                       <FormGroup className="mb-2">
                         <Label for="Alt phone">
-                          <strong>  Alternate Phone:</strong>{" "}
+                          <strong> Alternate Phone:</strong>{" "}
                         </Label>
                         <Input
                           type="text"
@@ -174,30 +169,29 @@ const UserProfile = () => {
                       <div className="d-flex justify-content-end">
                         <button
                           className="contact__btn me-2"
-                          onClick={handleSave}
-                        >
+                          onClick={handleSave}>
                           Update Changes
                         </button>
                       </div>
                     </div>
                   ) : (
                     <div class="large-text  px-4">
-                    <p>
-                      <strong>Name:</strong> {userInfo.name}
-                    </p>
-                    <p>
-                      <strong>Age:</strong> {userInfo.age}
-                    </p>
-                    <p>
-                      <strong>Phone:</strong> {userInfo.phone}
-                    </p>
-                    <p>
-                      <strong>Alternate Phone:</strong> {userInfo.alt_phone}
-                    </p>
-                    <p>
-                      <strong>Email:</strong> {userInfo.email}
-                    </p>
-                  </div>
+                      <p>
+                        <strong>Name:</strong> {userInfo.name}
+                      </p>
+                      <p>
+                        <strong>Age:</strong> {userInfo.age}
+                      </p>
+                      <p>
+                        <strong>Phone:</strong> {userInfo.phone}
+                      </p>
+                      <p>
+                        <strong>Alternate Phone:</strong> {userInfo.alt_phone}
+                      </p>
+                      <p>
+                        <strong>Email:</strong> {userInfo.email}
+                      </p>
+                    </div>
                   )}
                 </CardBody>
               </Card>

@@ -1,32 +1,49 @@
-import React, { useEffect ,useState} from "react";
-import { Link , useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/signup.css";
 
 const SignUp = () => {
+  const backendUrl = process.env.Backend_URL;
 
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState({
+    name: "",
+    phoneNumber: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-      event.preventDefault(); // Prevent default form submission
-      setLoading(true); // Show loading message
-
-      // Simulate a 2-second delay
-      setTimeout(() => {
-          setLoading(false); // Hide loading message
-          navigate('/home'); // Redirect to /home
-      }, 2000);
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setUser({ ...user, [name]: value });
   };
-  useEffect(() => {
-    // Get all input fields with labels
-    const inputs = document.querySelectorAll(".input-field");
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setLoading(true);
 
-    // Iterate over each input field
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/auth/signup", // Ensure the correct URL
+        user
+      );
+      console.log("Sign-up successful:", response.data);
+      setLoading(false);
+      navigate("/home"); // Redirect to /home on successful sign-up
+    } catch (error) {
+      console.error("Sign-up failed:", error.response || error.message);
+      setError("Sign-up failed. Please try again.");
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const inputs = document.querySelectorAll(".input-field");
     inputs.forEach((input) => {
-      const label = input.nextElementSibling; // Get the associated label
-      // Check if input already has a value
+      const label = input.nextElementSibling;
       if (input.value.trim() !== "") {
-        label.classList.add("active"); // Add 'active' class to label
+        label.classList.add("active");
       }
     });
   }, []);
@@ -37,53 +54,69 @@ const SignUp = () => {
         <div className="inner-box">
           <div className="forms-wrap">
             <form
-              action="index.html"
               autoComplete="off"
-              className="sign-in-form    froms"
-              onSubmit={handleSubmit}
-            >
+              className="sign-in-form froms"
+              onSubmit={handleSubmit}>
               <div className="heading">
                 <h2>Get Started</h2>
                 <h6>Already have an account?</h6>
-                &nbsp; <Link to="/sign-in">Sign in</Link>
+                <Link to="/sign-in">Sign in</Link>
               </div>
               <div className="actual-form">
                 <div className="input-wrap">
                   <input
                     type="text"
                     className="input-field"
-                    id="input"
+                    id="name"
+                    name="name"
                     required
-                    placeholder=" " // Empty placeholder to enable `:placeholder-shown` selector
+                    placeholder=" "
+                    value={user.name}
+                    onChange={handleInputChange}
                   />
-                  <label    className='label' htmlFor="input">Name</label>
+                  <label className="label" htmlFor="name">
+                    Name
+                  </label>
                 </div>
                 <div className="input-wrap">
                   <input
                     type="tel"
                     className="input-field"
-                    autoComplete="off"
-                    placeholder=" "
+                    id="phoneNumber"
+                    name="phoneNumber"
                     required
+                    placeholder=" "
+                    value={user.phoneNumber}
+                    onChange={handleInputChange}
                   />
-                  <label className='label'   htmlFor="input">Phone   Number</label>
+                  <label className="label" htmlFor="phoneNumber">
+                    Phone Number
+                  </label>
                 </div>
                 <div className="input-wrap">
                   <input
                     type="password"
                     minLength="4"
                     className="input-field"
-                    autoComplete="off"
+                    id="password"
+                    name="password"
                     required
                     placeholder=" "
+                    value={user.password}
+                    onChange={handleInputChange}
                   />
-                  <label className='label'   htmlFor="input">Password</label>
+                  <label className="label" htmlFor="password">
+                    Password
+                  </label>
                 </div>
                 <input type="submit" value="Sign Up" className="sign-btn" />
-                {loading && <div className="loading ">Signing up, please wait...</div>}
+                {loading && (
+                  <div className="loading">Signing up, please wait...</div>
+                )}
+                {error && <div className="error">{error}</div>}
                 <p className="text">
-                  By signing up, I agree to the &nbsp;
-                  <Link to="#">Terms of Services</Link> and &nbsp;
+                  By signing up, I agree to the{" "}
+                  <Link to="#">Terms of Services</Link> and{" "}
                   <Link to="#">Privacy Policy</Link>
                 </p>
               </div>
@@ -91,10 +124,9 @@ const SignUp = () => {
           </div>
         </div>
         <div className="car-rental-info ">
-  <h3 className="mb-4">Car Rental Specials(Replace  by  Lionea)  </h3>
-
-  <p  className="mt-4">Check out our latest deals on car rentals!</p>
-</div>
+          <h3 className="mb-4">Car Rental Specials</h3>
+          <p className="mt-4">Check out our latest deals on car rentals!</p>
+        </div>
       </div>
     </main>
   );
