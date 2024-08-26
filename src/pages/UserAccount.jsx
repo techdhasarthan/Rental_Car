@@ -17,14 +17,15 @@ import "./UserProfile.css"; // Import your CSS file
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+
 const UserProfile = () => {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [userInfo, setUserInfo] = useState({
-    name: "Kp Naveen",
-    email: "kpnaveen1312@gmail.com",
-    phone: "7339 510 541",
-    age: 23,
+    name: "",
+    email: "",
+    phone: "",
+    age: "",
     alt_phone: "",
   });
   const [originalUserInfo, setOriginalUserInfo] = useState(userInfo); // Store original user info for cancel
@@ -41,18 +42,40 @@ const UserProfile = () => {
     setUserInfo({ ...userInfo, [name]: value });
   };
 
-  const handleSave = () => {
-    setIsEditing(false);
-    toast.success("Profile updated successfully!", {
-      autoClose: 2000, // Show toast for 2 seconds
-      className: "custom-toast", // Apply custom class for styling
-    });
-    // You would usually also send updated info to the server here
+  const handleSave = async () => {
+    try {
+      const response = await fetch(
+        "Yhttp://192.168.1.18:2024/cars/insertCars",
+        {
+          method: "PUT", // or 'POST' depending on your API
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userInfo),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update profile");
+      }
+
+      setIsEditing(false);
+      toast.success("Profile updated successfully!", {
+        autoClose: 2000, // Show toast for 2 seconds
+        className: "custom-toast", // Apply custom class for styling
+      });
+    } catch (error) {
+      toast.error("Failed to update profile. Please try again.", {
+        autoClose: 3000, // Show toast for 3 seconds
+      });
+    }
   };
+
   const handleCancel = () => {
     setUserInfo(originalUserInfo); // Revert to the original user info
     setIsEditing(false);
   };
+
   const handleSignOut = () => {
     // Logic for sign out
     toast.error("Signed out successfully!", {
@@ -100,7 +123,7 @@ const UserProfile = () => {
                     )}
                   </h4>
                   {isEditing ? (
-                    <div class="large-text px-4">
+                    <div className="large-text px-4">
                       <FormGroup className="mb-2">
                         <Label for="name">
                           <strong>Name:</strong>{" "}
@@ -124,7 +147,7 @@ const UserProfile = () => {
                           name="age"
                           value={userInfo.age}
                           onChange={handleInputChange}
-                          placeholder="Enter your phone number"
+                          placeholder="Enter your age"
                         />
                       </FormGroup>
                       <FormGroup className="mb-2">
@@ -150,7 +173,7 @@ const UserProfile = () => {
                           name="alt_phone"
                           value={userInfo.alt_phone}
                           onChange={handleInputChange}
-                          placeholder="Enter your Alternate phone number"
+                          placeholder="Enter your alternate phone number"
                         />
                       </FormGroup>
                       <FormGroup className="mb-2">
@@ -175,7 +198,7 @@ const UserProfile = () => {
                       </div>
                     </div>
                   ) : (
-                    <div class="large-text  px-4">
+                    <div className="large-text px-4">
                       <p>
                         <strong>Name:</strong> {userInfo.name}
                       </p>
