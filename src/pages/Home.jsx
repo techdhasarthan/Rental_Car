@@ -10,6 +10,7 @@ import carData from "../assets/data/carData"; // Ensure carData is correctly imp
 import CarItem from "../components/UI/CarItem";
 import BecomeDriverSection from "../components/UI/BecomeDriverSection";
 import Testimonial from "../components/UI/Testimonial";
+import { Link } from "react-router-dom";
 
 const faqs = [
   // ... your FAQ data
@@ -127,12 +128,49 @@ const Home = () => {
                   ))}
                 </select>
               </div>
-
-              {/*----------------------------------------------Filter Ends-------------------------------------------*/}
             </Col>
 
+            {/*----------------------------------------------Filter Ends-------------------------------------------*/}
             {filteredCars.length > 0 ? (
-              filteredCars.map((item) => <CarItem item={item} key={item.id} />)
+              filteredCars.map((item) => (
+                <Col lg="4" md="4" sm="6" className="mb-5">
+                  <div className="car__item">
+                    <div className="car__img">
+                      <img src={item.imgUrl} alt="" className="w-100" />
+                    </div>
+
+                    <div className="car__item-content mt-4">
+                      <h4 className="section__title text-center">
+                        {item.carName}
+                      </h4>
+                      <h6 className="rent__price text-center mt-2">
+                        Rs. {item.price}.00 <span>/ Day</span>
+                      </h6>
+
+                      <div className="car__item-info d-flex align-items-center justify-content-between mt-3 mb-4">
+                        <span className="d-flex align-items-center gap-1">
+                          <i className="ri-wheelchair-line"></i> {item.no_seat}{" "}
+                          Seats
+                        </span>
+                        <span className="d-flex align-items-center gap-1">
+                          <i className="ri-settings-2-line"></i>{" "}
+                          {item.transmission_type}
+                        </span>
+                        <span className="d-flex align-items-center gap-1">
+                          <i className="ri-drop-line"></i> {item.oil}
+                        </span>
+                      </div>
+
+                      {/* Button to navigate to car details page */}
+                      <Link to={`/cars`}>
+                        <button className="w-100 car__item-btn car__btn-details text-white">
+                          Enquiry Now
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
+                </Col>
+              ))
             ) : (
               <Col lg="12" className="text-center">
                 <p>No cars available for the selected location.</p>
