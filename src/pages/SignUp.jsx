@@ -25,7 +25,9 @@ const SignUp = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/auth/signup", // Ensure the correct URL
+        //   "http://localhost:8080/api/auth/signup", // Ensure the correct URL
+        //   user
+        "http://192.168.1.18:2024/cars/insertCars",
         user
       );
       console.log("Sign-up successful:", response.data);
