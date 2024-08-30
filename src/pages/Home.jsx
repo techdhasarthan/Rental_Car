@@ -7,7 +7,6 @@ import FindCarForm from "../components/UI/FindCarForm";
 import AboutSection from "../components/UI/AboutSection";
 import ServicesList from "../components/UI/ServicesList";
 import carData from "../assets/data/carData"; // Ensure carData is correctly imported
-import CarItem from "../components/UI/CarItem";
 import BecomeDriverSection from "../components/UI/BecomeDriverSection";
 import Testimonial from "../components/UI/Testimonial";
 import { Link } from "react-router-dom";
@@ -129,7 +128,6 @@ const Home = () => {
                 </select>
               </div>
             </Col>
-
             {/*----------------------------------------------Filter Ends-------------------------------------------*/}
             {filteredCars.length > 0 ? (
               filteredCars.map((item) => (
@@ -161,8 +159,8 @@ const Home = () => {
                         </span>
                       </div>
 
-                      {/* Button to navigate to car details page */}
-                      <Link to={`/cars`}>
+                      {/* Button to navigate to car page */}
+                      <Link to="/cars">
                         <button className="w-100 car__item-btn car__btn-details text-white">
                           Enquiry Now
                         </button>

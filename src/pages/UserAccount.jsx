@@ -19,15 +19,16 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
+  const responseData = JSON.parse(localStorage.getItem("userData") || "{}");
+
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [userInfo, setUserInfo] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    age: "",
-    alt_phone: "",
+    Name: responseData.name || "",
+    PhoneNumber: responseData.phoneNumber || "",
   });
+
+  console.log(responseData);
   const [originalUserInfo, setOriginalUserInfo] = useState(userInfo); // Store original user info for cancel
 
   const handleEditClick = () => {
@@ -44,16 +45,13 @@ const UserProfile = () => {
 
   const handleSave = async () => {
     try {
-      const response = await fetch(
-        "Yhttp://192.168.1.18:2024/cars/insertCars",
-        {
-          method: "PUT", // or 'POST' depending on your API
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(userInfo),
-        }
-      );
+      const response = await fetch("http://localhost:8080/api/auth/update", {
+        method: "PUT", // or 'POST' depending on your API
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userInfo),
+      });
 
       if (!response.ok) {
         throw new Error("Failed to update profile");
@@ -68,6 +66,8 @@ const UserProfile = () => {
       toast.error("Failed to update profile. Please try again.", {
         autoClose: 3000, // Show toast for 3 seconds
       });
+    } finally {
+      localStorage.clear();
     }
   };
 
@@ -200,13 +200,13 @@ const UserProfile = () => {
                   ) : (
                     <div className="large-text px-4">
                       <p>
-                        <strong>Name:</strong> {userInfo.name}
+                        <strong>Name:</strong> {userInfo.Name}
                       </p>
                       <p>
                         <strong>Age:</strong> {userInfo.age}
                       </p>
                       <p>
-                        <strong>Phone:</strong> {userInfo.phone}
+                        <strong>Phone:</strong> {userInfo.PhoneNumber}
                       </p>
                       <p>
                         <strong>Alternate Phone:</strong> {userInfo.alt_phone}
