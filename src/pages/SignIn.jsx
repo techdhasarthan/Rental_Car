@@ -32,7 +32,9 @@ const SignIn = () => {
 
       // If successful, redirect to the home page
       if (response.status === 200) {
-        navigate("/home", { state: { user: response.data } }); // Pass user data to the home page
+        localStorage.setItem("userData", JSON.stringify(response.data)); // Store user data in local storage
+        navigate("/user-account", { state: { user: response.data } }); // Pass user data to the user profile page
+        alert(localStorage.getItem("userData"));
       }
     } catch (error) {
       setLoading(false); // Hide loading message
