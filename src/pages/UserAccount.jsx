@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Row,
@@ -17,19 +17,41 @@ import "./UserProfile.css"; // Import your CSS file
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const UserProfile = () => {
-  const responseData = JSON.parse(localStorage.getItem("userData") || "{}");
-
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [userInfo, setUserInfo] = useState({
-    Name: responseData.name || "",
-    PhoneNumber: responseData.phoneNumber || "",
+    Name: "",
+    PhoneNumber: "",
+    age: "",
+    alt_phone: "",
+    email: "",
   });
+  const [originalUserInfo, setOriginalUserInfo] = useState(userInfo);
 
-  console.log(responseData);
-  const [originalUserInfo, setOriginalUserInfo] = useState(userInfo); // Store original user info for cancel
+  useEffect(() => {
+    // Fetch user data from localStorage and set state
+    const fetchData = async () => {
+      const responseData = JSON.parse(localStorage.getItem("userData") || "{}");
+      setUserInfo({
+        Name: responseData.name || "",
+        PhoneNumber: responseData.phoneNumber || "",
+        age: responseData.age || "",
+        alt_phone: responseData.alt_phone || "",
+        email: responseData.email || "",
+      });
+      setOriginalUserInfo({
+        Name: responseData.name || "",
+        PhoneNumber: responseData.phoneNumber || "",
+        age: responseData.age || "",
+        alt_phone: responseData.alt_phone || "",
+        email: responseData.email || "",
+      });
+    };
+    fetchData();
+  }, []);
 
   const handleEditClick = () => {
     setIsEditing(!isEditing);
@@ -45,29 +67,30 @@ const UserProfile = () => {
 
   const handleSave = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/auth/update", {
-        method: "PUT", // or 'POST' depending on your API
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userInfo),
-      });
+      const response = await axios.put(
+        `http://localhost:8080/api/auth/update/${userInfo.PhoneNumber}`,
+        userInfo,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      if (!response.ok) {
+      if (response.status === 200) {
+        setIsEditing(false);
+        toast.success("Profile updated successfully!", {
+          autoClose: 2000,
+          className: "custom-toast",
+        });
+        localStorage.setItem("userData", JSON.stringify(userInfo));
+      } else {
         throw new Error("Failed to update profile");
       }
-
-      setIsEditing(false);
-      toast.success("Profile updated successfully!", {
-        autoClose: 2000, // Show toast for 2 seconds
-        className: "custom-toast", // Apply custom class for styling
-      });
     } catch (error) {
       toast.error("Failed to update profile. Please try again.", {
-        autoClose: 3000, // Show toast for 3 seconds
+        autoClose: 3000,
       });
-    } finally {
-      localStorage.clear();
     }
   };
 
@@ -131,8 +154,8 @@ const UserProfile = () => {
                         <Input
                           type="text"
                           id="name"
-                          name="name"
-                          value={userInfo.name}
+                          name="Name"
+                          value={userInfo.Name}
                           onChange={handleInputChange}
                           placeholder="Enter your name"
                         />
@@ -152,20 +175,20 @@ const UserProfile = () => {
                       </FormGroup>
                       <FormGroup className="mb-2">
                         <Label for="phone">
-                          <strong> Phone:</strong>{" "}
+                          <strong>Phone:</strong>{" "}
                         </Label>
                         <Input
                           type="text"
                           id="phone"
-                          name="phone"
-                          value={userInfo.phone}
+                          name="PhoneNumber"
+                          value={userInfo.PhoneNumber}
                           onChange={handleInputChange}
                           placeholder="Enter your phone number"
                         />
                       </FormGroup>
                       <FormGroup className="mb-2">
-                        <Label for="Alt phone">
-                          <strong> Alternate Phone:</strong>{" "}
+                        <Label for="alt_phone">
+                          <strong>Alternate Phone:</strong>{" "}
                         </Label>
                         <Input
                           type="text"
