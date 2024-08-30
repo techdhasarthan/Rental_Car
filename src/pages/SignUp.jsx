@@ -25,14 +25,14 @@ const SignUp = () => {
 
     try {
       const response = await axios.post(
-        //   "http://localhost:8080/api/auth/signup", // Ensure the correct URL
-        //   user
-        "http://192.168.1.18:2024/cars/insertCars",
+        "http://localhost:8080/api/auth/signup", // Ensure the correct URL
         user
+        // "http://192.168.1.18:2024/cars/insertCars",
+        // user
       );
       console.log("Sign-up successful:", response.data);
       setLoading(false);
-      navigate("/home"); // Redirect to /home on successful sign-up
+      navigate("/sign-in"); // Redirect to /home on successful sign-up
     } catch (error) {
       console.error("Sign-up failed:", error.response || error.message);
       setError("Sign-up failed. Please try again.");
