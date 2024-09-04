@@ -1,0 +1,45 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.button {
+    background-color: #f0ad4e;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.icon {
+    font-size: 50px;
+    color: #4285f4;
+
+}
+
+.dropdown {
+    width: 100%;
+}
+
+.select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.booking_options {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 1px;
+
+}
