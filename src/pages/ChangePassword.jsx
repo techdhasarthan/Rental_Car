@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, Form, FormGroup, Label, Input, Alert } from "reactstrap";
 import axios from "axios";
+import "./Document.css";
 
 const ChangePassword = () => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -69,10 +70,11 @@ const ChangePassword = () => {
         />
       </FormGroup>
       <div className="pb-3">
-        <Button color="warning" type="submit">
-          Change Password
+        <Button color="warning" type="submit" className="btn-with-icon">
+          <i class="ri-send-plane-fill"></i>Submit
         </Button>
       </div>
+
       {message && (
         <Alert color="success" className="mt-3">
           {message}

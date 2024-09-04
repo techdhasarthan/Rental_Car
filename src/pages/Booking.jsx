@@ -9,6 +9,7 @@ import {
   TabPane,
 } from "reactstrap";
 import classnames from "classnames";
+import "./Document.css";
 
 const Booking = () => {
   // State to manage active tab
@@ -32,8 +33,8 @@ const Booking = () => {
             className={classnames({ active: activeTab === "1" })}
             onClick={() => toggle("1")}
             style={{ cursor: "pointer" }}>
-            <Button color="warning">
-              <i className="fas fa-users"></i> Upcoming Bookings
+            <Button color="warning" className="btn-with-icon">
+              <i className="ri-calendar-fill"></i> Upcoming Bookings
             </Button>
           </NavLink>
         </NavItem>
@@ -42,8 +43,8 @@ const Booking = () => {
             className={classnames({ active: activeTab === "2" })}
             onClick={() => toggle("2")}
             style={{ cursor: "pointer" }}>
-            <Button color="warning">
-              <i className="fas fa-users"></i> Completed
+            <Button color="warning" className="btn-with-icon">
+              <i className="ri-calendar-check-fill"></i> Completed
             </Button>
           </NavLink>
         </NavItem>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Document.css";
 
 import { Container, Button } from "reactstrap";
-
+import "remixicon/fonts/remixicon.css";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import axios from "axios"; // Import axios for making HTTP requests
@@ -63,7 +63,7 @@ const Document = () => {
           <h4 className="profile-section fw-bold  ">Document</h4>
         </div>
         <Button color="warning" className="btn-4" onClick={handleShow}>
-          Upload
+          <i className="ri-file-upload-line"></i> Upload
         </Button>
 
         {/* Modal */}
