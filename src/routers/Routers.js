@@ -15,7 +15,7 @@ import UserAccount from "../pages/UserAccount";
 const Routers = () => {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/home" />} />
+      <Route path="/" element={<Navigate to="/sign-in" />} />
       <Route path="/home" element={<Home />} />
       <Route path="/about" element={<About />} />
       <Route path="/cars" element={<CarListing />} />
@@ -26,6 +26,7 @@ const Routers = () => {
       <Route path="/sign-up" element={<SignUp />} />
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="/user-account" element={<UserAccount />} />
+
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

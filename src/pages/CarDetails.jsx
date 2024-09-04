@@ -74,21 +74,18 @@ const CarDetails = () => {
 
                 <div
                   className=" d-flex align-items-center "
-                  style={{ columnGap: "4rem" }}
-                >
+                  style={{ columnGap: "4rem" }}>
                   <span className=" d-flex align-items-center gap-1 section__description">
                     <i
                       class="ri-roadster-line"
-                      style={{ color: "#f9a826" }}
-                    ></i>{" "}
+                      style={{ color: "#f9a826" }}></i>{" "}
                     {singleCarItem.category}
                   </span>
 
                   <span className=" d-flex align-items-center gap-1 section__description">
                     <i
                       class="ri-settings-2-line"
-                      style={{ color: "#f9a826" }}
-                    ></i>{" "}
+                      style={{ color: "#f9a826" }}></i>{" "}
                     {singleCarItem.transmission_type}
                   </span>
 
@@ -102,16 +99,14 @@ const CarDetails = () => {
                   <span className=" d-flex align-items-center gap-1 section__description">
                     <i
                       class="ri-wheelchair-line"
-                      style={{ color: "#f9a826" }}
-                    ></i>{" "}
+                      style={{ color: "#f9a826" }}></i>{" "}
                     {singleCarItem.no_seat} Seats
                   </span>
                 </div>
 
                 <div
                   className="d-flex align-items-center mt-2"
-                  style={{ columnGap: "2.1rem" }}
-                >
+                  style={{ columnGap: "2.1rem" }}>
                   <span className="d-flex align-items-center gap-1 section__description">
                     <p>
                       <strong>Trip Hours:</strong> {tripHours}
@@ -125,12 +120,9 @@ const CarDetails = () => {
                   </span>
                 </div>
 
-          
-
                 <div
                   className="d-flex align-items-center mt-1"
-                  style={{ columnGap: "2.1rem" }}
-                >
+                  style={{ columnGap: "2.1rem" }}>
                   <span className="d-flex align-items-center gap-1 section__description">
                     <p>
                       <strong>Total Free Kms:</strong> {totalFreeKms} km
@@ -145,8 +137,7 @@ const CarDetails = () => {
                 </div>
                 <div
                   className="d-flex align-items-center mt-1"
-                  style={{ columnGap: "2.1rem" }}
-                >
+                  style={{ columnGap: "2.1rem" }}>
                   <span className="d-flex align-items-center gap-1 section__description">
                     <p>
                       <strong>Start Date:</strong> {startDate}
@@ -159,7 +150,6 @@ const CarDetails = () => {
                     </p>
                   </span>
                 </div>
-
               </div>
             </Col>
 
@@ -176,7 +166,7 @@ const CarDetails = () => {
                 <h5 className="mb-4 fw-bold ">Price Details</h5>
                 {/* <PaymentMethod /> */}
                 <PriceDetails />
-                <div className="payment text-end mt-5" >
+                <div className="payment text-end mt-5">
                   <button>Reserve Now</button>
                 </div>
               </div>
