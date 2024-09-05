@@ -6,8 +6,6 @@ import "react-toastify/dist/ReactToastify.css";
 import "../styles/signup.css";
 
 const SignUp = () => {
-  const backendUrl = process.env.Backend_URL;
-
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
     id: null,
