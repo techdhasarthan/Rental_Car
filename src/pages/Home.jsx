@@ -52,10 +52,10 @@ const Home = () => {
   return (
     <Helmet title="Home mt-5">
       {/* ============= hero section =========== */}
-      <section className="p-0 hero__slider-section">
-        <HeroSlider />
+      {/* <section className="p-0 hero__slider-section"> */}
+      <HeroSlider />
 
-        <div className="hero__form">
+      {/* <div className="hero__form">
           <Container>
             <Row className="form__row">
               <Col lg="4" md="4">
@@ -69,8 +69,8 @@ const Home = () => {
               </Col>
             </Row>
           </Container>
-        </div>
-      </section>
+        </div> */}
+      {/* </section> */}
 
       {/* Steps Section */}
       <section>
