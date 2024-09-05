@@ -19,7 +19,7 @@ const BlogItem = ({ item }) => {
 
   return (
     <Col lg="4" md="6" sm="6" className="mb-5">
-      <div className="blog__item">
+      <div className="blog__item shadow">
         <img src={imgUrl} alt="" className="w-100" />
         <div className="blog__info p-3">
           <Link to={`/blogs/${title}`} className="blog__title">

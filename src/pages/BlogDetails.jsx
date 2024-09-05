@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 // import { Container, Row, Col, Form, FormGroup, Input } from "reactstrap";
-import { Container, Row, Col,  } from "reactstrap";
+import { Container, Row, Col } from "reactstrap";
 import { useParams } from "react-router-dom";
 import blogData from "../assets/data/blogData.js";
 import Helmet from "../components/Helmet/Helmet";
@@ -24,7 +24,7 @@ const BlogDetails = () => {
         <Container>
           <Row>
             <Col lg="8" md="8">
-              <div className="blog__details mt-4">
+              <div className="blog__details mt-4 ">
                 <img src={blog.imgUrl} alt="" className="w-100" />
                 <h2 className="section__title mt-4">{blog.title}</h2>
 
@@ -50,9 +50,9 @@ const BlogDetails = () => {
               </div>
 
               {/* <div className="comment__list mt-5"> */}
-                {/* <h4 className="mb-5">3 Comments</h4> */}
+              {/* <h4 className="mb-5">3 Comments</h4> */}
 
-                {/* <div className="single__comment d-flex gap-3">
+              {/* <div className="single__comment d-flex gap-3">
                   <img src={commentImg} alt="" />
                   <div className="comment__content">
                     <h6 className=" fw-bold">David Visa</h6>
@@ -69,8 +69,8 @@ const BlogDetails = () => {
                   </div>
                 </div> */}
 
-                {/* =============== comment form ============ */}
-                {/* <div className="leave__comment-form mt-5">
+              {/* =============== comment form ============ */}
+              {/* <div className="leave__comment-form mt-5">
                   <h4>Leave a Comment</h4>
                   <p className="section__description">
                     You must sign-in to make or comment a post

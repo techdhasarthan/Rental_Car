@@ -73,7 +73,7 @@ const Document = () => {
           backdrop="static"
           keyboard={false}>
           <Modal.Header closeButton>
-            <Modal.Title>Uploads</Modal.Title>
+            <Modal.Title>Add Document</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             {/* Dropdown for Document Type */}

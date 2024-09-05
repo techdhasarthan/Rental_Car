@@ -450,10 +450,10 @@ const UserProfile = () => {
             </Button>
           </div>
           <Row>
-            <Col lg="12" md="6">
-              <Card>
+            <Col lg="12" md="12">
+              <Card className="shadow">
                 <CardBody>
-                  <h4 className="fw-bold mb-4">
+                  <h4 className="fw-bold mb-4 ">
                     Your Profile Information
                     {isEditing ? (
                       <Button
@@ -551,7 +551,7 @@ const UserProfile = () => {
                       </div>
                     </div>
                   ) : (
-                    <div className="large-text px-4">
+                    <div className="large-text px-4 ">
                       <p>
                         <strong>Name:</strong> {userInfo.name}
                       </p>
