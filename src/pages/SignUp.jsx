@@ -6,6 +6,8 @@ import "react-toastify/dist/ReactToastify.css";
 import "../styles/signup.css";
 
 const SignUp = () => {
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
     id: null,
@@ -29,7 +31,7 @@ const SignUp = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:2024/RentARide/updateCustomerRegistrationDetails", // Ensure the correct URL
+        `${backendUrl}/updateCustomerRegistrationDetails`, // Ensure the correct URL
         user
       );
       console.log("Sign-up successful:", typeof response.data.status);

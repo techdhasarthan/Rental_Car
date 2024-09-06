@@ -5,11 +5,11 @@
 
 .slider__item-01 {
   background: linear-gradient(rgb(0, 13, 107, 0.5), rgb(0, 13, 107, 0.5)),
-    url("../assets/all-images/slider-img/car-slider.gif");
+    url("https://media.giphy.com/media/36bx8slIfXXGg/giphy.gif");
   /* https://media.giphy.com/media/36bx8slIfXXGg/giphy.gif */
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: calc(1600px);
 }
 
 .slider__item-02 {

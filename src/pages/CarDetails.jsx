@@ -4,10 +4,8 @@ import carData from "../assets/data/carData";
 import { Container, Row, Col } from "reactstrap";
 import Helmet from "../components/Helmet/Helmet";
 import { useParams } from "react-router-dom";
-import BookingForm from "../components/UI/BookingForm";
-import PaymentMethod from "../components/UI/PaymentMethod";
-import Fulfillment from "../components/UI/Fulfillment";
-import PriceDetails from "../components/UI/PriceDetails";
+import "../styles/car-item.css";
+import ShowCarDetails from "./ShowCarDetails";
 
 const CarDetails = () => {
   const startDate = "2024-08-09 16:00";
@@ -56,15 +54,10 @@ const CarDetails = () => {
                     ₹{singleCarItem.price}.00 / Day
                   </h6>
 
-                  <span className=" d-flex align-items-center gap-2">
-                    <span style={{ color: "#f9a826" }}>
-                      <i class="ri-star-s-fill"></i>
-                      <i class="ri-star-s-fill"></i>
-                      <i class="ri-star-s-fill"></i>
-                      <i class="ri-star-s-fill"></i>
-                      <i class="ri-star-s-fill"></i>
-                    </span>
-                    ({singleCarItem.rating} ratings)
+                  <span className=" d-flex align-items-center gap-2 fst-italic bold fs-5 fw-bold ">
+                    {/* ({singleCarItem.rating} ratings) */}
+                    <i class="ri-caravan-fill"></i>
+                    TN2024
                   </span>
                 </div>
 
@@ -135,7 +128,7 @@ const CarDetails = () => {
                     </p>
                   </span>
                 </div>
-                <div
+                {/* <div
                   className="d-flex align-items-center mt-1"
                   style={{ columnGap: "2.1rem" }}>
                   <span className="d-flex align-items-center gap-1 section__description">
@@ -149,28 +142,31 @@ const CarDetails = () => {
                       <strong>End Date:</strong> {endDate}
                     </p>
                   </span>
-                </div>
+                </div> */}
               </div>
             </Col>
+            <ShowCarDetails />
+            {/* ------------------------------------------------------------------- */}
 
-            <Col lg="7" className="mt-4">
+            {/* <Col lg="7" className="mt-4">
               <div className="booking-info mt-4">
-                <h5 className="mb-4 fw-bold ">Fulfillment Details</h5>
-                {/* <BookingForm /> */}
-                <Fulfillment />
+                <h5 className="mb-4 fw-bold ">Fulfillment Details</h5> */}
+            {/* <BookingForm /> */}
+            {/* <Fulfillment />
               </div>
-            </Col>
+            </Col> */}
 
-            <Col lg="5" className="mt-4">
+            {/* <Col lg="5" className="mt-4">
               <div className="payment__info mt-4">
-                <h5 className="mb-4 fw-bold ">Price Details</h5>
-                {/* <PaymentMethod /> */}
-                <PriceDetails />
+                <h5 className="mb-4 fw-bold ">Price Details</h5> */}
+            {/* <PaymentMethod /> */}
+            {/* <PriceDetails />
                 <div className="payment text-end mt-5">
                   <button>Reserve Now</button>
                 </div>
               </div>
-            </Col>
+            </Col> */}
+            {/* ------------------------------------------------------------------------ */}
           </Row>
         </Container>
       </section>

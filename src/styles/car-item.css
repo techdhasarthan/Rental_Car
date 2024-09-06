@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Slab&display=swap');
+
+
+
 .car__item {
   border: 1px solid #7c8a9736;
   padding: 20px;
@@ -49,6 +53,13 @@
 .car__item-content h6 {
   font-size: 1.2rem;
   font-weight: 600;
+}
+
+.oswald-font {
+  font-family: "Oswald", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: bolder;
+  font-style: normal;
 }
 
 @media only screen and (max-width: 992px) {

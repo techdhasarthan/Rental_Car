@@ -1,20 +1,21 @@
-
 .search-sort-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Media query for mobile view */
+@media (max-width: 768px) {
+
+  /* Adjust the max-width value as needed */
+  .search-sort-container {
+    flex-direction: column;
+    align-items: flex-start;
   }
-  
-  /* Media query for mobile view */
-  @media (max-width: 768px) { /* Adjust the max-width value as needed */
-    .search-sort-container {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  }
-  
+}
+
 
 /* Style for the sort dropdown */
 .sort-dropdown {
@@ -39,11 +40,15 @@
   font-size: 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: border-color 0.3s ease;
-  width: 300px; /* Adjust width as needed */
+  width: 300px;
+  /* Adjust width as needed */
 }
+
 .search-input::placeholder {
-  color: black; /* Set the placeholder color to black */
+  color: black;
+  /* Set the placeholder color to black */
 }
+
 .search-input:focus {
   border-color: #007bff;
   outline: none;
@@ -51,173 +56,249 @@
 
 /* Container for the sort label and icon */
 .sort-label-container {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
 
-  }
-  
-  /* Icon styling */
-  .sort-icon {
-    font-size: 1.2rem;
-    color: #0c0f45;
-  }
-  
-  /* Label styling */
-  .sort-label {
-    font-weight: bold;
-    color: #333;
-  }
-  .no-results-message {
-    background-color: #ffff; /* Light red background */
-    color: #f9a826; /* Dark red text color */
-    border: 2px solid #0c0f45; /* Light red border */
-    border-radius: 5px; /* Rounded corners */
-    padding: 15px; /* Space inside the box */
-    margin: 35px 0; /* Space outside the box */
-    text-align: center; /* Center the text */
-    font-size: 1.1rem; /* Adjust font size */
-    font-weight: 600;
-   
-  }
-
-
-  .pricing-plan-container {
-    background-color: #ffff; /* Example background color, adjust as needed */
-    padding: 20px; /* Adds space inside the container */
-    border-radius: 8px; /* Optional: adds rounded corners */
-     /* Optional: adds a subtle shadow */
-    border: 1px solid #ccc; /* Adds a border with a light gray color */
-    margin: 20px 0; /* Centers the container horizontally */
 }
 
-  
-  @media (max-width: 768px) {
-    .pricing-plan-container {
-      padding: 15px; /* Adjust padding for smaller screens */
-    }
+/* Icon styling */
+.sort-icon {
+  font-size: 1.2rem;
+  color: #0c0f45;
+}
+
+/* Label styling */
+.sort-label {
+  font-weight: bold;
+  color: #333;
+}
+
+.no-results-message {
+  background-color: #ffff;
+  /* Light red background */
+  color: #f9a826;
+  /* Dark red text color */
+  border: 2px solid #0c0f45;
+  /* Light red border */
+  border-radius: 5px;
+  /* Rounded corners */
+  padding: 15px;
+  /* Space inside the box */
+  margin: 35px 0;
+  /* Space outside the box */
+  text-align: center;
+  /* Center the text */
+  font-size: 1.1rem;
+  /* Adjust font size */
+  font-weight: 600;
+
+}
+
+
+.pricing-plan-container {
+  background-color: #ffff;
+  /* Example background color, adjust as needed */
+  padding: 20px;
+  /* Adds space inside the container */
+  border-radius: 8px;
+  /* Optional: adds rounded corners */
+  /* Optional: adds a subtle shadow */
+  border: 1px solid #ccc;
+  /* Adds a border with a light gray color */
+  margin: 20px 0;
+  /* Centers the container horizontally */
+}
+
+
+
+
+@media (max-width: 768px) {
+  .pricing-plan-container {
+    padding: 15px;
+    /* Adjust padding for smaller screens */
+  }
+}
+
+
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  /* Adjust the spacing between buttons */
+
+
+}
+
+.input-form-feild {
+  display: flex;
+  gap: 10px;
+}
+
+@media (max-width: 568px) {
+
+  /* Adjust the max-width value as needed for your specific small screen view */
+  .input-form-feild {
+    flex-direction: column;
+    /* Stacks items vertically on small screens */
+    align-items: flex-start;
+    /* Aligns items to the start of the container (optional) */
   }
 
-
-  
-  .button-group {
-    display: flex;
-    gap: 10px; /* Adjust the spacing between buttons */
-  
-   
+  .hidelable {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+    visibility: hidden;
+    /* Alternative method */
   }
 
-  .input-form-feild{
-    display: flex;
-    gap: 10px;
+  .form-control2 {
+    /* Default to full width */
+
+    margin-bottom: 10px;
+    /* Ensure each item takes full width of the container */
+    /* Add space between rows */
   }
+}
 
-  @media (max-width: 568px) { /* Adjust the max-width value as needed for your specific small screen view */
-    .input-form-feild{
-      flex-direction: column; /* Stacks items vertically on small screens */
-      align-items: flex-start; /* Aligns items to the start of the container (optional) */
-    }
+.btnplan {
+  padding: 10px 15px;
+  border: 1px solid transparent;
+  border-radius: 25px;
+  /* Rounded corners for a modern look */
+  background-color: #000d6b;
+  /* Light grey background */
+  color: #fff;
+  /* Dark text color */
+  font-size: 16px;
+  font-weight: 600;
+  /* Slightly bolder text */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  /* Smooth transitions */
+  outline: none;
+  /* Remove default focus outline */
+}
 
-    .hidelable {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      margin: -1px;
-      padding: 0;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      border: 0;
-      visibility: hidden; /* Alternative method */
-    }
-    
-    .form-control2 {
-       /* Default to full width */
+/* ----------------------------------------------- */
 
-  margin-bottom: 10px; /* Ensure each item takes full width of the container */
-     /* Add space between rows */
-    }
-  }
-  
+
+.apply-filters-btn {
+  padding: 10px 20px;
+  background-color: #f9a826;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+.apply-filters-btn:hover {
+  background-color: rgb(0, 13, 107);
+}
+
+.apply-refresh-btn {
+  padding: 10px 20px;
+  background-color: rgb(0, 13, 107);
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+.apply-refresh-btn:hover {
+  background-color: #f9a826;
+}
+
+
+
+@media (max-width: 668px) {
+
+  /* Adjust the max-width as needed for your specific small screen view */
   .btnplan {
-    padding: 10px 15px;
-    border: 1px solid transparent;
-    border-radius: 25px; /* Rounded corners for a modern look */
-    background-color: #000d6b; /* Light grey background */
-    color: #fff; /* Dark text color */
-    font-size: 16px;
-    font-weight: 600; /* Slightly bolder text */
-    cursor: pointer;
-    transition: all 0.3s ease; /* Smooth transitions */
-    outline: none; /* Remove default focus outline */
+    font-size: 14px;
+    /* Slightly smaller font size for small screens */
+    padding: 8px 12px;
+    /* Adjust padding to fit smaller screens */
   }
-  @media (max-width: 668px) { /* Adjust the max-width as needed for your specific small screen view */
-    .btnplan {
-      font-size: 14px; /* Slightly smaller font size for small screens */
-      padding: 8px 12px; /* Adjust padding to fit smaller screens */
-    }
-  }
+}
 
-  .btnplan:hover {
-    /* Highlight color when active */
-    color: #fff; /* Slightly darker on hover */
-    background-color: #f9a826;
-  }
-  
-  .btnplan.active {
-    background-color: #f9a826; /* Highlight color when active */
-    color: #ffff; /* Text color when active */
-    border: 1px solid #f9a826; /* Border color when active */
-  }
-  
+.btnplan:hover {
+  /* Highlight color when active */
+  color: #fff;
+  /* Slightly darker on hover */
+  background-color: #f9a826;
+}
+
+.btnplan.active {
+  background-color: #f9a826;
+  /* Highlight color when active */
+  color: #ffff;
+  /* Text color when active */
+  border: 1px solid #f9a826;
+  /* Border color when active */
+}
 
 
 
- 
-  
+
+
+
+.form-container {
+  display: flex;
+  justify-content: space-between;
+  /* Aligns content to the right */
+  padding: 20px 0;
+  /* Adds some space around the container */
+}
+
+@media (max-width: 1024px) {
+
+  /* Adjust the max-width as needed for your specific laptop view */
   .form-container {
-    display: flex;
-    justify-content: space-between; /* Aligns content to the right */
-    padding: 20px 0; /* Adds some space around the container */
+    flex-direction: column;
+    /* Ensures that items are laid out in a row */
+    gap: 20px;
   }
-  
-  @media (max-width: 1024px) { /* Adjust the max-width as needed for your specific laptop view */
-    .form-container {
-      flex-direction: column; /* Ensures that items are laid out in a row */
-      gap: 20px;
-    }
-  }
-  .form-groups label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #333;
-    font-size: 1rem;
-  }
-  
-  /* Styling for input fields */
-  .form-control {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  .form-groups .form-control-button {
-    background-color: #f9a826; /* Adjust to your color scheme */
-    color: white;
-    border: none;
-    border-radius: 3px;
-    padding: 9px 30px;
-    cursor: pointer;
-    font-size: 16px; /* Adjust as needed */
-    font-weight: 600;
-  }
-  
-  .form-groups .form-control-button:hover {
-    background-color: #000d6b; /* Darker shade on hover */
-  }
-  
- 
+}
 
+.form-groups label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+  font-size: 1rem;
+}
 
+/* Styling for input fields */
+.form-control {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-groups .form-control-button {
+  background-color: #f9a826;
+  /* Adjust to your color scheme */
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 9px 30px;
+  cursor: pointer;
+  font-size: 16px;
+  /* Adjust as needed */
+  font-weight: 600;
+}
+
+.form-groups .form-control-button:hover {
+  background-color: #000d6b;
+  /* Darker shade on hover */
+}

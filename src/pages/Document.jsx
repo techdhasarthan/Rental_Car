@@ -118,7 +118,11 @@ const Document = () => {
             </Form.Group>
           </Modal.Body>
           <Modal.Footer>
-            <Button color="warning" onClick={handleFileUpload}>
+            <Button
+              color="warning"
+              className="btn-save"
+              onClick={handleFileUpload}>
+              {/* <i class="ri-save-line"></i> */}
               Save
             </Button>
           </Modal.Footer>

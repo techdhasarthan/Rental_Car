@@ -28,7 +28,7 @@
   font-size: 0.7rem;
 }
 
-.header__top__right  {
+.header__top__right {
   text-decoration: none;
   color: #fff;
   font-size: 0.9rem;
@@ -66,7 +66,8 @@
   padding: 8px;
   background-color: #fff;
   color: #000d6b;
-  font-size: 16px; /* Match the font size with the select element */
+  font-size: 16px;
+  /* Match the font size with the select element */
 }
 
 /* Optionally, add some styles for hover and focus */
@@ -152,7 +153,7 @@
   /* padding: 3px; */
   background-color: #000d6b;
   color: #fff;
-  
+
   text-decoration: none;
   transition: background-color 0.3s ease, transform 0.3s ease;
 
@@ -204,12 +205,14 @@
 }
 
 .button-container .button:hover {
-  background-color: #004494; /* Even darker blue */
+  background-color: #004494;
+  /* Even darker blue */
   transform: scale(1.03);
 }
 
 .button-container .button.sign-out:hover {
-  background-color: #f9a826; /* Darker red for sign out */
+  background-color: #f9a826;
+  /* Darker red for sign out */
   transform: scale(1.03);
 }
 
@@ -219,11 +222,16 @@
 .main__navbar {
   padding: 15px 0;
   background: #000d6b;
-  position: fixed; /* Fixed positioning */
-  top: 0; /* Align to the top of the viewport */
-  left: 0; /* Align to the left of the viewport */
-  width: 100%; /* Ensure it spans the full width */
-  z-index: 1000; /* Make sure it's above other content */
+  position: fixed;
+  /* Fixed positioning */
+  top: 0;
+  /* Align to the top of the viewport */
+  left: 0;
+  /* Align to the left of the viewport */
+  width: 100%;
+  /* Ensure it spans the full width */
+  z-index: 1000;
+  /* Make sure it's above other content */
 }
 
 
@@ -241,7 +249,7 @@
   display: flex;
   align-items: center;
   column-gap: 2.7rem;
-  
+
 }
 
 .nav__item {
@@ -274,6 +282,7 @@
 .search__box input::placeholder {
   font-size: 0.8rem;
 }
+
 .search__box span i {
   color: rgba(255, 255, 255, 0.555);
   cursor: pointer;
@@ -282,21 +291,56 @@
 .nav__active {
   color: #f9a826;
 }
+
 /* styles.css */
 
 .custom-hover {
   display: flex;
   align-items: center;
-  gap: 0.5rem; /* Adjust gap between text and icon */
-  color: white; /* Default text color */
-  text-decoration: none; /* No underline */
+  gap: 0.5rem;
+  /* Adjust gap between text and icon */
+  color: white;
+  /* Default text color */
+  text-decoration: none;
+  /* No underline */
 }
 
 .custom-hover:hover {
-  color: #f9a826; /* Changes text color to yellow on hover */
+  color: #f9a826;
+  /* Changes text color to yellow on hover */
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 50px;
+  /* Adjust based on your header */
+  right: 0;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  display: none;
+  z-index: 1000;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-item {
+  padding: 10px;
+  color: black;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+  border-radius: 3px;
 }
 
 @media only screen and (max-width: 768px) {
+
   .header__top,
   .header__middle,
   .nav__right {
@@ -339,8 +383,3 @@
     display: block;
   }
 }
-
-
-
-
-
