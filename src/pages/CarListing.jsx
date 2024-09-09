@@ -17,6 +17,7 @@ const CarListing = () => {
   const [filteredData, setFilteredData] = useState([]); // Initialize as an empty array
   const [filterApplied, setFilterApplied] = useState(false); // Track filter button clicks
   const plans = ["", "140 KM", "320 KM", "500 KM", "620 KM"]; // Distance plans
+  const [refresh, setRefresh] = useState("");
 
   const navigate = useNavigate(); // useNavigate hook for redirection
 
@@ -68,10 +69,12 @@ const CarListing = () => {
     };
 
     applyFilters(); // Apply filters when page loads or filters change
-  }, [filterApplied]);
+    
+  }, [filterApplied,refresh]);
 
   // Refresh the page (reset filters)
   const applyRefresh = () => {
+    setRefresh(refresh+1);
     setSortOrder("");
     setSortCategory("");
     setSortFuel("");
@@ -79,9 +82,9 @@ const CarListing = () => {
     setSelectedPlan("");
     setFilterApplied(false); // Reset filters applied status
     setFilteredData([]); // Reset to initial state
-    window.location.reload(); // Optionally refresh the page
+   // window.location.reload(); // Optionally refresh the page
   };
-
+  
   return (
     <Helmet title="Cars">
       <CommonSection title="Car Listing" />
@@ -164,10 +167,11 @@ const CarListing = () => {
                 </button>
               </div>
             </Col>
-
+            
             {/* Render filtered data */}
+            
             {filteredData.length > 0 ? (
-              filteredData.map((item) => <CarItem item={item} key={item.id} />)
+              filteredData.map((item) => <CarItem item={item} key={item['ID']} />)
             ) : (
               <Col lg="12">
                 <div className="no-results-message">

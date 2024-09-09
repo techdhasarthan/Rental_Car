@@ -4,15 +4,21 @@ import { Link } from "react-router-dom";
 import "../../styles/car-item.css";
 
 const CarItem = (props) => {
-  const { imgUrl, carName, transmission_type, oil, price, no_seat } =
+  const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+  const { "Image URL": imgUrl,
+    "Car Name": carName,
+    "Transmission Type": transmissionType,
+    "Fuel Type": oil,
+    "Price Per Day": price,
+    "No.Of.Seats": noSeat } =
     props.item;
-
+    console.log(props);
   return (
     <>
       <Col lg="4" md="4" sm="6" className="mb-5">
         <div className="car__item">
           <div className="car__img">
-            <img src={imgUrl} alt="" className="w-100" />
+            <img src={`${BASE_URL}/`+imgUrl} alt="" className="w-100" />
           </div>
 
           <div className="car__item-content mt-4">
@@ -23,10 +29,10 @@ const CarItem = (props) => {
 
             <div className="car__item-info d-flex align-items-center justify-content-between mt-3 mb-4">
               <span className=" d-flex align-items-center gap-1">
-                <i class="ri-wheelchair-line"></i> {no_seat} Seats
+                <i class="ri-wheelchair-line"></i> {noSeat} Seats
               </span>
               <span className=" d-flex align-items-center gap-1">
-                <i class="ri-settings-2-line"></i> {transmission_type}
+                <i class="ri-settings-2-line"></i> {transmissionType}
               </span>
               <span className=" d-flex align-items-center gap-1">
                 <i class="ri-drop-line"></i> {oil}
