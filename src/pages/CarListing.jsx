@@ -1,21 +1,20 @@
-import { useNavigate } from "react-router-dom"; // Import useNavigate hook
+import { useNavigate } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/CommonSection";
 import CarItem from "../components/UI/CarItem";
-import carData from "../assets/data/carData";
 import "../styles/search.css";
 import { useState, useEffect } from "react";
 import PricingPlan from "../components/UI/Planing";
 
 const CarListing = () => {
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
-  const [sortByPrice, setSortOrder] = useState("");
+  const [sortByPrice, setSortOrder] = useState(""); // Initialize as empty string
   const [sortCategory, setSortCategory] = useState("");
   const [sortFuel, setSortFuel] = useState("");
   const [sortType, setSortType] = useState("");
-  const [selectedPlan, setSelectedPlan] = useState(""); // For dropdown
-  const [filteredData, setFilteredData] = useState(carData); // Store filtered data
+  const [selectedPlan, setSelectedPlan] = useState("");
+  const [filteredData, setFilteredData] = useState([]); // Initialize as an empty array
   const [filterApplied, setFilterApplied] = useState(false); // Track filter button clicks
   const plans = ["", "140 KM", "320 KM", "500 KM", "620 KM"]; // Distance plans
 
@@ -28,27 +27,22 @@ const CarListing = () => {
   const handleSortTypeChange = (e) => setSortType(e.target.value);
   const handlePlanChange = (e) => setSelectedPlan(e.target.value); // For distance plan dropdown
 
-  // Toggle filterApplied when "Apply Filters" button is clicked
   const handleApplyFilters = () => {
-    setFilterApplied((prev) => !prev); // Toggle the value
+    setFilterApplied((prev) => !prev); // Toggle the value to reapply filters
   };
 
-  // Apply filters when page loads (initial render) and when filter button is clicked
   useEffect(() => {
     const applyFilters = async () => {
       // Prepare filter data to send to the API
       const filterData = {
-        categoryArgs: sortCategory !== "default" ? sortCategory : "",
-        fuelType: sortFuel !== "default" ? sortFuel : "",
-        transmissionType: sortType !== "default" ? sortType : "",
-        kmLimit: selectedPlan !== "default" ? selectedPlan : "",
+        categoryArgs: sortCategory || "", // Send empty string if no selection
+        fuelType: sortFuel || "",
+        transmissionType: sortType || "",
+        kmLimit: selectedPlan || "",
         sortByPrice,
       };
 
-      alert(JSON.stringify(filterData)); // For debugging
-
       try {
-        
         const response = await fetch(`${BASE_URL}/getCustomerRentalCarsList`, {
           method: "POST",
           headers: {
@@ -56,32 +50,43 @@ const CarListing = () => {
           },
           body: JSON.stringify(filterData),
         });
-        
+
         if (!response.ok) {
           throw new Error("Failed to fetch filtered data");
         }
 
         const result = await response.json();
-        var carData = result.data;
-        setFilteredData(result.data); // Update the state with filtered data from API
+        if (result.data && result.data.length > 0) {
+          setFilteredData(result.data); // Update the state with filtered data from API
+        } else {
+          setFilteredData([]); // Clear filtered data if API returns empty
+        }
       } catch (error) {
         console.error("Error fetching filtered data:", error);
-        setFilteredData(carData); // Fallback to initial data if API fails
+        setFilteredData([]); // Fallback to empty array if API fails
       }
     };
 
-    applyFilters(); // Apply filters when page loads and whenever filterApplied changes
-  }, [filterApplied]); // Add dependencies to trigger re-render
+    applyFilters(); // Apply filters when page loads or filters change
+  }, [
+    filterApplied,
+    sortByPrice,
+    sortCategory,
+    sortFuel,
+    sortType,
+    selectedPlan,
+  ]);
 
   // Refresh the page (reset filters)
   const applyRefresh = () => {
-    setSortOrder("default");
-    setSortCategory("default");
-    setSortFuel("default");
-    setSortType("default");
-    setSelectedPlan("default");
-    setFilteredData(carData); // Reset to initial data or refetch if needed
-    window.location.reload("/cars");
+    setSortOrder("");
+    setSortCategory("");
+    setSortFuel("");
+    setSortType("");
+    setSelectedPlan("");
+    setFilterApplied(false); // Reset filters applied status
+    setFilteredData([]); // Reset to initial state
+    window.location.reload(); // Optionally refresh the page
   };
 
   return (
@@ -103,8 +108,9 @@ const CarListing = () => {
                   {/* Dropdown for different filters */}
                   <select
                     className="sort-dropdown"
-                    onChange={handleSortCategoryChange}>
-                    <option value="default">Choose Category</option>
+                    onChange={handleSortCategoryChange}
+                    value={sortCategory}>
+                    <option value="">Choose Category</option>
                     <option value="SUV">SUV</option>
                     <option value="Sedan">Sedan</option>
                     <option value="Hatchback">Hatchback</option>
@@ -113,32 +119,38 @@ const CarListing = () => {
 
                   <select
                     className="sort-dropdown"
-                    onChange={handleSortFuelChange}>
-                    <option value="default">Fuel Type</option>
-                    <option value="diesel">Diesel</option>
-                    <option value="petrol">Petrol</option>
-                    <option value="electric">Electric</option>
+                    onChange={handleSortFuelChange}
+                    value={sortFuel}>
+                    <option value="">Fuel Type</option>
+                    <option value="Diesel">Diesel</option>
+                    <option value="Petrol">Petrol</option>
+                    <option value="Electric">Electric</option>
                   </select>
 
                   <select
                     className="sort-dropdown"
-                    onChange={handleSortTypeChange}>
-                    <option value="default">Transmission Type</option>
+                    onChange={handleSortTypeChange}
+                    value={sortType}>
+                    <option value="">Transmission Type</option>
                     <option value="Manual">Manual</option>
                     <option value="Automatic">Automatic</option>
                   </select>
 
                   <select
                     className="sort-dropdown"
-                    onChange={handleSortOrderChange}>
-                    <option value="default">Sort By Price</option>
+                    onChange={handleSortOrderChange}
+                    value={sortByPrice}>
+                    <option value="">Sort By Price</option>
                     <option value="Asc">Asc</option>
                     <option value="Desc">Desc</option>
                   </select>
 
                   {/* Distance Plan Dropdown */}
-                  <select className="sort-dropdown" onChange={handlePlanChange}>
-                    <option value="default">Choose Distance Plan</option>
+                  <select
+                    className="sort-dropdown"
+                    onChange={handlePlanChange}
+                    value={selectedPlan}>
+                    <option value="">Choose Distance Plan</option>
                     {plans.map((plan) => (
                       <option key={plan} value={plan}>
                         {plan}
