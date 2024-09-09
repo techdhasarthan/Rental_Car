@@ -9,14 +9,15 @@ import { useState, useEffect } from "react";
 import PricingPlan from "../components/UI/Planing";
 
 const CarListing = () => {
-  const [sortByPrice, setSortOrder] = useState("default");
-  const [sortCategory, setSortCategory] = useState("default");
-  const [sortFuel, setSortFuel] = useState("default");
-  const [sortType, setSortType] = useState("default");
-  const [selectedPlan, setSelectedPlan] = useState("default"); // For dropdown
+  const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+  const [sortByPrice, setSortOrder] = useState("");
+  const [sortCategory, setSortCategory] = useState("");
+  const [sortFuel, setSortFuel] = useState("");
+  const [sortType, setSortType] = useState("");
+  const [selectedPlan, setSelectedPlan] = useState(""); // For dropdown
   const [filteredData, setFilteredData] = useState(carData); // Store filtered data
   const [filterApplied, setFilterApplied] = useState(false); // Track filter button clicks
-  const plans = ["default", "140 KM", "320 KM", "500 KM", "620 KM"]; // Distance plans
+  const plans = ["", "140 KM", "320 KM", "500 KM", "620 KM"]; // Distance plans
 
   const navigate = useNavigate(); // useNavigate hook for redirection
 
@@ -47,20 +48,22 @@ const CarListing = () => {
       alert(JSON.stringify(filterData)); // For debugging
 
       try {
-        const response = await fetch("https://your-api-endpoint.com/filters", {
+        
+        const response = await fetch(`${BASE_URL}/getCustomerRentalCarsList`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(filterData),
         });
-
+        
         if (!response.ok) {
           throw new Error("Failed to fetch filtered data");
         }
 
         const result = await response.json();
-        setFilteredData(result); // Update the state with filtered data from API
+        var carData = result.data;
+        setFilteredData(result.data); // Update the state with filtered data from API
       } catch (error) {
         console.error("Error fetching filtered data:", error);
         setFilteredData(carData); // Fallback to initial data if API fails
