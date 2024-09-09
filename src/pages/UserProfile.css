@@ -51,3 +51,15 @@ button {
   /* Adjust color as needed */
   color: white;
 }
+
+/* UserProfile.css */
+.btn-primary {
+  background-color: rgb(0, 13, 107) !important;
+  border-color: rgb(0, 13, 107) !important;
+}
+
+.btn-primary:hover {
+  background-color: rgb(0, 10, 90) !important;
+  /* Darker shade on hover */
+  border-color: rgb(0, 10, 90) !important;
+}

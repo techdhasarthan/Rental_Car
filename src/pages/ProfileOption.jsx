@@ -71,8 +71,8 @@ const ProfileOptions = () => {
   };
 
   return (
-    <div className="container-sm">
-      <Container className="my-4 rounded shadow">
+    <div className="container-sm ">
+      <Container className="my-4 rounded shadow border">
         <div>
           <h4 className="fw-bold px-2 py-2">Profile Options</h4>
         </div>

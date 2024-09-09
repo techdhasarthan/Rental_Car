@@ -5,7 +5,9 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios"; // Import axios for API requests
 
 const SignIn = () => {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  // Access the backend URL from the environment variable
+  const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+  console.log(BASE_URL);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -27,17 +29,16 @@ const SignIn = () => {
     setError(""); // Reset error message
 
     try {
-      const response = await axios.post(`${backendUrl}/customerSignIn`, user);
+      const response = await axios.post(`${BASE_URL}/customerSignIn`, user);
       setLoading(false); // Hide loading message
-      if (response.data.status == "false") {
-        //setError(response.data.errorMessage);
+      if (response.data.status === "false") {
         toast.error("Invalid Argument.");
         navigate("/sign-in"); // Pass user data to the home page
       } else {
         setTimeout(() => {
           toast.success("Phone Number & Password Correct.");
           navigate("/home", { state: { user: response.data.id } });
-          localStorage.setItem("id", response.data.id); // Pass user data to the home page
+          localStorage.setItem("id", response.data.id); // Store user data
         }, 1000);
       }
     } catch (error) {
@@ -47,15 +48,12 @@ const SignIn = () => {
   };
 
   useEffect(() => {
-    // Get all input fields with labels
     const inputs = document.querySelectorAll(".input-field");
 
-    // Iterate over each input field
     inputs.forEach((input) => {
-      const label = input.nextElementSibling; // Get the associated label
-      // Check if input already has a value
+      const label = input.nextElementSibling;
       if (input.value.trim() !== "") {
-        label.classList.add("active"); // Add 'active' class to label
+        label.classList.add("active");
       }
     });
   }, []);

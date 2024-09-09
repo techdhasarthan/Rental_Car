@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 import Fulfillment from "../components/UI/Fulfillment";
 import PriceDetails from "../components/UI/PriceDetails";
+import PricingPlan from "../components/UI/Planing";
 import { Col } from "reactstrap";
 import "./ShowCarDetails.css";
+import FromToDate from "../components/UI/FromToDate";
 
 const ShowCarDetails = () => {
+  const dateLabels = {
+    startLabel: "Booking From Date",
+    endLabel: "Booking To Date",
+  };
+
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisibility = () => {
@@ -27,6 +34,9 @@ const ShowCarDetails = () => {
           {/* Fulfillment Details Section */}
           <Col lg="7" className="mt-4">
             <div className="booking-info mt-4">
+              <div className="ms-2 ">
+                <FromToDate />
+              </div>
               <h5 className="mb-4 fw-bold">Fulfillment Details</h5>
               <Fulfillment />
             </div>

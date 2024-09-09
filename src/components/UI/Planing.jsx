@@ -3,7 +3,6 @@ import { useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const PricingPlan = () => {
-  const [selectedPlan, setSelectedPlan] = useState("140 KM");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
@@ -30,7 +29,7 @@ const PricingPlan = () => {
 
   const handleSearch = () => {
     // Logic to handle search or form submission
-    console.log(`Selected Plan: ${selectedPlan}`);
+
     console.log(`Start Date: ${startDate}`);
     console.log(`End Date: ${endDate}`);
   };
