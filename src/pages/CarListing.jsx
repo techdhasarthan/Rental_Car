@@ -9,6 +9,7 @@ import { useState } from "react";
 import PricingPlan from "../components/UI/Planing";
 
 const CarListing = () => {
+  const BASE_URL = process.env.REACT_APP_BACKEND_URL;
   const [sortByPrice, setSortOrder] = useState("");
   const [sortCategory, setSortCategory] = useState("default");
   const [sortFuel, setSortFuel] = useState("default");
@@ -40,8 +41,8 @@ const CarListing = () => {
     };
 
     alert(JSON.stringify(filterData));
-    try {
-      const response = await fetch("https://your-api-endpoint.com/filters", {
+    try {      
+      const response = await fetch(`${BASE_URL}/getCustomerRentalCarsList`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -54,6 +55,7 @@ const CarListing = () => {
       }
 
       const result = await response.json();
+      alert(JSON.stringify(result.data));
       setFilteredData(result); // Update the state with filtered data from API
     } catch (error) {
       console.error("Error fetching filtered data:", error);
@@ -104,9 +106,9 @@ const CarListing = () => {
                     className="sort-dropdown"
                     onChange={handleSortFuelChange}>
                     <option value="default">Fuel Type</option>
-                    <option value="diesel">Diesel</option>
-                    <option value="petrol">Petrol</option>
-                    <option value="electric">Electric</option>
+                    <option value="Diesel">Diesel</option>
+                    <option value="Petrol">Petrol</option>
+                    <option value="Electric">Electric</option>
                   </select>
 
                   <select
