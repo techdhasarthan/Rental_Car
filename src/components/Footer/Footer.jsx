@@ -11,11 +11,6 @@ const quickLinks = [
   },
 
   {
-    path: "#",
-    display: "Privacy Policy",
-  },
-
-  {
     path: "/cars",
     display: "Car Listing",
   },
@@ -49,12 +44,16 @@ const Footer = () => {
               </h1>
             </div>
             <p className="footer__logo-content  ">
-              Looking for hassle-free self-drive car rental services in Chennai? Look no further than Lionea Cars! As a leading car rental company, we offer a wide range of well-maintained vehicles for self-drive purposes.Enjoy the freedom and convenience of exploring Chennai at your own pace with our reliable self-drive car rental solutions.
+              Looking for hassle-free self-drive car rental services in Chennai?
+              Look no further than Lionea Cars! As a leading car rental company,
+              we offer a wide range of well-maintained vehicles for self-drive
+              purposes.Enjoy the freedom and convenience of exploring Chennai at
+              your own pace with our reliable self-drive car rental solutions.
             </p>
           </Col>
 
-          <Col lg="2" md="4" sm="6">
-            <div className="mb-4">
+          <Col lg="4" md="4" sm="6">
+            <div className="mb-4 ps-5">
               <h5 className="footer__link-title">Quick Links</h5>
               <ListGroup>
                 {quickLinks.map((item, index) => (
@@ -66,12 +65,14 @@ const Footer = () => {
             </div>
           </Col>
 
-          <Col lg="3" md="4" sm="6">
+          <Col lg="4" md="4" sm="6">
             <div className="mb-4">
               <h5 className="footer__link-title mb-4">Head Office</h5>
               <p className="office__info">
-              GA-2413 Genesis Creations Apartments Natham Link Road Egattur, Navalur, Chennai, Tamil Nadu</p>
-              <p className="office__info">Phone: +91  9962227523</p>
+                GA-2413 Genesis Creations Apartments Natham Link Road Egattur,
+                Navalur, Chennai, Tamil Nadu
+              </p>
+              <p className="office__info">Phone: +91 9962227523</p>
 
               <p className="office__info">Email: Lioneacars@gmail.com</p>
 
@@ -79,7 +80,7 @@ const Footer = () => {
             </div>
           </Col>
 
-          <Col lg="3" md="4" sm="12">
+          {/* <Col lg="3" md="4" sm="12">
             <div className="mb-4">
               <h5 className="footer__link-title">Newsletter</h5>
               <p className="section__description">Subscribe our newsletter</p>
@@ -90,7 +91,7 @@ const Footer = () => {
                 </span>
               </div>
             </div>
-          </Col>
+          </Col> */}
 
           <Col lg="12">
             <div className="footer__bottom">
