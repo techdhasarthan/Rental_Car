@@ -141,9 +141,9 @@ const Home = () => {
                       <h4 className="section__title text-center">
                         {item.carName}
                       </h4>
-                      <h6 className="rent__price text-center mt-2">
+                      {/* <h6 className="rent__price text-center mt-2">
                         Rs. {item.price}.00 <span>/ Day</span>
-                      </h6>
+                      </h6> */}
 
                       <div className="car__item-info d-flex align-items-center justify-content-between mt-3 mb-4">
                         <span className="d-flex align-items-center gap-1">
@@ -160,11 +160,11 @@ const Home = () => {
                       </div>
 
                       {/* Button to navigate to car page */}
-                      <Link to="/cars">
+                      {/* <Link to="/cars">
                         <button className="w-100 car__item-btn car__btn-details text-white">
                           Enquiry Now
                         </button>
-                      </Link>
+                      </Link> */}
                     </div>
                   </div>
                 </Col>
