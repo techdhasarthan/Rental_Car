@@ -5,19 +5,22 @@ import CommonSection from "../components/UI/CommonSection";
 import CarItem from "../components/UI/CarItem";
 import carData from "../assets/data/carData";
 import "../styles/search.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PricingPlan from "../components/UI/Planing";
 
 const CarListing = () => {
+<<<<<<< HEAD
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
   const [sortByPrice, setSortOrder] = useState("");
+=======
+  const [sortByPrice, setSortOrder] = useState("default");
+>>>>>>> 67dc3957cfcc22c7b77252bdf7cbd920c6e8f6c1
   const [sortCategory, setSortCategory] = useState("default");
   const [sortFuel, setSortFuel] = useState("default");
   const [sortType, setSortType] = useState("default");
   const [selectedPlan, setSelectedPlan] = useState("default"); // For dropdown
-
   const [filteredData, setFilteredData] = useState(carData); // Store filtered data
-
+  const [filterApplied, setFilterApplied] = useState(false); // Track filter button clicks
   const plans = ["default", "140 KM", "320 KM", "500 KM", "620 KM"]; // Distance plans
 
   const navigate = useNavigate(); // useNavigate hook for redirection
@@ -29,17 +32,47 @@ const CarListing = () => {
   const handleSortTypeChange = (e) => setSortType(e.target.value);
   const handlePlanChange = (e) => setSelectedPlan(e.target.value); // For distance plan dropdown
 
-  // API integration to apply filters when the "Apply Filters" button is clicked
-  const applyFilters = async () => {
-    // Prepare filter data to send to the API
-    const filterData = {
-      categoryArgs: sortCategory !== "default" ? sortCategory : "",
-      fuelType: sortFuel !== "default" ? sortFuel : "",
-      transmissionType: sortType !== "default" ? sortType : "",
-      kmLimit: selectedPlan !== "default" ? selectedPlan : "",
-      sortByPrice,
+  // Toggle filterApplied when "Apply Filters" button is clicked
+  const handleApplyFilters = () => {
+    setFilterApplied((prev) => !prev); // Toggle the value
+  };
+
+  // Apply filters when page loads (initial render) and when filter button is clicked
+  useEffect(() => {
+    const applyFilters = async () => {
+      // Prepare filter data to send to the API
+      const filterData = {
+        categoryArgs: sortCategory !== "default" ? sortCategory : "",
+        fuelType: sortFuel !== "default" ? sortFuel : "",
+        transmissionType: sortType !== "default" ? sortType : "",
+        kmLimit: selectedPlan !== "default" ? selectedPlan : "",
+        sortByPrice,
+      };
+
+      alert(JSON.stringify(filterData)); // For debugging
+
+      try {
+        const response = await fetch("https://your-api-endpoint.com/filters", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(filterData),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch filtered data");
+        }
+
+        const result = await response.json();
+        setFilteredData(result); // Update the state with filtered data from API
+      } catch (error) {
+        console.error("Error fetching filtered data:", error);
+        setFilteredData(carData); // Fallback to initial data if API fails
+      }
     };
 
+<<<<<<< HEAD
     alert(JSON.stringify(filterData));
     try {      
       const response = await fetch(`${BASE_URL}/getCustomerRentalCarsList`, {
@@ -62,6 +95,10 @@ const CarListing = () => {
       setFilteredData(carData); // Fallback to initial data if API fails
     }
   };
+=======
+    applyFilters(); // Apply filters when page loads and whenever filterApplied changes
+  }, [filterApplied]); // Add dependencies to trigger re-render
+>>>>>>> 67dc3957cfcc22c7b77252bdf7cbd920c6e8f6c1
 
   // Refresh the page (reset filters)
   const applyRefresh = () => {
@@ -70,9 +107,8 @@ const CarListing = () => {
     setSortFuel("default");
     setSortType("default");
     setSelectedPlan("default");
-
     setFilteredData(carData); // Reset to initial data or refetch if needed
-    window.location.reload();
+    window.location.reload("/cars");
   };
 
   return (
@@ -136,13 +172,15 @@ const CarListing = () => {
                       </option>
                     ))}
                   </select>
-                  <button className="apply-filters-btn" onClick={applyFilters}>
+
+                  <button
+                    className="apply-filters-btn"
+                    onClick={handleApplyFilters}>
                     Apply Filters
                   </button>
                 </div>
 
                 {/* Buttons for Apply Filters and Refresh */}
-
                 <button className="apply-refresh-btn" onClick={applyRefresh}>
                   Refresh
                 </button>
