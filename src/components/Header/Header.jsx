@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Container } from "reactstrap";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import "../../styles/header.css";
+import profile from "../../assets/all-images/slider-img/profile.jpg";
 
 const navLinks = [
   { path: "/home", display: "Home" },
@@ -89,9 +90,7 @@ const Header = () => {
                   // If logged in, show the avatar as a profile link with dropdown
                   <div className="dropdown">
                     <img
-                      src={
-                        "https://as1.ftcdn.net/v2/jpg/03/53/11/00/1000_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg"
-                      }
+                      src={profile}
                       alt="avatar"
                       className="img-fluid rounded-circle me-3"
                       width="35"
