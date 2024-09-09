@@ -68,14 +68,7 @@ const CarListing = () => {
     };
 
     applyFilters(); // Apply filters when page loads or filters change
-  }, [
-    filterApplied,
-    sortByPrice,
-    sortCategory,
-    sortFuel,
-    sortType,
-    selectedPlan,
-  ]);
+  }, [filterApplied]);
 
   // Refresh the page (reset filters)
   const applyRefresh = () => {
