@@ -9,18 +9,14 @@ import { useState, useEffect } from "react";
 import PricingPlan from "../components/UI/Planing";
 
 const CarListing = () => {
-<<<<<<< HEAD
-  const BASE_URL = process.env.REACT_APP_BACKEND_URL;
-  const [sortByPrice, setSortOrder] = useState("");
-=======
-  const [sortByPrice, setSortOrder] = useState("default");
->>>>>>> 67dc3957cfcc22c7b77252bdf7cbd920c6e8f6c1
-  const [sortCategory, setSortCategory] = useState("default");
-  const [sortFuel, setSortFuel] = useState("default");
-  const [sortType, setSortType] = useState("default");
-  const [selectedPlan, setSelectedPlan] = useState("default"); // For dropdown
+  const BASE_URL = process.env.REACT_APP_BACKEND_URL; // Set your backend URL
+  const [sortByPrice, setSortOrder] = useState(""); // State for sorting price
+  const [sortCategory, setSortCategory] = useState("default"); // State for car category
+  const [sortFuel, setSortFuel] = useState("default"); // State for fuel type
+  const [sortType, setSortType] = useState("default"); // State for transmission type
+  const [selectedPlan, setSelectedPlan] = useState("default"); // State for distance plan
   const [filteredData, setFilteredData] = useState(carData); // Store filtered data
-  const [filterApplied, setFilterApplied] = useState(false); // Track filter button clicks
+  const [filterApplied, setFilterApplied] = useState(true); // Track filter button clicks and auto-fetch on mount
   const plans = ["default", "140 KM", "320 KM", "500 KM", "620 KM"]; // Distance plans
 
   const navigate = useNavigate(); // useNavigate hook for redirection
@@ -31,11 +27,6 @@ const CarListing = () => {
   const handleSortFuelChange = (e) => setSortFuel(e.target.value);
   const handleSortTypeChange = (e) => setSortType(e.target.value);
   const handlePlanChange = (e) => setSelectedPlan(e.target.value); // For distance plan dropdown
-
-  // Toggle filterApplied when "Apply Filters" button is clicked
-  const handleApplyFilters = () => {
-    setFilterApplied((prev) => !prev); // Toggle the value
-  };
 
   // Apply filters when page loads (initial render) and when filter button is clicked
   useEffect(() => {
@@ -49,10 +40,8 @@ const CarListing = () => {
         sortByPrice,
       };
 
-      alert(JSON.stringify(filterData)); // For debugging
-
       try {
-        const response = await fetch("https://your-api-endpoint.com/filters", {
+        const response = await fetch(`${BASE_URL}/getCustomerRentalCarsList`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -65,40 +54,20 @@ const CarListing = () => {
         }
 
         const result = await response.json();
-        setFilteredData(result); // Update the state with filtered data from API
+        setFilteredData(result.data || carData); // Update the state with filtered data from API or fallback
       } catch (error) {
         console.error("Error fetching filtered data:", error);
         setFilteredData(carData); // Fallback to initial data if API fails
       }
     };
 
-<<<<<<< HEAD
-    alert(JSON.stringify(filterData));
-    try {      
-      const response = await fetch(`${BASE_URL}/getCustomerRentalCarsList`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(filterData),
-      });
+    applyFilters(); // Apply filters on load and whenever the filterApplied state changes
+  }, [filterApplied]); // Only trigger effect when filterApplied changes
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch filtered data");
-      }
-
-      const result = await response.json();
-      alert(JSON.stringify(result.data));
-      setFilteredData(result); // Update the state with filtered data from API
-    } catch (error) {
-      console.error("Error fetching filtered data:", error);
-      setFilteredData(carData); // Fallback to initial data if API fails
-    }
+  // Toggle filterApplied when "Apply Filters" button is clicked
+  const handleApplyFilters = () => {
+    setFilterApplied((prev) => !prev); // Toggle the value to re-apply filters
   };
-=======
-    applyFilters(); // Apply filters when page loads and whenever filterApplied changes
-  }, [filterApplied]); // Add dependencies to trigger re-render
->>>>>>> 67dc3957cfcc22c7b77252bdf7cbd920c6e8f6c1
 
   // Refresh the page (reset filters)
   const applyRefresh = () => {
@@ -108,7 +77,6 @@ const CarListing = () => {
     setSortType("default");
     setSelectedPlan("default");
     setFilteredData(carData); // Reset to initial data or refetch if needed
-    window.location.reload("/cars");
   };
 
   return (
@@ -130,6 +98,7 @@ const CarListing = () => {
                   {/* Dropdown for different filters */}
                   <select
                     className="sort-dropdown"
+                    value={sortCategory}
                     onChange={handleSortCategoryChange}>
                     <option value="default">Choose Category</option>
                     <option value="SUV">SUV</option>
@@ -140,6 +109,7 @@ const CarListing = () => {
 
                   <select
                     className="sort-dropdown"
+                    value={sortFuel}
                     onChange={handleSortFuelChange}>
                     <option value="default">Fuel Type</option>
                     <option value="Diesel">Diesel</option>
@@ -149,6 +119,7 @@ const CarListing = () => {
 
                   <select
                     className="sort-dropdown"
+                    value={sortType}
                     onChange={handleSortTypeChange}>
                     <option value="default">Transmission Type</option>
                     <option value="Manual">Manual</option>
@@ -157,6 +128,7 @@ const CarListing = () => {
 
                   <select
                     className="sort-dropdown"
+                    value={sortByPrice}
                     onChange={handleSortOrderChange}>
                     <option value="default">Sort By Price</option>
                     <option value="Asc">Asc</option>
@@ -164,7 +136,10 @@ const CarListing = () => {
                   </select>
 
                   {/* Distance Plan Dropdown */}
-                  <select className="sort-dropdown" onChange={handlePlanChange}>
+                  <select
+                    className="sort-dropdown"
+                    value={selectedPlan}
+                    onChange={handlePlanChange}>
                     <option value="default">Choose Distance Plan</option>
                     {plans.map((plan) => (
                       <option key={plan} value={plan}>
