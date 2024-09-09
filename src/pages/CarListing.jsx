@@ -9,14 +9,13 @@ import { useState, useEffect } from "react";
 import PricingPlan from "../components/UI/Planing";
 
 const CarListing = () => {
-  const BASE_URL = process.env.REACT_APP_BACKEND_URL; // Set your backend URL
-  const [sortByPrice, setSortOrder] = useState(""); // State for sorting price
-  const [sortCategory, setSortCategory] = useState("default"); // State for car category
-  const [sortFuel, setSortFuel] = useState("default"); // State for fuel type
-  const [sortType, setSortType] = useState("default"); // State for transmission type
-  const [selectedPlan, setSelectedPlan] = useState("default"); // State for distance plan
+  const [sortByPrice, setSortOrder] = useState("default");
+  const [sortCategory, setSortCategory] = useState("default");
+  const [sortFuel, setSortFuel] = useState("default");
+  const [sortType, setSortType] = useState("default");
+  const [selectedPlan, setSelectedPlan] = useState("default"); // For dropdown
   const [filteredData, setFilteredData] = useState(carData); // Store filtered data
-  const [filterApplied, setFilterApplied] = useState(true); // Track filter button clicks and auto-fetch on mount
+  const [filterApplied, setFilterApplied] = useState(false); // Track filter button clicks
   const plans = ["default", "140 KM", "320 KM", "500 KM", "620 KM"]; // Distance plans
 
   const navigate = useNavigate(); // useNavigate hook for redirection
@@ -27,6 +26,11 @@ const CarListing = () => {
   const handleSortFuelChange = (e) => setSortFuel(e.target.value);
   const handleSortTypeChange = (e) => setSortType(e.target.value);
   const handlePlanChange = (e) => setSelectedPlan(e.target.value); // For distance plan dropdown
+
+  // Toggle filterApplied when "Apply Filters" button is clicked
+  const handleApplyFilters = () => {
+    setFilterApplied((prev) => !prev); // Toggle the value
+  };
 
   // Apply filters when page loads (initial render) and when filter button is clicked
   useEffect(() => {
@@ -40,8 +44,10 @@ const CarListing = () => {
         sortByPrice,
       };
 
+      alert(JSON.stringify(filterData)); // For debugging
+
       try {
-        const response = await fetch(`${BASE_URL}/getCustomerRentalCarsList`, {
+        const response = await fetch("https://your-api-endpoint.com/filters", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -54,20 +60,15 @@ const CarListing = () => {
         }
 
         const result = await response.json();
-        setFilteredData(result.data || carData); // Update the state with filtered data from API or fallback
+        setFilteredData(result); // Update the state with filtered data from API
       } catch (error) {
         console.error("Error fetching filtered data:", error);
         setFilteredData(carData); // Fallback to initial data if API fails
       }
     };
 
-    applyFilters(); // Apply filters on load and whenever the filterApplied state changes
-  }, [filterApplied]); // Only trigger effect when filterApplied changes
-
-  // Toggle filterApplied when "Apply Filters" button is clicked
-  const handleApplyFilters = () => {
-    setFilterApplied((prev) => !prev); // Toggle the value to re-apply filters
-  };
+    applyFilters(); // Apply filters when page loads and whenever filterApplied changes
+  }, [filterApplied]); // Add dependencies to trigger re-render
 
   // Refresh the page (reset filters)
   const applyRefresh = () => {
@@ -77,6 +78,7 @@ const CarListing = () => {
     setSortType("default");
     setSelectedPlan("default");
     setFilteredData(carData); // Reset to initial data or refetch if needed
+    window.location.reload("/cars");
   };
 
   return (
@@ -98,7 +100,6 @@ const CarListing = () => {
                   {/* Dropdown for different filters */}
                   <select
                     className="sort-dropdown"
-                    value={sortCategory}
                     onChange={handleSortCategoryChange}>
                     <option value="default">Choose Category</option>
                     <option value="SUV">SUV</option>
@@ -109,17 +110,15 @@ const CarListing = () => {
 
                   <select
                     className="sort-dropdown"
-                    value={sortFuel}
                     onChange={handleSortFuelChange}>
                     <option value="default">Fuel Type</option>
-                    <option value="Diesel">Diesel</option>
-                    <option value="Petrol">Petrol</option>
-                    <option value="Electric">Electric</option>
+                    <option value="diesel">Diesel</option>
+                    <option value="petrol">Petrol</option>
+                    <option value="electric">Electric</option>
                   </select>
 
                   <select
                     className="sort-dropdown"
-                    value={sortType}
                     onChange={handleSortTypeChange}>
                     <option value="default">Transmission Type</option>
                     <option value="Manual">Manual</option>
@@ -128,7 +127,6 @@ const CarListing = () => {
 
                   <select
                     className="sort-dropdown"
-                    value={sortByPrice}
                     onChange={handleSortOrderChange}>
                     <option value="default">Sort By Price</option>
                     <option value="Asc">Asc</option>
@@ -136,10 +134,7 @@ const CarListing = () => {
                   </select>
 
                   {/* Distance Plan Dropdown */}
-                  <select
-                    className="sort-dropdown"
-                    value={selectedPlan}
-                    onChange={handlePlanChange}>
+                  <select className="sort-dropdown" onChange={handlePlanChange}>
                     <option value="default">Choose Distance Plan</option>
                     {plans.map((plan) => (
                       <option key={plan} value={plan}>
