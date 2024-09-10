@@ -36,15 +36,25 @@ const CarListing = () => {
   useEffect(() => {
     const fetchFilterOptions = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/getFilterOptions`);
+        var jsonObj = JSON.parse("{}");
+        jsonObj['Property Name'] = "Category";
+        //const response = await fetch(`${BASE_URL}/getDefaultPropertyValuesByName`,jsonObj);
+        const response = await fetch(`${BASE_URL}/getDefaultPropertyValuesByName`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(jsonObj),
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch filter options");
         }
 
         const result = await response.json();
-
+        const responseObj = result.data;
+        const categoryValueString = responseObj['Property Value'];
         // Convert string to array using split, assuming comma-separated values
-        setCategoryOptions(result.categoryOptions.split(",") || []);
+        setCategoryOptions(categoryValueString.split(",") || []);
         setFuelOptions(result.fuelOptions.split(",") || []);
         setTransmissionOptions(result.transmissionOptions.split(",") || []);
         setDistancePlans(result.distancePlans.split(",") || []);
