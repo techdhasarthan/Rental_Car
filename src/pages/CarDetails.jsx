@@ -1,6 +1,4 @@
-import React, { useEffect } from "react";
-
-import carData from "../assets/data/carData";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "reactstrap";
 import Helmet from "../components/Helmet/Helmet";
 import { useParams } from "react-router-dom";
@@ -8,62 +6,79 @@ import "../styles/car-item.css";
 import ShowCarDetails from "./ShowCarDetails";
 
 const CarDetails = () => {
-  const startDate = "2024-08-09 16:00";
-  const endDate = "2024-08-10 16:00";
+  const [carDetails, setCarDetails] = useState(""); // State for car details
+  const [loading, setLoading] = useState(true); // State for loading status
+  const [error, setError] = useState(""); // State for error handling
+  const { slug } = useParams(); // Extract car name (slug) from the URL
+
   const tripHours = "24.0 Hrs";
   const pricingPlan = "1 Day";
   const totalFreeKms = 300;
   const extraKmCharges = "₹ 7.0 per km";
   const fuelNote = "Rental Charges Doesn't Include Fuel";
 
-  const { slug } = useParams();
+  const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
-  const singleCarItem = carData.find((item) => item.carName === slug);
-
+  // Fetch car details from the API
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [singleCarItem]);
+    const fetchCarDetails = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${BASE_URL}/cars/${slug}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch car details");
+        }
+        const data = await response.json();
+        setCarDetails(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchCarDetails();
+  }, [slug]);
+
+  // If the data is still loading
+  if (loading) {
+    return <p>Loading car details...</p>;
+  }
+
+  // If there was an error fetching data
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
+  // If the data was successfully fetched
   return (
-    <Helmet title={singleCarItem.carName}>
+    <Helmet title={carDetails?.carName}>
       <section className=" ">
         <h2 className="section__title text-center my-3">ENQUIRY BREAKDOWN</h2>
         <Container>
           <Row>
             <Col lg="6">
-              <img src={singleCarItem.imgUrl} alt="" className="w-100 mt-5" />
+              <img
+                src={carDetails?.imgUrl}
+                alt={carDetails?.carName}
+                className="w-100 mt-5"
+              />
             </Col>
 
             <Col lg="6">
               <div className="car__info mt-5">
-                <div className=" d-flex align-items-center gap-5  mt-1">
-                  <h2 className="section__title">{singleCarItem.carName}</h2>
-                  {/* <span className=" d-flex align-items-center gap-2">
-                    <span style={{ color: "#f9a826" }}>
-                      <i class="ri-star-s-fill"></i>
-                      <i class="ri-star-s-fill"></i>
-                      <i class="ri-star-s-fill"></i>
-                      <i class="ri-star-s-fill"></i>
-                      <i class="ri-star-s-fill"></i>
-                    </span>
-                    ({singleCarItem.rating} ratings)
-                  </span> */}
+                <div className="d-flex align-items-center gap-5 mt-1">
+                  <h2 className="section__title">{carDetails?.carName}</h2>
                 </div>
-                <div className=" d-flex align-items-center gap-5 mb-2 mt-2">
+                <div className="d-flex align-items-center gap-5 mb-2 mt-2">
                   <h6 className="rent__price fw-bold fs-4">
-                    ₹{singleCarItem.price}.00 / Day
+                    ₹{carDetails?.price}.00 / Day
                   </h6>
 
-                  <span className=" d-flex align-items-center gap-2 fst-italic bold fs-5 fw-bold ">
-                    {/* ({singleCarItem.rating} ratings) */}
-                    <i class="ri-caravan-fill"></i>
-                    TN2024
+                  <span className="d-flex align-items-center gap-2 fst-italic bold fs-5 fw-bold ">
+                    <i className="ri-caravan-fill"></i> TN2024
                   </span>
                 </div>
-
-                {/* <p className="section__description">
-                  {singleCarItem.description}
-                </p> */}
 
                 <div
                   className=" d-flex align-items-center "
@@ -72,28 +87,21 @@ const CarDetails = () => {
                     <i
                       class="ri-roadster-line"
                       style={{ color: "#f9a826" }}></i>{" "}
-                    {singleCarItem.category}
+                    {carDetails?.category}
                   </span>
 
                   <span className=" d-flex align-items-center gap-1 section__description">
                     <i
                       class="ri-settings-2-line"
                       style={{ color: "#f9a826" }}></i>{" "}
-                    {singleCarItem.transmission_type}
+                    {carDetails?.transmission_type}
                   </span>
 
-                  {/* <span className=" d-flex align-items-center gap-1 section__description">
-                    <i
-                      class="ri-timer-flash-line"
-                      style={{ color: "#f9a826" }}
-                    ></i>{" "}
-                    {singleCarItem.speed}
-                  </span> */}
                   <span className=" d-flex align-items-center gap-1 section__description">
                     <i
                       class="ri-wheelchair-line"
                       style={{ color: "#f9a826" }}></i>{" "}
-                    {singleCarItem.no_seat} Seats
+                    {carDetails?.no_seat} Seats
                   </span>
                 </div>
 
@@ -128,45 +136,9 @@ const CarDetails = () => {
                     </p>
                   </span>
                 </div>
-                {/* <div
-                  className="d-flex align-items-center mt-1"
-                  style={{ columnGap: "2.1rem" }}>
-                  <span className="d-flex align-items-center gap-1 section__description">
-                    <p>
-                      <strong>Start Date:</strong> {startDate}
-                    </p>
-                  </span>
-
-                  <span className="d-flex align-items-center gap-1 section__description">
-                    <p>
-                      <strong>End Date:</strong> {endDate}
-                    </p>
-                  </span>
-                </div> */}
               </div>
             </Col>
             <ShowCarDetails />
-            {/* ------------------------------------------------------------------- */}
-
-            {/* <Col lg="7" className="mt-4">
-              <div className="booking-info mt-4">
-                <h5 className="mb-4 fw-bold ">Fulfillment Details</h5> */}
-            {/* <BookingForm /> */}
-            {/* <Fulfillment />
-              </div>
-            </Col> */}
-
-            {/* <Col lg="5" className="mt-4">
-              <div className="payment__info mt-4">
-                <h5 className="mb-4 fw-bold ">Price Details</h5> */}
-            {/* <PaymentMethod /> */}
-            {/* <PriceDetails />
-                <div className="payment text-end mt-5">
-                  <button>Reserve Now</button>
-                </div>
-              </div>
-            </Col> */}
-            {/* ------------------------------------------------------------------------ */}
           </Row>
         </Container>
       </section>
