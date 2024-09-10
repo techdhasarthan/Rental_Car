@@ -351,6 +351,7 @@
     display: block;
   }
 
+
   .navigation {
     background: rgb(0, 13, 107, 0.6);
     width: 100%;
@@ -382,4 +383,9 @@
   .menu__active {
     display: block;
   }
+
+
+
+
+
 }
