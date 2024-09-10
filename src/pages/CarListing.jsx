@@ -37,22 +37,25 @@ const CarListing = () => {
     const fetchFilterOptions = async () => {
       try {
         var jsonObj = JSON.parse("{}");
-        jsonObj['Property Name'] = "Category";
+        jsonObj["Property Name"] = "Category";
         //const response = await fetch(`${BASE_URL}/getDefaultPropertyValuesByName`,jsonObj);
-        const response = await fetch(`${BASE_URL}/getDefaultPropertyValuesByName`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(jsonObj),
-        });
+        const response = await fetch(
+          `${BASE_URL}/getDefaultPropertyValuesByName`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(jsonObj),
+          }
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch filter options");
         }
 
         const result = await response.json();
         const responseObj = result.data;
-        const categoryValueString = responseObj['Property Value'];
+        const categoryValueString = responseObj["Property Value"];
         // Convert string to array using split, assuming comma-separated values
         setCategoryOptions(categoryValueString.split(",") || []);
         setFuelOptions(result.fuelOptions.split(",") || []);
@@ -192,14 +195,14 @@ const CarListing = () => {
                   </select>
 
                   <button
-                    className="apply-filters-btn"
+                    className="apply-filters-btn "
                     onClick={handleApplyFilters}>
                     Apply Filters
                   </button>
                 </div>
 
                 {/* Buttons for Apply Filters and Refresh */}
-                <button className="apply-refresh-btn" onClick={applyRefresh}>
+                <button className="apply-refresh-btn " onClick={applyRefresh}>
                   Refresh
                 </button>
               </div>

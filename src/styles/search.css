@@ -196,11 +196,14 @@
   color: white;
   border: none;
   cursor: pointer;
-  border-radius: 20px;
+  border-radius: 10px;
+  transition: background-color 0.3s ease, color 0.3s ease-in-out;
+
 }
 
 .apply-filters-btn:hover {
   background-color: rgb(0, 13, 107);
+  box-shadow: 2px 3px 0px rgba(36, 36, 36, 0.5);
 }
 
 .apply-refresh-btn {
@@ -209,11 +212,13 @@
   color: white;
   border: none;
   cursor: pointer;
-  border-radius: 20px;
+  border-radius: 10px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .apply-refresh-btn:hover {
   background-color: #f9a826;
+  box-shadow: 2px 3px 0px rgba(36, 36, 36, 0.5);
 }
 
 
