@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Container } from "reactstrap";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import "../../styles/header.css";
 import profile from "../../assets/all-images/slider-img/profile.jpg";
 
@@ -15,9 +15,8 @@ const navLinks = [
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false); // State to toggle dropdown visibility
-
-  const location = useLocation();
   const menuRef = useRef(null);
+  const dropdownRef = useRef(null);
 
   const toggleMenu = () => menuRef.current.classList.toggle("menu__active");
 
@@ -35,8 +34,20 @@ const Header = () => {
 
   // Toggle dropdown visibility
   const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
+    setShowDropdown((prev) => !prev);
   };
+
+  // Hide dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <header className="header">
@@ -62,8 +73,8 @@ const Header = () => {
               </div>
             </div>
             <div className="nav__right">
-              <div className="d-flex align-items-center justify-content-between w-100 gap-4">
-                <div className="location-selector d-flex align-items-center">
+              <div className="d-flex align-items-center justify-content-between w-100 gap-4 ">
+                <div className="location-selector d-flex align-items-center ">
                   <i className="ri-map-pin-line"></i>
                   <select
                     value={selectedLocation}
@@ -79,37 +90,36 @@ const Header = () => {
                 {!isLoggedIn ? (
                   <Link
                     to="/sign-in"
-                    className="d-flex align-items-center gap-1 text-white no-underline custom-hover p-3">
+                    className="d-flex shadow border-4 gap-1 text-white no-underline custom-hover p-3 ">
                     <span className="custom-hover">
                       <i className="ri-login-box-line"></i> Login
                     </span>
                   </Link>
                 ) : (
-                  <div className="dropdown ">
+                  <div className="dropdown " ref={dropdownRef}>
                     <img
                       src={profile}
                       alt="avatar"
-                      className="img-fluid rounded-circle me-3"
+                      className="img-fluid rounded-circle me-3 shadow-lg profileimage  "
                       width="35"
                       onClick={toggleDropdown}
                       style={{ cursor: "pointer" }}
                     />
-                    {showDropdown && (
-                      <div className="dropdown-menu show">
-                        <Link
-                          to="/user-account"
-                          className="dropdown-item"
-                          onClick={() => setShowDropdown(false)}>
-                          <i className="ri-user-line"></i> My Profile
-                        </Link>
-                        <Link
-                          to="/sign-up"
-                          className="dropdown-item"
-                          onClick={() => setShowDropdown(false)}>
-                          <i className="ri-logout-box-line"></i> Logout
-                        </Link>
-                      </div>
-                    )}
+                    <div
+                      className={`dropdown-menu ${showDropdown ? "show" : ""}`}>
+                      <Link
+                        to="/user-account"
+                        className="dropdown-item"
+                        onClick={() => setShowDropdown(false)}>
+                        <i className="ri-user-line"></i> My Profile
+                      </Link>
+                      <Link
+                        to="/sign-up"
+                        className="dropdown-item"
+                        onClick={() => setShowDropdown(false)}>
+                        <i className="ri-logout-box-line"></i> Logout
+                      </Link>
+                    </div>
                   </div>
                 )}
               </div>

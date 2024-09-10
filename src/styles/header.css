@@ -310,6 +310,9 @@
   /* Changes text color to yellow on hover */
 }
 
+
+
+/* Dropdown Menu */
 .dropdown-menu {
   position: absolute;
   top: 50px;
@@ -318,13 +321,22 @@
   background-color: white;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Shadow effect */
   padding: 10px;
-  display: none;
+  opacity: 0;
+  /* Hidden by default */
+  visibility: hidden;
+  /* Ensure it's not interactive when hidden */
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  /* Smooth transition */
   z-index: 1000;
 }
 
 .dropdown-menu.show {
-  display: block;
+  opacity: 1;
+  /* Visible */
+  visibility: visible;
+  /* Make it interactive */
 }
 
 .dropdown-item {
@@ -339,13 +351,21 @@
   border-radius: 3px;
 }
 
+.profileimage {
+
+  transition: filter 0.3s ease-in-out;
+  transition: transform 250ms;
+}
+
+.profileimage:hover {
+
+  filter: drop-shadow(0px 0px 4px rgb(255, 255, 255));
+  transform: translateY(-3px);
+}
+
+
 @media only screen and (max-width: 768px) {
 
-  .header__top,
-  .header__middle,
-  .nav__right {
-    display: none;
-  }
 
   .mobile__menu {
     display: block;
