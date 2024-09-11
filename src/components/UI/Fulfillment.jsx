@@ -17,14 +17,12 @@ const Fulfillment = () => {
   const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
+  const [option, setOption] = useState("");
 
   const location = useLocation();
   const { startdate, enddate } = location.state || {}; // Retrieve date from state
   const { slug } = useParams(); // Extract car name (slug) from the URL
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
-  const handleSelectChange = (event) => {
-    setSelectedOption(event.target.value);
-  };
 
   useEffect(() => {
     // Fetch car details from the API
@@ -119,6 +117,11 @@ const Fulfillment = () => {
   };
 
   // Other handlers...
+
+  const handleSelectChange = (event) => {
+    setOption(event.target.value);
+  };
+
   const handleCheckboxChange = (event) => {
     const { name } = event.target;
     setSelectedOption(name);
@@ -203,7 +206,7 @@ const Fulfillment = () => {
           <div className="select-input-container">
             <select
               className="select-input"
-              value={selectedOption}
+              value={option}
               onChange={handleSelectChange}>
               <option value="">Select an option</option>
               <option value="Kilampakkam">Kilampakkam</option>
