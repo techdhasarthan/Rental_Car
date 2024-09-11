@@ -39,7 +39,6 @@ const CarDetails = () => {
         }
         const data = await response.json();
         alert(JSON.stringify(data));
-        
         setCarDetails(data);
       } catch (err) {
         setError(err.message);
