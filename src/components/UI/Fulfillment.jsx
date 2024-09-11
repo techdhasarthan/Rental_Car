@@ -22,6 +22,9 @@ const Fulfillment = () => {
   const { startdate, enddate } = location.state || {}; // Retrieve date from state
   const { slug } = useParams(); // Extract car name (slug) from the URL
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+  const handleSelectChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
 
   useEffect(() => {
     // Fetch car details from the API
@@ -198,7 +201,10 @@ const Fulfillment = () => {
 
         {selectedOption === "selfPickup" && (
           <div className="select-input-container">
-            <select className="select-input">
+            <select
+              className="select-input"
+              value={selectedOption}
+              onChange={handleSelectChange}>
               <option value="">Select an option</option>
               <option value="Kilampakkam">Kilampakkam</option>
               <option value="Koyambedu">Koyambedu</option>
