@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom"; // Import useParams
 import "../../styles/fulfillment.css"; // Import your CSS file for styling
 
 const Fulfillment = () => {
@@ -18,11 +18,14 @@ const Fulfillment = () => {
 
   const location = useLocation();
   const { startdate, enddate } = location.state || {}; // Retrieve date from state
+  const { slug } = useParams(); // Extract car name (slug) from the URL
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+
   useEffect(() => {
     // Fetch car details from the API
     const fetchCarDetails = async () => {
       try {
+        const requestBody = { ID: slug };
         const response = await fetch(
           `${BASE_URL}/getCustomerRentalCarsInfoBookingView`,
           {
@@ -30,9 +33,7 @@ const Fulfillment = () => {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-              /* your requestBody */
-            }),
+            body: JSON.stringify(requestBody),
           }
         );
 
@@ -56,40 +57,56 @@ const Fulfillment = () => {
     };
 
     fetchCarDetails();
-  }, []); // Empty dependency array ensures this runs once
+  }, [slug, BASE_URL]); // Added slug and BASE_URL as dependencies to avoid warnings
 
   useEffect(() => {
     // Make the fulfillment request
-    if (startDate && endDate && selectedOption && carDetails.carName) {
-      const requestData = {
-        fulfillmentType: selectedOption,
-        deliveryInfo: deliveryInfo || "",
-        extraInfo: extraInfo || "",
-        startDate: startDate,
-        endDate: endDate,
-        carName: carDetails.carName,
-        car_no: carDetails.car_no,
-        category: carDetails.category,
-      };
+    const applyData = async () => {
+      if (startDate && endDate && selectedOption && carDetails.carName) {
+        const requestData = {
+          fulfillmentType: selectedOption,
+          deliveryInfo: deliveryInfo || "",
+          extraInfo: extraInfo || "",
+          startDate: startDate,
+          endDate: endDate,
+          carName: carDetails.carName,
+          car_no: carDetails.car_no,
+          category: carDetails.category,
+        };
 
-      console.log("Sending data:", requestData);
+        console.log("Sending data:", requestData);
 
-      fetch(`${BASE_URL}/submit-fulfillment-details`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      })
-        .then((response) => response.json())
-        .then((data) => {
+        try {
+          const response = await fetch(`${BASE_URL}/fulfillment`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestData),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to submit fulfillment details");
+          }
+
+          const data = await response.json();
           console.log("Success:", data);
-        })
-        .catch((error) => {
+        } catch (error) {
           console.error("Error:", error);
-        });
-    }
-  }, [selectedOption, startDate, endDate, deliveryInfo, extraInfo, carDetails]); // Dependencies ensure this triggers correctly
+        }
+      }
+    };
+
+    applyData(); // Call the function within the effect
+  }, [
+    selectedOption,
+    startDate,
+    endDate,
+    deliveryInfo,
+    extraInfo,
+    carDetails,
+    BASE_URL,
+  ]); // Added BASE_URL as a dependency
 
   // Other handlers...
   const handleCheckboxChange = (event) => {
@@ -125,7 +142,7 @@ const Fulfillment = () => {
 
   return (
     <>
-      <div className="d-flex date_container flex-row me-1">
+      <div className="d-flex date_container flex-row me-3">
         <div className="form-groups me-3">
           <label htmlFor="startDate">Start Date & Time</label>
           <input
@@ -176,9 +193,9 @@ const Fulfillment = () => {
           <div className="select-input-container">
             <select className="select-input">
               <option value="">Select an option</option>
-              <option value="option1">Kilampakkam</option>
-              <option value="option2">Koyambedu</option>
-              <option value="option3">Tambaram</option>
+              <option value="Kilampakkam">Kilampakkam</option>
+              <option value="Koyambedu">Koyambedu</option>
+              <option value="Tambaram">Tambaram</option>
             </select>
           </div>
         )}
