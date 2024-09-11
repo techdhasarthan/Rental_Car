@@ -3,46 +3,78 @@ import { useLocation } from "react-router-dom";
 import "../../styles/fulfillment.css"; // Import your CSS file for styling
 
 const Fulfillment = () => {
+  const [carDetails, setCarDetails] = useState({
+    carName: "",
+    car_no: "",
+    category: "",
+  });
+
   const [selectedOption, setSelectedOption] = useState("selfPickup");
   const [deliveryInfo, setDeliveryInfo] = useState("");
   const [extraInfo, setExtraInfo] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const location = useLocation();
   const { startdate, enddate } = location.state || {}; // Retrieve date from state
+  const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+  useEffect(() => {
+    // Fetch car details from the API
+    const fetchCarDetails = async () => {
+      try {
+        const response = await fetch(
+          `${BASE_URL}/getCustomerRentalCarsInfoBookingView`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              /* your requestBody */
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch car details");
+        }
+
+        const data = await response.json();
+        const carData = {
+          carName: data.data?.["Car Name"] || "",
+          car_no: data.data?.["Car Number"] || "",
+          category: data.data?.["Category"] || "",
+        };
+
+        setCarDetails(carData); // Store car details in state
+      } catch (err) {
+        console.error(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCarDetails();
+  }, []); // Empty dependency array ensures this runs once
 
   useEffect(() => {
-    if (startdate && enddate) {
-      setStartDate(startdate);
-      setEndDate(enddate);
-    } else {
-      // Set default startDate to today at 10 AM and endDate to the next day at 10 AM
-      const now = new Date();
-      const start = new Date(now.setHours(10, 0, 0, 0)); // Today at 10 AM
-      const end = new Date(start);
-      end.setDate(end.getDate()); // Next day at 10 AM
-
-      setStartDate(start.toISOString().slice(0, 16)); // Format to YYYY-MM-DDTHH:MM
-      setEndDate(end.toISOString().slice(0, 16)); // Format to YYYY-MM-DDTHH:MM
-    }
-  }, [startdate, enddate]);
-
-  // API call whenever dates or options are selected
-  useEffect(() => {
-    if (startDate && endDate && selectedOption) {
+    // Make the fulfillment request
+    if (startDate && endDate && selectedOption && carDetails.carName) {
       const requestData = {
-        fulfillmentType: selectedOption, // selfPickup or delivery
-        deliveryInfo: deliveryInfo || "", // Delivery info (if applicable)
-        extraInfo: extraInfo || "", // Extra info (if applicable)
+        fulfillmentType: selectedOption,
+        deliveryInfo: deliveryInfo || "",
+        extraInfo: extraInfo || "",
         startDate: startDate,
         endDate: endDate,
+        carName: carDetails.carName,
+        car_no: carDetails.car_no,
+        category: carDetails.category,
       };
 
       console.log("Sending data:", requestData);
 
-      // Make the API call using fetch
-      fetch("https://api.example.com/submit-fulfillment-details", {
+      fetch(`${BASE_URL}/submit-fulfillment-details`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,8 +89,9 @@ const Fulfillment = () => {
           console.error("Error:", error);
         });
     }
-  }, [selectedOption, startDate, endDate, deliveryInfo, extraInfo]);
+  }, [selectedOption, startDate, endDate, deliveryInfo, extraInfo, carDetails]); // Dependencies ensure this triggers correctly
 
+  // Other handlers...
   const handleCheckboxChange = (event) => {
     const { name } = event.target;
     setSelectedOption(name);
@@ -76,14 +109,6 @@ const Fulfillment = () => {
 
   const handleStartDateChange = (e) => {
     const selectedStartDate = e.target.value;
-    const currentDateTime = new Date(); // Current date and time
-    const selectedStartDateTime = new Date(selectedStartDate);
-
-    if (selectedStartDateTime < currentDateTime) {
-      alert("You cannot select a past time.");
-      return;
-    }
-
     setStartDate(selectedStartDate);
   };
 
@@ -100,8 +125,8 @@ const Fulfillment = () => {
 
   return (
     <>
-      <div className="d-flex date_container flex-row ms-2">
-        <div className="form-groups me-3 ">
+      <div className="d-flex date_container flex-row me-1">
+        <div className="form-groups me-3">
           <label htmlFor="startDate">Start Date & Time</label>
           <input
             type="datetime-local"

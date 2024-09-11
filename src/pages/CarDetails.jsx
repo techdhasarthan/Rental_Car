@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 import "../styles/car-item.css";
 import ShowCarDetails from "./ShowCarDetails";
 import Fulfillment from "../components/UI/Fulfillment";
-import FromToDate from "../components/UI/FromToDate";
 
 const CarDetails = () => {
   const [carDetails, setCarDetails] = useState(null); // State for car details
@@ -146,7 +145,7 @@ const CarDetails = () => {
                   <span className="d-flex align-items-center gap-1 section__description">
                     <p>
                       <strong>Total Free Kms:</strong>{" "}
-                      {carDetails?.limitkm || "N/A"} km
+                      {carDetails?.limitkm || "N/A"}
                     </p>
                   </span>
 
