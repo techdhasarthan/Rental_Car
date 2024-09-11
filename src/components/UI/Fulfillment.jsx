@@ -26,6 +26,7 @@ const Fulfillment = () => {
   useEffect(() => {
     // Fetch car details from the API
     const fetchCarDetails = async () => {
+      console.log("hellow");
       try {
         const requestBody = { ID: slug };
         const response = await fetch(
