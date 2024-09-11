@@ -1,85 +1,110 @@
 /* Container for the entire fulfillment section */
 .fulfillment-container {
-    padding: 25px;
-    max-width: 800px;
-    margin: 0   10px;
-    border: 1px solid #ddd; /* Add a border for better separation */
-    border-radius: 8px; /* Rounded corners for a modern look */
-     /* Light background color for contrast */
-  }
-  
-  /* Flex container for radio buttons */
-  .radio-buttons {
-    display: flex;
-    gap: 20px;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  
-  /* Styling for radio button labels */
-  .radio-buttons label {
-    display: block;
-    margin: 15px; /* Reduced margin for a tighter layout */
-    font-weight: bold; /* Make labels more prominent */
-  }
-  
-  .radio-buttons input[type="checkbox"] {
-    margin-right: 5px;
-  }
-  
-  /* Container for select inputs */
-  .select-input-container {
-    margin-bottom: 20px;
-  }
-  
-  /* Styling for select inputs */
-  .select-input {
-    padding: 12px; /* Slightly increased padding for better touch */
-    font-size: 16px;
-    width: 100%;
-    border: 1px solid #ddd; /* Border for better definition */
-    border-radius: 4px; /* Rounded corners for consistency */
-    margin-bottom: 20px; /* Adjusted margin for consistency */
-  }
-  
-  /* Styling for input fields */
-  .input-fieldss {
-    padding: 12px; /* Increased padding for better touch */
-    font-size: 16px;
-    width: 100%;
-    border: 1px solid #ddd; /* Border for better definition */
-    border-radius: 4px; /* Rounded corners for consistency */
-    margin-bottom: 20px; /* Adjusted margin for consistency */
-  }
-  
-  /* Styling for text area */
-  .text-areas {
-    padding: 12px; /* Increased padding for better touch */
-    font-size: 16px;
-    width: 100%;
-    height: 120px; /* Slightly increased height for better usability */
-    border: 1px solid #ddd; /* Border for better definition */
-    border-radius: 4px; /* Rounded corners for consistency */
-    margin-bottom: 20px; /* Adjusted margin for consistency */
-  }
-  
-  /* Placeholder styling for input fields and text area */
-  .input-fieldss::placeholder,
-  .text-areas::placeholder {
-    color: black; /* Slightly lighter color for placeholder text */
-  }
-  
-  /* Styling for disclaimer text */
-  .disclaimer {
-    font-size: 15px;
-    color: #000;
-    margin-top: 10px; /* Space above the disclaimer */
-  }
-  
+  padding: 25px;
+  max-width: 800px;
+  margin: 0 10px;
+  border: 1px solid #ddd;
+  /* Add a border for better separation */
+  border-radius: 8px;
+  /* Rounded corners for a modern look */
+  /* Light background color for contrast */
+}
 
+/* Flex container for radio buttons */
+.radio-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
 
-.section__description strong {
-  color: #000d6b; /* Optional: Sets the strong tag text color to sky blue */
+/* Styling for radio button labels */
+.radio-buttons label {
+  display: block;
+  margin: 15px;
+  /* Reduced margin for a tighter layout */
+  font-weight: bold;
+  /* Make labels more prominent */
+}
+
+.radio-buttons input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+/* Container for select inputs */
+.select-input-container {
+  margin-bottom: 20px;
+}
+
+/* Styling for select inputs */
+.select-input {
+  padding: 12px;
+  /* Slightly increased padding for better touch */
+  font-size: 16px;
+  width: 100%;
+  border: 1px solid #ddd;
+  /* Border for better definition */
+  border-radius: 4px;
+  /* Rounded corners for consistency */
+  margin-bottom: 20px;
+  /* Adjusted margin for consistency */
+}
+
+/* Styling for input fields */
+.input-fieldss {
+  padding: 12px;
+  /* Increased padding for better touch */
+  font-size: 16px;
+  width: 100%;
+  border: 1px solid #ddd;
+  /* Border for better definition */
+  border-radius: 4px;
+  /* Rounded corners for consistency */
+  margin-bottom: 20px;
+  /* Adjusted margin for consistency */
+}
+
+/* Styling for text area */
+.text-areas {
+  padding: 12px;
+  /* Increased padding for better touch */
+  font-size: 16px;
+  width: 100%;
+  height: 120px;
+  /* Slightly increased height for better usability */
+  border: 1px solid #ddd;
+  /* Border for better definition */
+  border-radius: 4px;
+  /* Rounded corners for consistency */
+  margin-bottom: 20px;
+  /* Adjusted margin for consistency */
+}
+
+/* Placeholder styling for input fields and text area */
+.input-fieldss::placeholder,
+.text-areas::placeholder {
+  color: black;
+  /* Slightly lighter color for placeholder text */
+}
+
+/* Styling for disclaimer text */
+.disclaimer {
+  font-size: 15px;
+  color: #000;
+  margin-top: 10px;
+  /* Space above the disclaimer */
 }
 
 
+
+.section__description strong {
+  color: #000d6b;
+  /* Optional: Sets the strong tag text color to sky blue */
+}
+
+
+.date_container {
+  padding-left: 425px;
+  padding-bottom: 30px;
+
+}

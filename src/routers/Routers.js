@@ -11,6 +11,7 @@ import Contact from "../pages/Contact";
 import SignUp from "../pages/SignUp";
 import SignIn from "../pages/SignIn";
 import UserAccount from "../pages/UserAccount";
+import Fulfillment from "../components/UI/Fulfillment";
 
 const Routers = () => {
   return (
@@ -26,6 +27,7 @@ const Routers = () => {
       <Route path="/sign-up" element={<SignUp />} />
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="/user-account" element={<UserAccount />} />
+      <Route path="/full" element={<Fulfillment />} />
 
       <Route path="*" element={<NotFound />} />
     </Routes>
