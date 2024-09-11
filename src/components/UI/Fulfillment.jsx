@@ -67,7 +67,7 @@ const Fulfillment = () => {
   const handleFulfillmentRequest = async () => {
     if (startDate && endDate && selectedOption && carDetails.carName) {
       const requestData = {
-        fulfillmentType: selectedOption,
+        fulfillmentType: option || "",
         deliveryInfo: deliveryInfo || "",
         extraInfo: extraInfo || "",
         startDate: startDate,
