@@ -130,12 +130,12 @@ const CarDetails = () => {
                 <div
                   className="d-flex align-items-center mt-2"
                   style={{ columnGap: "2.1rem" }}>
-                  <span className="d-flex align-items-center gap-1 section__description">
+                  {/* <span className="d-flex align-items-center gap-1 section__description">
                     <p>
                       <strong>Pricing Plan:</strong>{" "}
                       {carDetails?.pricingPlan || "N/A"}
                     </p>
-                  </span>
+                  </span> */}
                 </div>
 
                 <div
