@@ -75,7 +75,7 @@ const Fulfillment = () => {
         };
 
         console.log("Sending data:", requestData);
-
+        
         try {
           const response = await fetch(`${BASE_URL}/fulfillment`, {
             method: "POST",
