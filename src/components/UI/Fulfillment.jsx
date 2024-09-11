@@ -15,6 +15,11 @@ const Fulfillment = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
+
+  const toggleVisibility = () => {
+    setIsVisible(!isVisible);
+  };
 
   const location = useLocation();
   const { startdate, enddate } = location.state || {}; // Retrieve date from state
@@ -75,7 +80,7 @@ const Fulfillment = () => {
         };
 
         console.log("Sending data:", requestData);
-        
+
         try {
           const response = await fetch(`${BASE_URL}/fulfillment`, {
             method: "POST",
@@ -98,15 +103,7 @@ const Fulfillment = () => {
     };
 
     applyData(); // Call the function within the effect
-  }, [
-    selectedOption,
-    startDate,
-    endDate,
-    deliveryInfo,
-    extraInfo,
-    carDetails,
-    BASE_URL,
-  ]); // Added BASE_URL as a dependency
+  }, [isVisible]); // Added BASE_URL as a dependency
 
   // Other handlers...
   const handleCheckboxChange = (event) => {
@@ -223,6 +220,13 @@ const Fulfillment = () => {
           city limits locations including Airport pickup/drop. The same will be
           confirmed upon KYC verification.
         </p>
+      </div>
+      <div className="text-end ps-5 me-3">
+        <button
+          onClick={toggleVisibility}
+          className="custom-blue-btn rounded px-3 py-2">
+          {isVisible ? "Not Now" : "Apply Now"}
+        </button>
       </div>
     </>
   );
