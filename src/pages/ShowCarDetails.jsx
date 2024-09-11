@@ -7,11 +7,6 @@ import "./ShowCarDetails.css";
 import FromToDate from "../components/UI/FromToDate";
 
 const ShowCarDetails = () => {
-  const dateLabels = {
-    startLabel: "Booking From Date",
-    endLabel: "Booking To Date",
-  };
-
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisibility = () => {
