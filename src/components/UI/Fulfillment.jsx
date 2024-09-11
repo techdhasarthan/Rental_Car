@@ -66,6 +66,12 @@ const Fulfillment = () => {
   // Trigger fulfillment request on button click
   const handleFulfillmentRequest = async () => {
     if (startDate && endDate && selectedOption && carDetails.carName) {
+      if (selectedOption === "delivery") {
+        setOption("");
+      } else if (selectedOption === "selfPickup") {
+        setExtraInfo("");
+        setDeliveryInfo("");
+      }
       const requestData = {
         fulfillmentType: option || "",
         deliveryInfo: deliveryInfo || "",
