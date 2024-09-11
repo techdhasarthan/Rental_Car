@@ -11,7 +11,6 @@ const CarDetails = () => {
   const [error, setError] = useState(""); // State for error handling
   const { slug } = useParams(); // Extract car name (slug) from the URL
 
-  const tripHours = "24.0 Hrs";
   const pricingPlan = "1 Day";
   const totalFreeKms = 300;
   const extraKmCharges = "₹ 7.0 per km";
@@ -23,12 +22,23 @@ const CarDetails = () => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
+        var jsonObj = JSON.parse("{}");
+        jsonObj["ID"] = slug;
+        const response = await fetch(`${BASE_URL}/cars/${slug}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(jsonObj),
+        });
+
         setLoading(true);
-        const response = await fetch(`${BASE_URL}/cars/${slug}`);
+
         if (!response.ok) {
           throw new Error("Failed to fetch car details");
         }
         const data = await response.json();
+        alert(data);
         setCarDetails(data);
       } catch (err) {
         setError(err.message);
@@ -108,11 +118,11 @@ const CarDetails = () => {
                 <div
                   className="d-flex align-items-center mt-2"
                   style={{ columnGap: "2.1rem" }}>
-                  <span className="d-flex align-items-center gap-1 section__description">
+                  {/* <span className="d-flex align-items-center gap-1 section__description">
                     <p>
                       <strong>Trip Hours:</strong> {tripHours}
                     </p>
-                  </span>
+                  </span> */}
 
                   <span className="d-flex align-items-center gap-1 section__description">
                     <p>
