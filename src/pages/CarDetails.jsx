@@ -164,9 +164,9 @@ const CarDetails = () => {
               <Row>
                 <Col lg="7" className="mt-4">
                   <div className="booking-info mt-4">
-                    <div className="ms-2 ">
+                    {/* <div className="ms-2 ">
                       <FromToDate />
-                    </div>
+                    </div> */}
                     <h5 className="mb-4 fw-bold">Fulfillment Details</h5>
                     <Fulfillment />
                   </div>
