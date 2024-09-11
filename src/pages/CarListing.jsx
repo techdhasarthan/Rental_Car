@@ -39,8 +39,7 @@ const CarListing = () => {
         var jsonObj = JSON.parse("{}");
         jsonObj["Property Name"] = "Category";
         //const response = await fetch(`${BASE_URL}/getDefaultPropertyValuesByName`,jsonObj);
-        const response = await fetch(
-          `${BASE_URL}/getDefaultPropertyValuesByName`,
+        const response = await fetch(`${BASE_URL}/getDefaultPropertyValuesByName`,
           {
             method: "POST",
             headers: {

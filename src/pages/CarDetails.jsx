@@ -24,7 +24,7 @@ const CarDetails = () => {
       try {
         var jsonObj = JSON.parse("{}");
         jsonObj["ID"] = slug;
-        const response = await fetch(`${BASE_URL}/cars/${slug}`, {
+        const response = await fetch(`${BASE_URL}/getCustomerRentalCarsInfoBookingView`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -38,7 +38,7 @@ const CarDetails = () => {
           throw new Error("Failed to fetch car details");
         }
         const data = await response.json();
-        alert(data);
+        alert(JSON.stringify(data));
         setCarDetails(data);
       } catch (err) {
         setError(err.message);
