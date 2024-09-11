@@ -61,20 +61,19 @@ const Fulfillment = () => {
 
   useEffect(() => {
     // Make the fulfillment request
-    const applyData = async () => {
-      if (startDate && endDate && selectedOption && carDetails.carName) {
-        const requestData = {
-          fulfillmentType: selectedOption,
-          deliveryInfo: deliveryInfo || "",
-          extraInfo: extraInfo || "",
-          startDate: startDate,
-          endDate: endDate,
-          carName: carDetails.carName,
-          car_no: carDetails.car_no,
-          category: carDetails.category,
-        };
+    if (startDate && endDate && selectedOption && carDetails.carName) {
+      const requestData = {
+        fulfillmentType: selectedOption,
+        deliveryInfo: deliveryInfo || "",
+        extraInfo: extraInfo || "",
+        startDate: startDate,
+        endDate: endDate,
+        carName: carDetails.carName,
+        car_no: carDetails.car_no,
+        category: carDetails.category,
+      };
 
-        console.log("Sending data:", requestData);
+      console.log("Sending data:", requestData);
 
         try {
           const response = await fetch(`${BASE_URL}/fulfillment`, {
