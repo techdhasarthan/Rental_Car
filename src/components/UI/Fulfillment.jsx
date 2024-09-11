@@ -100,8 +100,8 @@ const Fulfillment = () => {
 
   return (
     <>
-      <div className="d-flex date_container flex-row">
-        <div className="form-groups me-3">
+      <div className="d-flex date_container flex-row ms-2">
+        <div className="form-groups me-3 ">
           <label htmlFor="startDate">Start Date & Time</label>
           <input
             type="datetime-local"
