@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom"; // Import useParams
 import "../../styles/fulfillment.css"; // Import your CSS file for styling
+import ShowCarDetails from "../../pages/ShowCarDetails";
 
 const Fulfillment = () => {
   const [carDetails, setCarDetails] = useState({
@@ -9,17 +10,13 @@ const Fulfillment = () => {
     category: "",
   });
 
-  const [selectedOption, setSelectedOption] = useState("selfPickup");
+  const [selectedOption, setSelectedOption] = useState("");
   const [deliveryInfo, setDeliveryInfo] = useState("");
   const [extraInfo, setExtraInfo] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
-
-  const toggleVisibility = () => {
-    setIsVisible(!isVisible);
-  };
 
   const location = useLocation();
   const { startdate, enddate } = location.state || {}; // Retrieve date from state
@@ -64,46 +61,58 @@ const Fulfillment = () => {
     fetchCarDetails();
   }, [slug, BASE_URL]); // Added slug and BASE_URL as dependencies to avoid warnings
 
-  useEffect(() => {
-    // Make the fulfillment request
-    const applyData = async () => {
-      if (startDate && endDate && selectedOption && carDetails.carName) {
-        const requestData = {
-          fulfillmentType: selectedOption,
-          deliveryInfo: deliveryInfo || "",
-          extraInfo: extraInfo || "",
-          startDate: startDate,
-          endDate: endDate,
-          carName: carDetails.carName,
-          car_no: carDetails.car_no,
-          category: carDetails.category,
-        };
+  // Trigger fulfillment request on button click
+  const handleFulfillmentRequest = async () => {
+    if (startDate && endDate && selectedOption && carDetails.carName) {
+      const requestData = {
+        fulfillmentType: selectedOption,
+        deliveryInfo: deliveryInfo || "",
+        extraInfo: extraInfo || "",
+        startDate: startDate,
+        endDate: endDate,
+        carName: carDetails.carName,
+        car_no: carDetails.car_no,
+        category: carDetails.category,
+      };
 
-        console.log("Sending data:", requestData);
-
-        try {
-          const response = await fetch(`${BASE_URL}/fulfillment`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestData),
-          });
-
-          if (!response.ok) {
-            throw new Error("Failed to submit fulfillment details");
-          }
-
-          const data = await response.json();
-          console.log("Success:", data);
-        } catch (error) {
-          console.error("Error:", error);
-        }
+      if (selectedOption === "delivery") {
+        requestData.deliveryInfo = deliveryInfo || "";
+        requestData.extraInfo = extraInfo || "";
       }
-    };
 
-    applyData(); // Call the function within the effect
-  }, [isVisible]); // Added BASE_URL as a dependency
+      console.log("Sending data:", requestData);
+
+      try {
+        const response = await fetch(`${BASE_URL}/fulfillment`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestData),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to submit fulfillment details");
+        }
+
+        const data = await response.json();
+        alert(JSON.stringify(data));
+        console.log("Success:", data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  // Toggle visibility and trigger the fulfillment request when button is clicked
+  const toggleVisibilityAndSubmit = () => {
+    setIsVisible((prevIsVisible) => {
+      if (!prevIsVisible) {
+        handleFulfillmentRequest(); // Call API when making the component visible
+      }
+      return !prevIsVisible;
+    });
+  };
 
   // Other handlers...
   const handleCheckboxChange = (event) => {
@@ -223,10 +232,11 @@ const Fulfillment = () => {
       </div>
       <div className="text-end ps-5 me-3">
         <button
-          onClick={toggleVisibility}
+          onClick={toggleVisibilityAndSubmit}
           className="custom-blue-btn rounded px-3 py-2">
           {isVisible ? "Not Now" : "Apply Now"}
         </button>
+        {isVisible ? <ShowCarDetails /> : "not found"}
       </div>
     </>
   );

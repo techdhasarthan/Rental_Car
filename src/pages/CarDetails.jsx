@@ -3,7 +3,7 @@ import { Container, Row, Col } from "reactstrap";
 import Helmet from "../components/Helmet/Helmet";
 import { useParams } from "react-router-dom";
 import "../styles/car-item.css";
-import ShowCarDetails from "./ShowCarDetails";
+
 import Fulfillment from "../components/UI/Fulfillment";
 
 const CarDetails = () => {
@@ -173,8 +173,6 @@ const CarDetails = () => {
               </Row>
             </Container>
             {/* ----------------------------------------------------- */}
-
-            <ShowCarDetails />
           </Row>
         </Container>
       </section>
