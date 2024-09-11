@@ -10,6 +10,7 @@ const CarItem = (props) => {
     "Fuel Type": oil,
     "Price Per Day": price,
     "No.Of.Seats": noSeat,
+    ID: id,
   } = props.item;
 
   return (
@@ -37,7 +38,7 @@ const CarItem = (props) => {
             </span>
           </div>
 
-          <Link to={`/cars/${carName}`}>
+          <Link to={`/cars/${id}`}>
             <button className=" w-100 car__item-btn car__btn-details  text-white">
               BOOK NOW
             </button>
