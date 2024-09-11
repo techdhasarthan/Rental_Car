@@ -108,7 +108,7 @@ const Fulfillment = () => {
   const toggleVisibilityAndSubmit = () => {
     setIsVisible((prevIsVisible) => {
       if (!prevIsVisible) {
-        handleFulfillmentRequest(); // Call API when making the component visible
+        // Call API when making the component visible
       }
       return !prevIsVisible;
     });
@@ -232,7 +232,7 @@ const Fulfillment = () => {
       </div>
       <div className="text-end ps-5 me-3 pt-2">
         <button
-          onClick={toggleVisibilityAndSubmit}
+          onClick={handleFulfillmentRequest}
           className="custom-blue-btn rounded px-3 py-2">
           {isVisible ? "Not Now" : "Apply Now"}
         </button>
