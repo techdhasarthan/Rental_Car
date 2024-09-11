@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom"; // Import useParams
 import "../../styles/fulfillment.css"; // Import your CSS file for styling
 import ShowCarDetails from "../../pages/ShowCarDetails";
+import Document from "../../pages/Document";
 
 const Fulfillment = () => {
   const [carDetails, setCarDetails] = useState({
@@ -16,7 +17,7 @@ const Fulfillment = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(true);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const [option, setOption] = useState("");
 
   const location = useLocation();
@@ -67,7 +68,7 @@ const Fulfillment = () => {
   const handleFulfillmentRequest = async () => {
     if (startDate && endDate && selectedOption && carDetails.carName) {
       if (selectedOption === "delivery") {
-        setOption("");
+        setOption();
       } else if (selectedOption === "selfPickup") {
         setExtraInfo("");
         setDeliveryInfo("");
@@ -100,6 +101,7 @@ const Fulfillment = () => {
         });
 
         if (!response.ok) {
+          setIsVisible(false);
           throw new Error("Failed to submit fulfillment details");
         }
 
@@ -107,20 +109,13 @@ const Fulfillment = () => {
         alert(JSON.stringify(data));
         console.log("Success:", data);
       } catch (error) {
+        setIsVisible(false);
         console.error("Error:", error);
       }
     }
   };
 
   // Toggle visibility and trigger the fulfillment request when button is clicked
-  const toggleVisibilityAndSubmit = () => {
-    setIsVisible((prevIsVisible) => {
-      if (!prevIsVisible) {
-        // Call API when making the component visible
-      }
-      return !prevIsVisible;
-    });
-  };
 
   // Other handlers...
 
@@ -251,10 +246,8 @@ const Fulfillment = () => {
         </p>
       </div>
       <div className="text-end ps-5 me-3 pt-2">
-        <button
-          onClick={handleFulfillmentRequest}
-          className="custom-blue-btn rounded px-3 py-2">
-          {isVisible ? "Not Now" : "Apply Now"}
+        <button onClick={handleFulfillmentRequest}>
+          {/* {isVisible ? "Not Now" : "Apply Now"} */}
         </button>
         {isVisible ? <ShowCarDetails /> : "not found"}
       </div>
@@ -263,3 +256,5 @@ const Fulfillment = () => {
 };
 
 export default Fulfillment;
+
+// className="custom-blue-btn rounded px-3 py-2"
