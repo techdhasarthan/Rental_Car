@@ -71,7 +71,7 @@ const Fulfillment = () => {
         car_no: carDetails.car_no,
         category: carDetails.category,
       };
-
+      
       console.log("Sending data:", requestData);
 
       fetch(`${BASE_URL}/submit-fulfillment-details`, {
