@@ -109,6 +109,14 @@ const Fulfillment = () => {
 
   const handleStartDateChange = (e) => {
     const selectedStartDate = e.target.value;
+    const currentDateTime = new Date(); // Current date and time
+    const selectedStartDateTime = new Date(selectedStartDate);
+
+    if (selectedStartDateTime < currentDateTime) {
+      alert("You cannot select a past time.");
+      return;
+    }
+
     setStartDate(selectedStartDate);
   };
 
