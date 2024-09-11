@@ -230,7 +230,7 @@ const Fulfillment = () => {
           confirmed upon KYC verification.
         </p>
       </div>
-      <div className="text-end ps-5 me-3">
+      <div className="text-end ps-5 me-3 pt-2">
         <button
           onClick={toggleVisibilityAndSubmit}
           className="custom-blue-btn rounded px-3 py-2">
