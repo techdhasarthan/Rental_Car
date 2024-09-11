@@ -66,12 +66,6 @@ const Fulfillment = () => {
   // Trigger fulfillment request on button click
   const handleFulfillmentRequest = async () => {
     if (startDate && endDate && selectedOption && carDetails.carName) {
-      if (selectedOption === "delivery") {
-        setOption("");
-      } else if (selectedOption === "selfPickup") {
-        setExtraInfo("");
-        setDeliveryInfo("");
-      }
       const requestData = {
         fulfillmentType: option || "",
         deliveryInfo: deliveryInfo || "",
@@ -126,6 +120,8 @@ const Fulfillment = () => {
 
   const handleSelectChange = (event) => {
     setOption(event.target.value);
+    setDeliveryInfo("");
+    setExtraInfo("");
   };
 
   const handleCheckboxChange = (event) => {
@@ -135,10 +131,12 @@ const Fulfillment = () => {
 
   const handleDeliveryInfoChange = (event) => {
     setDeliveryInfo(event.target.value);
+    setOption("");
   };
 
   const handleExtraInfoChange = (event) => {
     setExtraInfo(event.target.value);
+    setOption("");
   };
 
   const today = new Date().toISOString().slice(0, 16);
