@@ -32,7 +32,7 @@ const ShowCarDetails = () => {
       <div className={`smooth-toggle ${isVisible ? "show" : ""}`}>
         <div className="row">
           {/* Fulfillment Details Section */}
-          <Col lg="7" className="mt-4">
+          {/* <Col lg="7" className="mt-4">
             <div className="booking-info mt-4">
               <div className="ms-2 ">
                 <FromToDate />
@@ -40,10 +40,10 @@ const ShowCarDetails = () => {
               <h5 className="mb-4 fw-bold">Fulfillment Details</h5>
               <Fulfillment />
             </div>
-          </Col>
+          </Col> */}
 
           {/* Price Details Section */}
-          <Col lg="5" className="mt-4">
+          <Col lg="12" className="mt-4">
             <div className="payment__info mt-4">
               <h5 className="mb-4 fw-bold">Price Details</h5>
               <PriceDetails />

@@ -4,6 +4,8 @@ import Helmet from "../components/Helmet/Helmet";
 import { useParams } from "react-router-dom";
 import "../styles/car-item.css";
 import ShowCarDetails from "./ShowCarDetails";
+import Fulfillment from "../components/UI/Fulfillment";
+import FromToDate from "../components/UI/FromToDate";
 
 const CarDetails = () => {
   const [carDetails, setCarDetails] = useState(null); // State for car details
@@ -157,6 +159,22 @@ const CarDetails = () => {
                 </div>
               </div>
             </Col>
+            {/* ---------------------------------------------- */}
+            <Container>
+              <Row>
+                <Col lg="7" className="mt-4">
+                  <div className="booking-info mt-4">
+                    <div className="ms-2 ">
+                      <FromToDate />
+                    </div>
+                    <h5 className="mb-4 fw-bold">Fulfillment Details</h5>
+                    <Fulfillment />
+                  </div>
+                </Col>
+              </Row>
+            </Container>
+            {/* ----------------------------------------------------- */}
+
             <ShowCarDetails />
           </Row>
         </Container>
