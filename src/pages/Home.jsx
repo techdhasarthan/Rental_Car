@@ -114,19 +114,6 @@ const Home = () => {
               <h6 className="section__subtitle">Come with</h6>
               <h2 className="section__title">Hot Offers</h2>
               {/*---------------------------------------------Filter Options ----------------------------------------*/}
-              <div className="location-selector-item">
-                <i className="ri-map-pin-line"></i>
-                <select
-                  value={selectedLocation}
-                  onChange={handleLocationChange}>
-                  <option value="">Select Location</option>
-                  {locations.map((location) => (
-                    <option key={location.value} value={location.value}>
-                      {location.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
             </Col>
             {/*----------------------------------------------Filter Ends-------------------------------------------*/}
             {filteredCars.length > 0 ? (

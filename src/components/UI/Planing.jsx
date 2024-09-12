@@ -17,9 +17,11 @@ const PricingPlan = ({ setStartDateProp, setEndDateProp }) => {
 
   useEffect(() => {
     if (startdate && enddate) {
+      // Use dates passed via location state if available
       setStartDate(startdate);
       setEndDate(enddate);
     } else {
+      // Default start and end date logic
       const now = new Date();
       const start = new Date(now.setHours(10, 0, 0, 0)); // Today at 10 AM
       const end = new Date(start);
@@ -29,18 +31,7 @@ const PricingPlan = ({ setStartDateProp, setEndDateProp }) => {
       setStartDate(start.toISOString().slice(0, 16)); // Format to YYYY-MM-DDTHH:MM
       setEndDate(end.toISOString().slice(0, 16)); // Format to YYYY-MM-DDTHH:MM
     }
-
-    // Pass dates to parent component (CarListing)
-    setStartDateProp(startDate);
-    setEndDateProp(endDate);
-  }, [
-    startdate,
-    enddate,
-    startDate,
-    endDate,
-    setStartDateProp,
-    setEndDateProp,
-  ]);
+  }, [startdate, enddate]);
 
   // Handle startDate change
   const handleStartDateChange = (e) => {
@@ -53,6 +44,9 @@ const PricingPlan = ({ setStartDateProp, setEndDateProp }) => {
       newEndDate.setDate(newEndDate.getDate() + 1); // Next day
       setEndDate(newEndDate.toISOString().slice(0, 16));
     }
+
+    // Update parent component with new start date
+    setStartDateProp(selectedStartDate);
   };
 
   // Handle endDate change
@@ -60,6 +54,7 @@ const PricingPlan = ({ setStartDateProp, setEndDateProp }) => {
     const selectedEndDate = e.target.value;
     if (new Date(selectedEndDate) >= new Date(startDate)) {
       setEndDate(selectedEndDate);
+      setEndDateProp(selectedEndDate); // Update parent component with new end date
     }
   };
 

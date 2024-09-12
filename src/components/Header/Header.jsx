@@ -33,6 +33,8 @@ const Header = () => {
       setUserName(JSON.parse(userData));
     }
 
+    localStorage.clear();
+
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowDropdown(false);
@@ -97,7 +99,7 @@ const Header = () => {
                       }  mt-1`}>
                       <Link
                         to="/user-account"
-                        className="dropdown-item"
+                        className="dropdown-item "
                         onClick={() => setShowDropdown(false)}>
                         <i className="ri-user-line"></i> My Profile
                       </Link>
