@@ -87,7 +87,7 @@ const ProfileOptions = () => {
             onClick={() => toggle("1")}
             style={{ cursor: "pointer" }}>
             <Button color={activeTab === "1" ? "primary" : "warning"}>
-              <i className="fas fa-file-alt"></i> Document Upload
+              <i className="fas fa-file-alt"></i> Uploaded Files
             </Button>
           </NavItem>
 

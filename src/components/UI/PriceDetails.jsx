@@ -1,36 +1,21 @@
-import React from 'react';
-import '../../styles/priceDetails.css'; // Import your CSS file
+import React from "react";
+import "../../styles/priceDetails.css";
 
-const PriceDetails = () => {
+const PriceDetails = ({ priceData }) => {
   return (
     <div className="price-details-container">
-     
       <div className="price-item">
-        <span className="price-label">Weekday Charges:</span>
-        <span className="price-value">₹ 3500.0</span>
+        <span className="price-label">Booking Charges:</span>
+        <span className="price-value">₹ {priceData.bookingCharges}</span>
       </div>
       <div className="price-item">
-        <span className="price-label">Weekend Charges:</span>
-        <span className="price-value">₹ 0.0</span>
-      </div>
-      <div className="price-item">
-        <span className="price-label">Base Fare:</span>
-        <span className="price-value">₹ 3500.0</span>
-      </div>
-      <div className="price-item">
-        <span className="price-label">Delivery Charge:</span>
-        <span className="price-value">₹ 500.0</span>
-      </div>
-      <div className="price-item">
-        <span className="price-label">Security Deposit:</span>
-        <span className="price-value">₹ 5000.0</span>
+        <span className="price-label">Delivery Charges:</span>
+        <span className="price-value">₹ {priceData.deliveryCharges}</span>
       </div>
       <div className="price-item">
         <span className="price-label">Payable Amount:</span>
-        <span className="price-value">₹ 9350.0</span>
+        <span className="price-value">₹ {priceData.payableAmount}</span>
       </div>
-      <p className="price-disclaimer">*incl. of taxes</p>
-      
     </div>
   );
 };
