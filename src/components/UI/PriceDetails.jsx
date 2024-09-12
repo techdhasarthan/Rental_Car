@@ -1,20 +1,20 @@
 import React from "react";
-import "../../styles/priceDetails.css";
+import "../../styles/priceDetails.css"; // Import your CSS file
 
-const PriceDetails = ({ priceData }) => {
+const PriceDetails = () => {
   return (
     <div className="price-details-container">
       <div className="price-item">
         <span className="price-label">Booking Charges:</span>
-        <span className="price-value">₹ {priceData.bookingCharges}</span>
+        <span className="price-value">₹ 3500.0</span>
       </div>
       <div className="price-item">
         <span className="price-label">Delivery Charges:</span>
-        <span className="price-value">₹ {priceData.deliveryCharges}</span>
+        <span className="price-value">₹ 0.0</span>
       </div>
       <div className="price-item">
         <span className="price-label">Payable Amount:</span>
-        <span className="price-value">₹ {priceData.payableAmount}</span>
+        <span className="price-value">₹ 9350.0</span>
       </div>
     </div>
   );

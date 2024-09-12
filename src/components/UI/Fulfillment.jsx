@@ -30,7 +30,6 @@ const Fulfillment = () => {
   const [loading, setLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
   const [option, setOption] = useState("");
-  const [priceData, setPriceData] = useState(null);
 
   const location = useLocation();
   const { startdate, enddate } = location.state || {}; // Retrieve date from state
@@ -118,7 +117,7 @@ const Fulfillment = () => {
         }
 
         const data = await response.json();
-        setPriceData(data);
+
         alert(JSON.stringify(data));
         console.log("Success:", data);
       } catch (error) {
@@ -274,7 +273,7 @@ const Fulfillment = () => {
               <Col lg="12" className="mt-4">
                 <div className="payment__info mt-4">
                   <h5 className="mb-4 fw-bold">Price Details</h5>
-                  <PriceDetails priceData={priceData} />
+                  <PriceDetails />
                   <div className="payment text-end mt-5">
                     <button className="custom-blue-btn rounded px-3 py-2">
                       Reserve Now
