@@ -150,7 +150,7 @@ function UploadConfirm(props) {
                     style={{
                       maxWidth: "20%",
                       height: "auto",
-                      marginRight: "20px", // Space between image and text
+                      // Space between image and text
                     }} // Adjust size as needed
                   />
                   <h4>{isFileValid ? "Verified" : "File Not Found"}</h4>
