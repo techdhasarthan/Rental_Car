@@ -158,8 +158,8 @@ const Fulfillment = () => {
 
   return (
     <>
-      <div className="pb-5 pt-lg-5">
-        <div className="d-flex date_container flex-row me-3 ">
+      <div className="pb-5  ">
+        <div className="d-flex date_container flex-row me-3 ps-2 ">
           <div className="form-groups me-3">
             <label htmlFor="startDate">Start Date & Time</label>
             <input
@@ -246,11 +246,11 @@ const Fulfillment = () => {
             be confirmed upon KYC verification.
           </p>
         </div>
-        <div className="">
-          <div className="text-end ps-5 me-5">
+        <div className="justify-content-end Apply_button ">
+          <div className="text-end ps-5 me-5 ">
             <button
               onClick={toggleVisibility}
-              className="custom-blue-btn rounded px-3 py-2">
+              className="custom-blue-btn rounded px-3 py-2 ">
               {isVisible ? "Not Now" : "Apply Now"}
             </button>
           </div>

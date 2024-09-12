@@ -110,7 +110,7 @@ function UploadConfirm(props) {
   };
 
   return (
-    <div className="ps-3 pt-5">
+    <div className="ps-5 upload_button">
       <Button color="warning" onClick={toggle}>
         Document Upload
       </Button>
