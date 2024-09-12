@@ -14,8 +14,9 @@ const CarListing = () => {
   const [sortFuel, setSortFuel] = useState("");
   const [sortType, setSortType] = useState("");
   const [selectedPlan, setSelectedPlan] = useState("");
-  const [startDate, setStartDate] = useState(""); // New state for startDate
-  const [endDate, setEndDate] = useState(""); // New state for endDate
+  const [selectedLocation, setSelectedLocation] = useState(""); // New state for location
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [filterApplied, setFilterApplied] = useState(false);
   const [refresh, setRefresh] = useState("");
@@ -25,12 +26,14 @@ const CarListing = () => {
   const [fuelOptions, setFuelOptions] = useState([]);
   const [transmissionOptions, setTransmissionOptions] = useState([]);
   const [distancePlans, setDistancePlans] = useState([]);
+  const [locationOptions, setLocationOptions] = useState([]); // New state for location options
 
   const handleSortOrderChange = (e) => setSortOrder(e.target.value);
   const handleSortCategoryChange = (e) => setSortCategory(e.target.value);
   const handleSortFuelChange = (e) => setSortFuel(e.target.value);
   const handleSortTypeChange = (e) => setSortType(e.target.value);
   const handlePlanChange = (e) => setSelectedPlan(e.target.value);
+  const handleLocationChange = (e) => setSelectedLocation(e.target.value); // New handler for location
   const handleApplyFilters = () => setFilterApplied((prev) => !prev);
 
   useEffect(() => {
@@ -38,8 +41,8 @@ const CarListing = () => {
       try {
         var jsonObj = JSON.parse("{}");
         jsonObj["Property Name"] = "Category";
-        //const response = await fetch(`${BASE_URL}/getDefaultPropertyValuesByName`,jsonObj);
-        const response = await fetch(`${BASE_URL}/getDefaultPropertyValuesByName`,
+        const response = await fetch(
+          `${BASE_URL}/getDefaultPropertyValuesByName`,
           {
             method: "POST",
             headers: {
@@ -55,11 +58,11 @@ const CarListing = () => {
         const result = await response.json();
         const responseObj = result.data;
         const categoryValueString = responseObj["Property Value"];
-        // Convert string to array using split, assuming comma-separated values
         setCategoryOptions(categoryValueString.split(",") || []);
         setFuelOptions(result.fuelOptions.split(",") || []);
         setTransmissionOptions(result.transmissionOptions.split(",") || []);
         setDistancePlans(result.distancePlans.split(",") || []);
+        setLocationOptions(result.locationOptions.split(",") || []); // Fetch location options
       } catch (error) {
         console.error("Error fetching filter options:", error);
       }
@@ -75,9 +78,10 @@ const CarListing = () => {
         fuelType: sortFuel || "",
         transmissionType: sortType || "",
         kmLimit: selectedPlan || "",
+        location: selectedLocation || "", // Include location in filters
         sortByPrice,
-        startDate, // Send startDate
-        endDate, // Send endDate
+        startDate,
+        endDate,
       };
 
       try {
@@ -115,8 +119,9 @@ const CarListing = () => {
     setSortFuel("");
     setSortType("");
     setSelectedPlan("");
-    setStartDate(""); // Reset startDate
-    setEndDate(""); // Reset endDate
+    setSelectedLocation(""); // Reset location
+    setStartDate("");
+    setEndDate("");
     setFilterApplied(false);
     setFilteredData([]);
   };
@@ -129,7 +134,6 @@ const CarListing = () => {
         <Container>
           <Row>
             <Col lg="12">
-              {/* Pass startDate and endDate setter to PricingPlan */}
               <PricingPlan
                 setStartDateProp={setStartDate}
                 setEndDateProp={setEndDate}
@@ -140,6 +144,19 @@ const CarListing = () => {
                 <div className="sort-label-container">
                   <i className="ri-sort-asc sort-icon"></i>
                   <span className="sort-label">Sort By</span>
+
+                  {/* Dropdown for locationOptions */}
+                  <select
+                    className="sort-dropdown"
+                    onChange={handleLocationChange}
+                    value={selectedLocation}>
+                    <option value="">Choose Location</option>
+                    {locationOptions.map((location, index) => (
+                      <option key={index} value={location}>
+                        {location}
+                      </option>
+                    ))}
+                  </select>
 
                   {/* Dropdown for categoryOptions */}
                   <select
@@ -194,14 +211,14 @@ const CarListing = () => {
                   </select>
 
                   <button
-                    className="apply-filters-btn "
+                    className="apply-filters-btn"
                     onClick={handleApplyFilters}>
                     Apply Filters
                   </button>
                 </div>
 
                 {/* Buttons for Apply Filters and Refresh */}
-                <button className="apply-refresh-btn " onClick={applyRefresh}>
+                <button className="apply-refresh-btn" onClick={applyRefresh}>
                   Refresh
                 </button>
               </div>

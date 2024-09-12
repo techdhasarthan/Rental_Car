@@ -74,7 +74,7 @@ const Header = () => {
             </div>
             <div className="nav__right">
               <div className="d-flex align-items-center justify-content-between w-100 gap-4 ">
-                <div className="location-selector d-flex align-items-center ">
+                {/* <div className="location-selector d-flex align-items-center ">
                   <i className="ri-map-pin-line"></i>
                   <select
                     value={selectedLocation}
@@ -85,7 +85,7 @@ const Header = () => {
                       </option>
                     ))}
                   </select>
-                </div>
+                </div> */}
 
                 {!isLoggedIn ? (
                   <Link
@@ -96,7 +96,9 @@ const Header = () => {
                     </span>
                   </Link>
                 ) : (
-                  <div className="dropdown " ref={dropdownRef}>
+                  <div
+                    className="dropdown d-flex justify-content-end ps-5"
+                    ref={dropdownRef}>
                     <img
                       src={profile}
                       alt="avatar"
@@ -105,6 +107,9 @@ const Header = () => {
                       onClick={toggleDropdown}
                       style={{ cursor: "pointer" }}
                     />
+                    <div className=" pt-2 text-light">
+                      <h6 className="profileName">Dhasarathan</h6>
+                    </div>
                     <div
                       className={`dropdown-menu ${showDropdown ? "show" : ""}`}>
                       <Link
@@ -114,7 +119,7 @@ const Header = () => {
                         <i className="ri-user-line"></i> My Profile
                       </Link>
                       <Link
-                        to="/sign-up"
+                        to="/sign-in"
                         className="dropdown-item"
                         onClick={() => setShowDropdown(false)}>
                         <i className="ri-logout-box-line"></i> Logout
