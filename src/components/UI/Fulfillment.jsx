@@ -89,10 +89,11 @@ const Fulfillment = () => {
         requestData.extraInfo = extraInfo || "";
       }
 
-      console.log("Sending data:", requestData);
+      
+      alert(JSON.stringify(requestData));
 
       try {
-        const response = await fetch(`${BASE_URL}/fulfillment`, {
+        const response = await fetch(`${BASE_URL}/getCustomerRentalCarsPriceDetails`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -246,8 +247,8 @@ const Fulfillment = () => {
         </p>
       </div>
       <div className="text-end ps-5 me-3 pt-2">
-        <button onClick={handleFulfillmentRequest}>
-          {/* {isVisible ? "Not Now" : "Apply Now"} */}
+        <button onClick={handleFulfillmentRequest}  className="custom-blue-btn rounded px-3 py-2">
+          {isVisible ? "Not Now" : "Apply Now"} 
         </button>
         {isVisible ? <ShowCarDetails /> : "not found"}
       </div>
