@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom"; // Import useParams
 import "../../styles/fulfillment.css"; // Import your CSS file for styling
-import ShowCarDetails from "../../pages/ShowCarDetails";
-import Document from "../../pages/Document";
+
+import "../../pages/ShowCarDetails.css";
+import { Col } from "reactstrap";
+import PriceDetails from "../UI/PriceDetails";
 
 const Fulfillment = () => {
+  const toggleVisibility = () => {
+    setIsVisible(!isVisible);
+
+    if (!isVisible) {
+      handleFulfillmentRequest();
+    }
+  };
+
   const [carDetails, setCarDetails] = useState({
     carName: "",
     car_no: "",
@@ -17,7 +27,7 @@ const Fulfillment = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(true);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const [option, setOption] = useState("");
 
   const location = useLocation();
@@ -89,11 +99,10 @@ const Fulfillment = () => {
         requestData.extraInfo = extraInfo || "";
       }
 
-      
-      alert(JSON.stringify(requestData));
+      console.log("Sending data:", requestData);
 
       try {
-        const response = await fetch(`${BASE_URL}/getCustomerRentalCarsPriceDetails`, {
+        const response = await fetch(`${BASE_URL}/fulfillment`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -115,8 +124,6 @@ const Fulfillment = () => {
       }
     }
   };
-
-  // Toggle visibility and trigger the fulfillment request when button is clicked
 
   // Other handlers...
 
@@ -246,16 +253,35 @@ const Fulfillment = () => {
           confirmed upon KYC verification.
         </p>
       </div>
-      <div className="text-end ps-5 me-3 pt-2">
-        <button onClick={handleFulfillmentRequest}  className="custom-blue-btn rounded px-3 py-2">
-          {isVisible ? "Not Now" : "Apply Now"} 
-        </button>
-        {isVisible ? <ShowCarDetails /> : "not found"}
+      <div className="">
+        <div className="text-end ps-5 me-5">
+          <button
+            onClick={toggleVisibility}
+            className="custom-blue-btn rounded px-3 py-2">
+            {isVisible ? "Not Now" : "Apply Now"}
+          </button>
+        </div>
+
+        {/* Smooth Toggle Section */}
+        <div className={`smooth-toggle ${isVisible ? "show" : ""}`}>
+          <div className="row">
+            {/* Price Details Section */}
+            <Col lg="12" className="mt-4">
+              <div className="payment__info mt-4">
+                <h5 className="mb-4 fw-bold">Price Details</h5>
+                <PriceDetails />
+                <div className="payment text-end mt-5">
+                  <button className="custom-blue-btn rounded px-3 py-2">
+                    Reserve Now
+                  </button>
+                </div>
+              </div>
+            </Col>
+          </div>
+        </div>
       </div>
     </>
   );
 };
 
 export default Fulfillment;
-
-// className="custom-blue-btn rounded px-3 py-2"
