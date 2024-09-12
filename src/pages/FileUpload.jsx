@@ -1,23 +1,22 @@
 import React, { useState } from "react";
 import "./Document.css";
-
 import { Container, Button } from "reactstrap";
 import "remixicon/fonts/remixicon.css";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import axios from "axios"; // Import axios for making HTTP requests
 
-const FileUpload = () => {
+const FileUpload = ({ onUploadComplete }) => {
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
   const [show, setShow] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState(null);
-  const [uploadResponse, setUploadResponse] = useState(null); // To store the backend response
-  const [selectedDocumentType, setSelectedDocumentType] = useState(""); // To track the selected document type
-  const [documentNumber, setDocumentNumber] = useState(""); // State for document number
-  const [nameOnDocument, setNameOnDocument] = useState(""); // State for name on document
-  const [issueDate, setIssueDate] = useState(""); // State for issue date (for Driving License)
-  const [expiryDate, setExpiryDate] = useState(""); // State for expiry date (for Driving License)
+  const [uploadResponse, setUploadResponse] = useState(null);
+  const [selectedDocumentType, setSelectedDocumentType] = useState("");
+  const [documentNumber, setDocumentNumber] = useState("");
+  const [nameOnDocument, setNameOnDocument] = useState("");
+  const [issueDate, setIssueDate] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
 
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
@@ -34,39 +33,32 @@ const FileUpload = () => {
     if (selectedFiles) {
       const formData = new FormData();
 
-      // Append each file to the FormData object
       Array.from(selectedFiles).forEach((file) => {
         formData.append("files", file);
       });
 
-      // Append additional form data
       formData.append("documentType", selectedDocumentType);
-      formData.append("documentNumber", documentNumber); // Document number
-      formData.append("nameOnDocument", nameOnDocument); // Name on document
+      formData.append("documentNumber", documentNumber);
+      formData.append("nameOnDocument", nameOnDocument);
 
-      // Append issue/expiry dates if document type is Driving License
       if (selectedDocumentType === "Driving License") {
         formData.append("issueDate", issueDate);
         formData.append("expiryDate", expiryDate);
       }
 
       try {
-        const response = await axios.post(
-          `${BASE_URL}/upload`, // Your API endpoint
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+        const response = await axios.post(`${BASE_URL}/upload`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
 
-        // Handle the response from the server
         setUploadResponse(response.data);
-        console.log(response.data); // Example response handling
-        setShow(false); // Close the modal after successful upload
+        setShow(false);
+        onUploadComplete(true); // Notify parent component of successful upload
       } catch (error) {
         console.error("Error uploading file:", error);
+        onUploadComplete(false); // Notify parent component of failure
       }
     }
   };
@@ -74,11 +66,10 @@ const FileUpload = () => {
   return (
     <Container className="my-2 ms-5 pt-4">
       <div className="header">
-        <Button color="warning" className="btn-4" onClick={handleShow}>
-          <i className="ri-file-upload-line"></i> Upload
-        </Button>
+        {/* <Button color="warning" className="btn-4" onClick={handleShow}>
+          <i className="ri-file-upload-line"></i> Document Upload
+        </Button> */}
 
-        {/* Modal */}
         <Modal
           show={show}
           onHide={handleClose}
@@ -88,7 +79,6 @@ const FileUpload = () => {
             <Modal.Title>Add Document</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {/* Dropdown for Document Type */}
             <Form.Label className="my-2">Document Type</Form.Label>
             <br />
             <select className="select" onChange={handleDocumentTypeChange}>
@@ -99,8 +89,6 @@ const FileUpload = () => {
               <option value="Voter ID">Voter ID</option>
             </select>
 
-            {/* Document Number */}
-
             <Form.Label>Document Number</Form.Label>
             <Form.Control
               size="lg"
@@ -109,7 +97,6 @@ const FileUpload = () => {
               onChange={(e) => setDocumentNumber(e.target.value)}
             />
 
-            {/* Name On Document */}
             <Form.Label>Name On Document</Form.Label>
             <Form.Control
               size="lg"
@@ -118,7 +105,6 @@ const FileUpload = () => {
               onChange={(e) => setNameOnDocument(e.target.value)}
             />
 
-            {/* Conditionally Render Issue/Expiry Date Fields for Driving License */}
             {selectedDocumentType === "Driving License" && (
               <div className="row">
                 <div className="col-md-6">
@@ -142,7 +128,6 @@ const FileUpload = () => {
               </div>
             )}
 
-            {/* File Upload Section */}
             <Form.Group controlId="formFileMultiple" className="mb-3">
               <Form.Label>File upload</Form.Label>
               <Form.Control type="file" multiple onChange={handleFileChange} />

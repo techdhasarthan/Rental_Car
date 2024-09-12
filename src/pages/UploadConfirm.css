@@ -1,0 +1,28 @@
+.file-option {
+    width: 100%;
+    padding: 12px 16px;
+    /* Increased padding for better spacing */
+    margin: 8px 0;
+    /* Better margin for separation */
+    border: none;
+    /* Subtle border color */
+    color: white;
+    cursor: pointer;
+    border-radius: 8px;
+    /* Slightly rounder corners */
+    text-align: center;
+    background-color: #f0ad4e;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    /* Soft shadow */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    /* Smooth transition */
+}
+
+.file-option:hover {
+    background-color: rgb(0, 13, 107);
+    /* Change background color on hover */
+    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2);
+    /* Bigger shadow on hover */
+    transform: translateY(-2px);
+    /* Slight upward movement */
+}

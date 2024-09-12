@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useParams } from "react-router-dom"; // Import useParams
+import { useLocation, useParams } from "react-router-dom";
 import "../../styles/fulfillment.css"; // Import your CSS file for styling
-
 import "../../pages/ShowCarDetails.css";
 import { Col } from "reactstrap";
 import PriceDetails from "../UI/PriceDetails";
-import FileUpload from "../../pages/FileUpload";
+import FileUpload from "../../pages/FileUpload"; // Import FileUpload component
+import UploadConfirm from "../../pages/UploadConfirm";
 
 const Fulfillment = () => {
   const toggleVisibility = () => {
@@ -32,14 +32,12 @@ const Fulfillment = () => {
   const [option, setOption] = useState("");
 
   const location = useLocation();
-  const { startdate, enddate } = location.state || {}; // Retrieve date from state
+  const { startdate, enddate } = location.state || {}; // Retrieve dates from state
   const { slug } = useParams(); // Extract car name (slug) from the URL
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
-    // Fetch car details from the API
     const fetchCarDetails = async () => {
-      console.log("hellow");
       try {
         const requestBody = { ID: slug };
         const response = await fetch(
@@ -64,7 +62,7 @@ const Fulfillment = () => {
           category: data.data?.["Category"] || "",
         };
 
-        setCarDetails(carData); // Store car details in state
+        setCarDetails(carData);
       } catch (err) {
         console.error(err.message);
       } finally {
@@ -73,17 +71,10 @@ const Fulfillment = () => {
     };
 
     fetchCarDetails();
-  }, [slug, BASE_URL]); // Added slug and BASE_URL as dependencies to avoid warnings
+  }, [slug, BASE_URL]);
 
-  // Trigger fulfillment request on button click
   const handleFulfillmentRequest = async () => {
     if (startDate && endDate && selectedOption && carDetails.carName) {
-      if (selectedOption === "delivery") {
-        setOption();
-      } else if (selectedOption === "selfPickup") {
-        setExtraInfo("");
-        setDeliveryInfo("");
-      }
       const requestData = {
         fulfillmentType: option || "",
         deliveryInfo: deliveryInfo || "",
@@ -117,7 +108,6 @@ const Fulfillment = () => {
         }
 
         const data = await response.json();
-
         alert(JSON.stringify(data));
         console.log("Success:", data);
       } catch (error) {
@@ -126,8 +116,6 @@ const Fulfillment = () => {
       }
     }
   };
-
-  // Other handlers...
 
   const handleSelectChange = (event) => {
     setOption(event.target.value);
@@ -179,7 +167,7 @@ const Fulfillment = () => {
               id="startDate"
               className="form-control"
               value={startDate}
-              min={today} // Prevent past dates
+              min={today}
               onChange={handleStartDateChange}
             />
           </div>
@@ -191,11 +179,12 @@ const Fulfillment = () => {
               id="endDate"
               className="form-control"
               value={endDate}
-              min={startDate} // Prevent reverse dates
+              min={startDate}
               onChange={handleEndDateChange}
             />
           </div>
-          <FileUpload />
+
+          <UploadConfirm />
         </div>
         <div className="fulfillment-container">
           <div className="radio-buttons">
@@ -266,23 +255,18 @@ const Fulfillment = () => {
             </button>
           </div>
 
-          {/* Smooth Toggle Section */}
           <div className={`smooth-toggle ${isVisible ? "show" : ""}`}>
             <div className="row">
-              {/* Price Details Section */}
               <Col lg="12" className="mt-4">
                 <div className="payment__info mt-4">
                   <h5 className="mb-4 fw-bold">Price Details</h5>
                   <PriceDetails />
-                  <div className="payment text-end mt-5">
-                    <button className="custom-blue-btn rounded px-3 py-2">
-                      Reserve Now
-                    </button>
-                  </div>
+                  {/* Placeholder for price details */}
                 </div>
               </Col>
             </div>
           </div>
+          {/* <FileUpload /> */}
         </div>
       </div>
     </>
