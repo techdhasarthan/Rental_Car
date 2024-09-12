@@ -13,24 +13,13 @@ const navLinks = [
 ];
 
 const Header = () => {
+  const [user, setUserName] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false); // State to toggle dropdown visibility
   const menuRef = useRef(null);
   const dropdownRef = useRef(null);
 
   const toggleMenu = () => menuRef.current.classList.toggle("menu__active");
-
-  const [selectedLocation, setSelectedLocation] = useState("");
-  const locations = [
-    { value: "chennai", label: "Chennai" },
-    { value: "trichy", label: "Trichy" },
-    { value: "ramanad", label: "Ramanathapuram" },
-    { value: "chicago", label: "Chicago" },
-  ];
-
-  const handleLocationChange = (event) => {
-    setSelectedLocation(event.target.value);
-  };
 
   // Toggle dropdown visibility
   const toggleDropdown = () => {
@@ -39,6 +28,11 @@ const Header = () => {
 
   // Hide dropdown when clicking outside
   useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setUserName(JSON.parse(userData));
+    }
+
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowDropdown(false);
@@ -74,19 +68,6 @@ const Header = () => {
             </div>
             <div className="nav__right">
               <div className="d-flex align-items-center justify-content-between w-100 gap-4 ">
-                {/* <div className="location-selector d-flex align-items-center ">
-                  <i className="ri-map-pin-line"></i>
-                  <select
-                    value={selectedLocation}
-                    onChange={handleLocationChange}>
-                    {locations.map((location) => (
-                      <option key={location.value} value={location.value}>
-                        {location.label}
-                      </option>
-                    ))}
-                  </select>
-                </div> */}
-
                 {!isLoggedIn ? (
                   <Link
                     to="/sign-in"
@@ -108,10 +89,12 @@ const Header = () => {
                       style={{ cursor: "pointer" }}
                     />
                     <div className=" pt-2 text-light">
-                      <h6 className="profileName">Dhasarathan</h6>
+                      <h6 className="profileName">{user?.name || "Guest"}</h6>
                     </div>
                     <div
-                      className={`dropdown-menu ${showDropdown ? "show" : ""}`}>
+                      className={`dropdown-menu ${
+                        showDropdown ? "show" : ""
+                      }  mt-1`}>
                       <Link
                         to="/user-account"
                         className="dropdown-item"

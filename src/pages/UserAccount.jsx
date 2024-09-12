@@ -157,6 +157,8 @@ const UserProfile = () => {
     }
   };
 
+  localStorage.setItem("user", JSON.stringify(userInfo.name));
+
   return (
     <Helmet title="Profile">
       <CommonSection title="Profile" />
