@@ -19,23 +19,15 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import ProfileOption from "./ProfileOption";
+import { useUser } from "./UserContext";
 
 const UserProfile = () => {
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const customerId = localStorage.getItem("id") || "{}";
   const navigate = useNavigate();
+  const { userInfo, setUserInfo } = useUser();
 
   const [isEditing, setIsEditing] = useState(false);
-  const [userInfo, setUserInfo] = useState({
-    ID: "",
-    Name: "",
-    "Phone Number": "",
-    Password: "",
-    "Email ID": "",
-    "Alternative Mobile.NO": "",
-    Age: "",
-    "Sign Status": "active",
-  });
   const [originalUserInfo, setOriginalUserInfo] = useState(userInfo);
 
   useEffect(() => {
@@ -83,7 +75,7 @@ const UserProfile = () => {
     if (customerId) {
       fetchProfileData();
     }
-  }, [customerId, backendUrl]);
+  }, [customerId, backendUrl, setUserInfo]);
 
   const handleEditClick = () => {
     setIsEditing(!isEditing);
