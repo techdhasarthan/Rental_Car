@@ -54,6 +54,7 @@ const UserProfile = () => {
 
         if (response.ok) {
           const data = await response.json();
+          console.log(data); // Check the structure of the response
           const vResponseObj = data.data;
           const profileData = {
             ID: vResponseObj.ID || "",
@@ -64,9 +65,8 @@ const UserProfile = () => {
             "Alternative Mobile.NO":
               vResponseObj["Alternative Mobile.NO"] || "",
             Age: vResponseObj.Age || "",
-            "Sign Status": "",
+            "Sign Status": vResponseObj["Sign Status"] || "", // Ensure this field is correctly named
           };
-
           setUserInfo(profileData);
           setOriginalUserInfo(profileData);
         } else {
