@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Container, Row, Col } from "reactstrap";
 import Helmet from "../components/Helmet/Helmet";
 import { useParams } from "react-router-dom";
 import "../styles/car-item.css";
-
 import Fulfillment from "../components/UI/Fulfillment";
+import { CarContext } from "./CarContext"; // Import CarContext
 
 const CarDetails = () => {
-  const [carDetails, setCarDetails] = useState(null); // State for car details
+  const { carDetails, setCarDetails } = useContext(CarContext); // Use the context
   const [loading, setLoading] = useState(true); // State for loading status
   const [error, setError] = useState(""); // State for error handling
   const { slug } = useParams(); // Extract car name (slug) from the URL
@@ -47,7 +47,7 @@ const CarDetails = () => {
           limitkm: data.data?.["Limit Km"] || "",
         };
 
-        setCarDetails(carData);
+        setCarDetails(carData); // Store car details in context
       } catch (err) {
         setError(err.message);
       } finally {
@@ -56,7 +56,7 @@ const CarDetails = () => {
     };
 
     fetchCarDetails();
-  }, [slug, BASE_URL]);
+  }, [slug, BASE_URL, setCarDetails]);
 
   // If the data is still loading
   if (loading) {
@@ -94,10 +94,6 @@ const CarDetails = () => {
                   <h2 className="section__title">{carDetails?.carName}</h2>
                 </div>
                 <div className="d-flex align-items-center gap-5 mb-2 mt-2">
-                  {/* <h6 className="rent__price fw-bold fs-4">
-                    ₹{carDetails?.price}.00 / Day
-                  </h6> */}
-
                   <span className="d-flex align-items-center gap-2 fst-italic bold fs-5 fw-bold ">
                     <i className="ri-caravan-fill"></i> {carDetails?.car_no}
                   </span>
@@ -131,48 +127,25 @@ const CarDetails = () => {
                 <div
                   className="d-flex align-items-center mt-2"
                   style={{ columnGap: "2.1rem" }}>
-                  {/* <span className="d-flex align-items-center gap-1 section__description">
-                    <p>
-                      <strong>Pricing Plan:</strong>{" "}
-                      {carDetails?.pricingPlan || "N/A"}
-                    </p>
-                  </span> */}
-                </div>
-
-                <div
-                  className="d-flex align-items-center mt-1"
-                  style={{ columnGap: "2.1rem" }}>
                   <span className="d-flex align-items-center gap-1 section__description">
                     <p>
                       <strong>Total Free Kms:</strong>{" "}
                       {carDetails?.limitkm || "N/A"}
                     </p>
                   </span>
-
-                  {/* <span className="d-flex align-items-center gap-1 section__description">
-                    <p>
-                      <strong>Extra Km Charges:</strong>{" "}
-                      {carDetails?.extraKmCharges || "N/A"}
-                    </p>
-                  </span> */}
                 </div>
               </div>
             </Col>
-            {/* ---------------------------------------------- */}
             <Container>
               <Row>
                 <Col lg="7" className="mt-4">
                   <div className="booking-info mt-4">
-                    {/* <div className="ms-2 ">
-                      <FromToDate />
-                    </div> */}
                     <h5 className="mb-4 fw-bold">Fulfillment Details</h5>
                   </div>
                 </Col>
               </Row>
               <Fulfillment />
             </Container>
-            {/* ----------------------------------------------------- */}
           </Row>
         </Container>
       </section>
