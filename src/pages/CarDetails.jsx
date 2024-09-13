@@ -82,7 +82,7 @@ const CarDetails = () => {
           <Row>
             <Col lg="6">
               <img
-                src={carDetails?.imgUrl}
+                src={`${BASE_URL}/` + carDetails?.imgUrl}
                 alt={carDetails?.carName}
                 className="w-100 mt-5"
               />
