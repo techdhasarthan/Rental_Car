@@ -35,9 +35,12 @@ const SignUp = () => {
         `${backendUrl}/updateCustomerRegistrationDetails`,
         user
       );
-      console.log("Sign-up successful:", typeof response.data.status);
+      console.log(response);
+      console.log(response.data);
+      console.log(response.data.status);
+      console.log(response.data.data);
 
-      if (response.data.status === "true") {
+      if (response.data.status == "true") {
         toast.success("Registered Successfully.", {
           autoClose: 3000,
           position: "top-right",
@@ -88,7 +91,7 @@ const SignUp = () => {
                   <input
                     type="text"
                     className="input-field"
-                    id="name"
+                    id="Name"
                     name="Name"
                     required
                     placeholder=" "
@@ -103,7 +106,7 @@ const SignUp = () => {
                   <input
                     type="tel"
                     className="input-field"
-                    id="phoneNumber"
+                    id="phone Number"
                     name="Phone Number"
                     required
                     placeholder=" "
@@ -119,7 +122,7 @@ const SignUp = () => {
                     type="password"
                     minLength="4"
                     className="input-field"
-                    id="password"
+                    id="Password"
                     name="Password"
                     required
                     placeholder=" "
