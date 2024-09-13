@@ -18,33 +18,29 @@ import "./UserProfile.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-import Document from "./Document";
 import ProfileOption from "./ProfileOption";
 
 const UserProfile = () => {
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const customerId = localStorage.getItem("id") || "{}";
-  console.log(customerId);
   const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState(false);
   const [userInfo, setUserInfo] = useState({
-    ID: "", // Initialize with empty strings
+    ID: "",
     Name: "",
     "Phone Number": "",
     Password: "",
     "Email ID": "",
     "Alternative Mobile.NO": "",
-    "Sign Status": "active", // Default value
     Age: "",
+    "Sign Status": "active",
   });
   const [originalUserInfo, setOriginalUserInfo] = useState(userInfo);
 
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const jsonObj = { id: customerId };
-        //toast.info("Fetching profile data...");
         const response = await fetch(
           `${backendUrl}/getCustomerProfileDetails`,
           {
@@ -52,39 +48,40 @@ const UserProfile = () => {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(jsonObj),
+            body: JSON.stringify({ id: customerId }),
           }
         );
 
         if (response.ok) {
           const data = await response.json();
           const profileData = {
-            id: data.data.ID || "",
-            name: data.data.Name || "",
-            phoneNumber: data.data["Phone Number"] || "",
-            password: data.data.Password || "",
-            emailID: data.data["Email ID"] || "",
-            alternativeMobileNO: data.data["Alternative Mobile.NO"] || "",
-            age: data.data.Age || "",
-            signStatus: "active",
+            ID: data.data.ID || "",
+            Name: data.data.Name || "",
+            "Phone Number": data.data["Phone Number"] || "",
+            Password: data.data.Password || "",
+            "Email ID": data.data["Email ID"] || "",
+            "Alternative Mobile.NO": data.data["Alternative Mobile.NO"] || "",
+            Age: data.data.Age || "",
+            "Sign Status": "active",
           };
 
           setUserInfo(profileData);
           setOriginalUserInfo(profileData);
-          //toast.success("Profile data loaded successfully!");
         } else {
-          //toast.error(`Failed to fetch profile data. Status: ${response.status}`);
+          toast.error(
+            `Failed to fetch profile data. Status: ${response.status}`
+          );
         }
       } catch (error) {
+        toast.error(`An error occurred: ${error.message}`);
         console.error("Error fetching profile data:", error);
-        //toast.error(`An error occurred: ${error.message}`);
       }
     };
 
     if (customerId) {
       fetchProfileData();
     }
-  }, [customerId]);
+  }, [customerId, backendUrl]);
 
   const handleEditClick = () => {
     setIsEditing(!isEditing);
@@ -95,13 +92,13 @@ const UserProfile = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUserInfo({ ...userInfo, [name]: value });
+    setUserInfo((prevInfo) => ({ ...prevInfo, [name]: value }));
   };
 
   const handleSave = async () => {
     try {
       const response = await fetch(
-        "http://localhost:2024/RentARide/updateCustomerRegistrationDetails",
+        `${backendUrl}/updateCustomerRegistrationDetails`,
         {
           method: "POST",
           headers: {
@@ -112,17 +109,19 @@ const UserProfile = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Failed to update profile");
+        throw new Error(`Failed to update profile. Status: ${response.status}`);
       }
 
+      const updatedUserInfo = await response.json();
+      setUserInfo(updatedUserInfo);
+      setOriginalUserInfo(updatedUserInfo);
       setIsEditing(false);
       toast.success("Profile updated successfully!", {
         autoClose: 2000,
         className: "custom-toast",
       });
-      console.log("Profile update successful:", await response.json());
     } catch (error) {
-      toast.error("Failed to update profile. Please try again.", {
+      toast.error(`Failed to update profile: ${error.message}`, {
         autoClose: 3000,
       });
       console.error("Error updating profile:", error);
@@ -135,25 +134,31 @@ const UserProfile = () => {
   };
 
   const handleSignOut = async () => {
-    const jsonObj = { id: customerId };
-    const response = await axios.post(
-      "http://localhost:2024/RentARide/getCustomerRegistrationDetailsSignOut",
-      jsonObj
-    );
+    try {
+      const response = await axios.post(
+        `${backendUrl}/getCustomerRegistrationDetailsSignOut`,
+        { id: customerId }
+      );
 
-    if (response.data.status == "false") {
-      toast.error("Failed sign out", {
-        autoClose: 2000,
-        className: "custom-toast",
+      if (response.data.status === "false") {
+        toast.error("Failed sign out", {
+          autoClose: 2000,
+          className: "custom-toast",
+        });
+      } else if (response.data.status === "true") {
+        toast.success("Sign out successfully", {
+          autoClose: 2000,
+          className: "custom-toast",
+        });
+        setTimeout(() => {
+          navigate("/sign-in");
+        }, 1000);
+      }
+    } catch (error) {
+      toast.error("Failed sign out. Please try again.", {
+        autoClose: 3000,
       });
-    } else if (response.data.status == "true") {
-      toast.success("Sign out successfully", {
-        autoClose: 2000,
-        className: "custom-toast",
-      });
-      setTimeout(() => {
-        navigate("/sign-in");
-      }, 1000);
+      console.error("Error signing out:", error);
     }
   };
 
@@ -173,7 +178,7 @@ const UserProfile = () => {
             <Col lg="12" md="12">
               <Card className="shadow">
                 <CardBody>
-                  <h4 className="fw-bold mb-4 ">
+                  <h4 className="fw-bold mb-4">
                     Your Profile Information
                     {isEditing ? (
                       <Button
@@ -204,7 +209,7 @@ const UserProfile = () => {
                         <Input
                           type="text"
                           id="name"
-                          name="name"
+                          name="Name"
                           value={userInfo.Name}
                           onChange={handleInputChange}
                           placeholder="Enter your name"
@@ -217,7 +222,7 @@ const UserProfile = () => {
                         <Input
                           type="text"
                           id="age"
-                          name="age"
+                          name="Age"
                           value={userInfo.Age}
                           onChange={handleInputChange}
                           placeholder="Enter your age"
@@ -225,12 +230,12 @@ const UserProfile = () => {
                       </FormGroup>
                       <FormGroup className="mb-2">
                         <Label for="phone">
-                          <strong> Phone:</strong>{" "}
+                          <strong>Phone:</strong>{" "}
                         </Label>
                         <Input
                           type="text"
                           id="phone"
-                          name="phoneNumber"
+                          name="Phone Number"
                           value={userInfo["Phone Number"]}
                           onChange={handleInputChange}
                           placeholder="Enter your phone number"
@@ -238,12 +243,12 @@ const UserProfile = () => {
                       </FormGroup>
                       <FormGroup className="mb-2">
                         <Label for="alt_phone">
-                          <strong> Alternate Phone:</strong>{" "}
+                          <strong>Alternate Phone:</strong>{" "}
                         </Label>
                         <Input
                           type="text"
                           id="alt_phone"
-                          name="alternativeMobileNO"
+                          name="Alternative Mobile.NO"
                           value={userInfo["Alternative Mobile.NO"]}
                           onChange={handleInputChange}
                           placeholder="Enter your alternate phone number"
@@ -256,22 +261,20 @@ const UserProfile = () => {
                         <Input
                           type="email"
                           id="email"
-                          name="emailID"
+                          name="Email ID"
                           value={userInfo["Email ID"]}
                           onChange={handleInputChange}
                           placeholder="Enter your email"
                         />
                       </FormGroup>
                       <div className="d-flex justify-content-end">
-                        <button
-                          className="contact__btn me-2"
-                          onClick={handleSave}>
+                        <Button color="primary" onClick={handleSave}>
                           Update Changes
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   ) : (
-                    <div className="large-text px-4 ">
+                    <div className="large-text px-4">
                       <p>
                         <strong>Name:</strong> {userInfo.Name}
                       </p>
