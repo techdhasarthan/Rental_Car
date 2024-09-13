@@ -108,3 +108,14 @@
   padding-bottom: 30px;
 
 }
+
+/* Add this CSS for the transition effect */
+.custom-blue-btn {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Optional: you can add hover or focus styles */
+.custom-blue-btn:hover {
+  transform: scale(1.05);
+  /* slightly scales the button */
+}

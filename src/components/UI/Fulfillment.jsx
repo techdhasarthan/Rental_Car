@@ -94,13 +94,16 @@ const Fulfillment = () => {
       console.log("Sending data:", requestData);
 
       try {
-        const response = await fetch(`${BASE_URL}/fulfillment`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestData),
-        });
+        const response = await fetch(
+          `${BASE_URL}/getCustomerRentalCarsPriceDetails`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestData),
+          }
+        );
 
         if (!response.ok) {
           setIsVisible(false);
@@ -158,7 +161,7 @@ const Fulfillment = () => {
 
   return (
     <>
-      <div className="pb-5  ">
+      <div className="pb-2  ">
         <div className="d-flex date_container flex-row me-3 ps-2 ">
           <div className="form-groups me-3">
             <label htmlFor="startDate">Start Date & Time</label>
@@ -246,27 +249,32 @@ const Fulfillment = () => {
             be confirmed upon KYC verification.
           </p>
         </div>
-        <div className="justify-content-end Apply_button ">
-          <div className="text-end ps-5 me-5 ">
-            <button
-              onClick={toggleVisibility}
-              className="custom-blue-btn rounded px-3 py-2 ">
-              {isVisible ? "Not Now" : "Apply Now"}
-            </button>
-          </div>
+      </div>
+      <div className="text-end me-5 ">
+        <div className="d-flex ">
+          <Col lg="12">
+            <div className=" ">
+              <button
+                onClick={toggleVisibility}
+                className={`custom-blue-btn rounded px-2 py-2 ${
+                  isVisible ? "show-text" : "hide-text"
+                }`}>
+                {isVisible ? "Not Now" : "Apply Now"}
+              </button>
 
-          <div className={`smooth-toggle ${isVisible ? "show" : ""}`}>
-            <div className="row">
-              <Col lg="12" className="mt-4">
-                <div className="payment__info mt-4">
-                  <h5 className="mb-4 fw-bold">Price Details</h5>
-                  <PriceDetails />
-                  {/* Placeholder for price details */}
+              <div className={`smooth-toggle ${isVisible ? "show" : ""} w-100`}>
+                {" "}
+                {/* Added w-100 to make it full width */}
+                <div className="row">
+                  <Col lg="12" className="mt-4">
+                    <div className="payment__info mt-4">
+                      <PriceDetails />
+                    </div>
+                  </Col>
                 </div>
-              </Col>
+              </div>
             </div>
-          </div>
-          {/* <FileUpload /> */}
+          </Col>
         </div>
       </div>
     </>

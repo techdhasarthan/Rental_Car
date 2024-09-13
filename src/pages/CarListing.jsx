@@ -72,6 +72,38 @@ const CarListing = () => {
   }, []);
 
   useEffect(() => {
+    const fetchBranchData = async () => {
+      try {
+        var jsonObj = JSON.parse("{}");
+        jsonObj["Property Name"] = "Branch"; // Ensuring you're fetching branch data
+        const response = await fetch(
+          `${BASE_URL}/getDefaultPropertyValuesByName`, // Assuming this is the correct endpoint
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(jsonObj),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch branch data");
+        }
+
+        const result = await response.json();
+        const responseObj = result.data;
+        const branchValueString = responseObj["Property Value"];
+        setLocationOptions(branchValueString.split(",") || []); // Set the branch options in the location dropdown
+      } catch (error) {
+        console.error("Error fetching branch data:", error);
+      }
+    };
+
+    fetchBranchData();
+  }, [BASE_URL]); // Use BASE_URL as a dependency if it might change
+
+  useEffect(() => {
     const applyFilters = async () => {
       const filterData = {
         categoryArgs: sortCategory || "",

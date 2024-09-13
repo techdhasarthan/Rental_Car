@@ -167,10 +167,10 @@ const CarDetails = () => {
                       <FromToDate />
                     </div> */}
                     <h5 className="mb-4 fw-bold">Fulfillment Details</h5>
-                    <Fulfillment />
                   </div>
                 </Col>
               </Row>
+              <Fulfillment />
             </Container>
             {/* ----------------------------------------------------- */}
           </Row>
