@@ -59,13 +59,13 @@ const UserProfile = () => {
         if (response.ok) {
           const data = await response.json();
           const profileData = {
-            id: data.data.id || "",
-            name: data.data.name || "",
-            phoneNumber: data.data.phoneNumber || "",
-            password: data.data.password || "",
-            emailID: data.data.emailID || "",
-            alternativeMobileNO: data.data.alternativeMobileNO || "",
-            age: data.data.age || "",
+            id: data.data.ID || "",
+            name: data.data.Name || "",
+            phoneNumber: data.data["Phone Number"] || "",
+            password: data.data.Password || "",
+            emailID: data.data["Email ID"] || "",
+            alternativeMobileNO: data.data["Alternative Mobile.NO"] || "",
+            age: data.data.Age || "",
             signStatus: "active",
           };
 
@@ -157,7 +157,7 @@ const UserProfile = () => {
     }
   };
 
-  localStorage.setItem("user", JSON.stringify(userInfo.name));
+  localStorage.setItem("user", JSON.stringify(userInfo.Name));
 
   return (
     <Helmet title="Profile">
