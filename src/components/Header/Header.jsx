@@ -33,8 +33,6 @@ const Header = () => {
       setUserName(JSON.parse(userData));
     }
 
-    localStorage.clear();
-
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowDropdown(false);

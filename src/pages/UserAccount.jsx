@@ -23,10 +23,18 @@ import { useUser } from "./UserContext";
 
 const UserProfile = () => {
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
-  const customerId = localStorage.getItem("id") || "{}";
+  const customerId = localStorage.getItem("userid") || "{}";
+  console.log(customerId);
   const navigate = useNavigate();
-  const { userInfo, setUserInfo } = useUser();
-
+  const [formData, setFormData] = useState({
+    id: customerId,
+    Name: userdata.Name,
+    Email_ID: userdata["Email ID"],
+    Age: userdata.Age,
+    Phone_Number: userdata["Phone Number"],
+    Alternative_Mobile_No: userdata["Alternative Mobile.NO"],
+  });
+  const [userdata, setUserdata] = useState();
   const [isEditing, setIsEditing] = useState(false);
   const [originalUserInfo, setOriginalUserInfo] = useState(userInfo);
 
@@ -46,6 +54,7 @@ const UserProfile = () => {
 
         if (response.ok) {
           const data = await response.json();
+          setUserdata(data);
           console.log(data); // Check the structure of the response
           const vResponseObj = data.data;
           const profileData = {
@@ -86,7 +95,10 @@ const UserProfile = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUserInfo((prevInfo) => ({ ...prevInfo, [name]: value }));
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
   const handleSave = async () => {
@@ -98,7 +110,7 @@ const UserProfile = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(userInfo),
+          body: JSON.stringify(formData),
         }
       );
 
@@ -204,7 +216,7 @@ const UserProfile = () => {
                           type="text"
                           id="name"
                           name="Name"
-                          value={userInfo.Name}
+                          value={formData.Name}
                           onChange={handleInputChange}
                           placeholder="Enter your name"
                         />
@@ -217,7 +229,7 @@ const UserProfile = () => {
                           type="text"
                           id="age"
                           name="Age"
-                          value={userInfo.Age}
+                          value={formData.Age}
                           onChange={handleInputChange}
                           placeholder="Enter your age"
                         />
@@ -229,8 +241,8 @@ const UserProfile = () => {
                         <Input
                           type="text"
                           id="phone"
-                          name="Phone Number"
-                          value={userInfo["Phone Number"]}
+                          name="Phone_Number"
+                          value={formData.Phone_Number}
                           onChange={handleInputChange}
                           placeholder="Enter your phone number"
                         />
@@ -242,8 +254,8 @@ const UserProfile = () => {
                         <Input
                           type="text"
                           id="alt_phone"
-                          name="Alternative Mobile.NO"
-                          value={userInfo["Alternative Mobile.NO"]}
+                          name="Alternative_Mobile_No"
+                          value={formData.Alternative_Mobile_No}
                           onChange={handleInputChange}
                           placeholder="Enter your alternate phone number"
                         />
@@ -255,8 +267,8 @@ const UserProfile = () => {
                         <Input
                           type="email"
                           id="email"
-                          name="Email ID"
-                          value={userInfo["Email ID"]}
+                          name="Email_ID"
+                          value={formData.Email_ID}
                           onChange={handleInputChange}
                           placeholder="Enter your email"
                         />
@@ -270,20 +282,20 @@ const UserProfile = () => {
                   ) : (
                     <div className="large-text px-4">
                       <p>
-                        <strong>Name:</strong> {userInfo.Name}
+                        <strong>Name:</strong> {userdata.Name}
                       </p>
                       <p>
-                        <strong>Age:</strong> {userInfo.Age}
+                        <strong>Age:</strong> {userdata.Age}
                       </p>
                       <p>
-                        <strong>Phone:</strong> {userInfo["Phone Number"]}
+                        <strong>Phone:</strong> {userdata["Phone Number"]}
                       </p>
                       <p>
                         <strong>Alternate Phone:</strong>{" "}
-                        {userInfo["Alternative Mobile.NO"]}
+                        {userdata["Alternative Mobile.NO"]}
                       </p>
                       <p>
-                        <strong>Email:</strong> {userInfo["Email ID"]}
+                        <strong>Email:</strong> {userdata["Email ID"]}
                       </p>
                     </div>
                   )}
