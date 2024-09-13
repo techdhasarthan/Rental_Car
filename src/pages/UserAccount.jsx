@@ -54,15 +54,17 @@ const UserProfile = () => {
 
         if (response.ok) {
           const data = await response.json();
+          const vResponseObj = data.data;
           const profileData = {
-            ID: data.data.ID || "",
-            Name: data.data.Name || "",
-            "Phone Number": data.data["Phone Number"] || "",
-            Password: data.data.Password || "",
-            "Email ID": data.data["Email ID"] || "",
-            "Alternative Mobile.NO": data.data["Alternative Mobile.NO"] || "",
-            Age: data.data.Age || "",
-            "Sign Status": "active",
+            ID: vResponseObj.ID || "",
+            Name: vResponseObj.Name || "",
+            "Phone Number": vResponseObj["Phone Number"] || "",
+            Password: vResponseObj.Password || "",
+            "Email ID": vResponseObj["Email ID"] || "",
+            "Alternative Mobile.NO":
+              vResponseObj["Alternative Mobile.NO"] || "",
+            Age: vResponseObj.Age || "",
+            "Sign Status": "",
           };
 
           setUserInfo(profileData);
