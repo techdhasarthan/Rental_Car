@@ -1,5 +1,5 @@
  .car__item {
-     height: 480px;
+     height: 400px;
      /* Set a fixed height for all car items */
      display: flex;
      flex-direction: column;
@@ -7,8 +7,14 @@
      /* Distribute content within the box */
      overflow: hidden;
      /* Optional: hides overflow content */
+     background-color: black;
+
  }
 
+ .car__img img {
+     height: 200px;
+     /* Adjust image height on mobile */
+ }
 
  /* For medium-sized screens (tablets, small laptops) */
  @media (max-width: 992px) {
@@ -18,7 +24,7 @@
      }
 
      .car__img img {
-         height: 150px;
+         height: 80px;
          /* Adjust image height on mobile */
      }
  }
@@ -33,7 +39,7 @@
      }
 
      .car__img img {
-         height: 150px;
+         height: 80px;
          /* Adjust image height on mobile */
      }
  }

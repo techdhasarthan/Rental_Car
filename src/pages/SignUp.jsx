@@ -10,14 +10,14 @@ const SignUp = () => {
 
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
-    id: null,
-    name: "",
-    phoneNumber: "",
-    password: "",
-    emailID: "",
-    alternativeMobileNO: "",
-    signStatus: "active",
-    age: "",
+    ID: user.id || "",
+    Name: user.name || "",
+    "Phone Number": user.phoneNumber || "",
+    Password: user.password || "",
+    "Email ID": user.emailid || "",
+    "Alternative Mobile.NO": user.alternativemobileno || "",
+    "Sign Status": "active",
+    Age: user.age || "",
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
