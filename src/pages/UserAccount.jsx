@@ -29,14 +29,14 @@ const UserProfile = () => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [userInfo, setUserInfo] = useState({
-    id: "",
-    name: "",
-    phoneNumber: "",
-    password: "",
-    emailID: "",
-    alternativeMobileNO: "",
-    signStatus: "active",
-    age: "",
+    ID: "", // Initialize with empty strings
+    Name: "",
+    "Phone Number": "",
+    Password: "",
+    "Email ID": "",
+    "Alternative Mobile.NO": "",
+    "Sign Status": "active", // Default value
+    Age: "",
   });
   const [originalUserInfo, setOriginalUserInfo] = useState(userInfo);
 
@@ -205,7 +205,7 @@ const UserProfile = () => {
                           type="text"
                           id="name"
                           name="name"
-                          value={userInfo.name}
+                          value={userInfo.Name}
                           onChange={handleInputChange}
                           placeholder="Enter your name"
                         />
@@ -218,7 +218,7 @@ const UserProfile = () => {
                           type="text"
                           id="age"
                           name="age"
-                          value={userInfo.age}
+                          value={userInfo.Age}
                           onChange={handleInputChange}
                           placeholder="Enter your age"
                         />
@@ -231,7 +231,7 @@ const UserProfile = () => {
                           type="text"
                           id="phone"
                           name="phoneNumber"
-                          value={userInfo.phoneNumber}
+                          value={userInfo["Phone Number"]}
                           onChange={handleInputChange}
                           placeholder="Enter your phone number"
                         />
@@ -244,7 +244,7 @@ const UserProfile = () => {
                           type="text"
                           id="alt_phone"
                           name="alternativeMobileNO"
-                          value={userInfo.alternativeMobileNO}
+                          value={userInfo["Alternative Mobile.NO"]}
                           onChange={handleInputChange}
                           placeholder="Enter your alternate phone number"
                         />
@@ -257,7 +257,7 @@ const UserProfile = () => {
                           type="email"
                           id="email"
                           name="emailID"
-                          value={userInfo.emailID}
+                          value={userInfo["Email ID"]}
                           onChange={handleInputChange}
                           placeholder="Enter your email"
                         />
@@ -273,20 +273,20 @@ const UserProfile = () => {
                   ) : (
                     <div className="large-text px-4 ">
                       <p>
-                        <strong>Name:</strong> {userInfo.name}
+                        <strong>Name:</strong> {userInfo.Name}
                       </p>
                       <p>
-                        <strong>Age:</strong> {userInfo.age}
+                        <strong>Age:</strong> {userInfo.Age}
                       </p>
                       <p>
-                        <strong>Phone:</strong> {userInfo.phoneNumber}
+                        <strong>Phone:</strong> {userInfo["Phone Number"]}
                       </p>
                       <p>
                         <strong>Alternate Phone:</strong>{" "}
-                        {userInfo.alternativeMobileNO}
+                        {userInfo["Alternative Mobile.NO"]}
                       </p>
                       <p>
-                        <strong>Email:</strong> {userInfo.emailID}
+                        <strong>Email:</strong> {userInfo["Email ID"]}
                       </p>
                     </div>
                   )}
