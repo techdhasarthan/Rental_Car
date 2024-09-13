@@ -10,14 +10,14 @@ const SignUp = () => {
 
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
-    ID: user.id || "",
-    Name: user.name || "",
-    "Phone Number": user.phoneNumber || "",
-    Password: user.password || "",
-    "Email ID": user.emailid || "",
-    "Alternative Mobile.NO": user.alternativemobileno || "",
-    "Sign Status": "active",
-    Age: user.age || "",
+    ID: "", // Initialize with empty strings
+    Name: "",
+    "Phone Number": "",
+    Password: "",
+    "Email ID": "",
+    "Alternative Mobile.NO": "",
+    "Sign Status": "active", // Default value
+    Age: "",
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -26,30 +26,30 @@ const SignUp = () => {
     const { name, value } = event.target;
     setUser({ ...user, [name]: value });
   };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
     try {
       const response = await axios.post(
-        `${backendUrl}/updateCustomerRegistrationDetails`, // Ensure the correct URL
+        `${backendUrl}/updateCustomerRegistrationDetails`,
         user
       );
       console.log("Sign-up successful:", typeof response.data.status);
 
       if (response.data.status === "true") {
         toast.success("Registered Successfully.", {
-          autoClose: 3000, // The toast will automatically close after 3 seconds
-          position: "top-right", // The position of the toast
-          className: "custom-toast-error", // Optional: You can add custom styling with this class
+          autoClose: 3000,
+          position: "top-right",
+          className: "custom-toast-error",
         });
         setLoading(false);
-        navigate("/sign-in"); // Redirect to /home on successful sign-up
+        navigate("/sign-in");
       } else if (response.data.status === "false") {
-        console.log("Already Existed.");
         toast.error("Already Existed.", {
-          autoClose: 3000, // The toast will automatically close after 3 seconds
-          position: "top-right", // The position of the toast
-          className: "custom-toast-error", // Optional: You can add custom styling with this class
+          autoClose: 3000,
+          position: "top-right",
+          className: "custom-toast-error",
         });
       }
     } catch (error) {
@@ -89,10 +89,10 @@ const SignUp = () => {
                     type="text"
                     className="input-field"
                     id="name"
-                    name="name"
+                    name="Name"
                     required
                     placeholder=" "
-                    value={user.name}
+                    value={user.Name}
                     onChange={handleInputChange}
                   />
                   <label className="label" htmlFor="name">
@@ -104,10 +104,10 @@ const SignUp = () => {
                     type="tel"
                     className="input-field"
                     id="phoneNumber"
-                    name="phoneNumber"
+                    name="Phone Number"
                     required
                     placeholder=" "
-                    value={user.phoneNumber}
+                    value={user["Phone Number"]}
                     onChange={handleInputChange}
                   />
                   <label className="label" htmlFor="phoneNumber">
@@ -120,10 +120,10 @@ const SignUp = () => {
                     minLength="4"
                     className="input-field"
                     id="password"
-                    name="password"
+                    name="Password"
                     required
                     placeholder=" "
-                    value={user.password}
+                    value={user.Password}
                     onChange={handleInputChange}
                   />
                   <label className="label" htmlFor="password">
@@ -144,7 +144,7 @@ const SignUp = () => {
             </form>
           </div>
         </div>
-        <div className="car-rental-info ">
+        <div className="car-rental-info">
           <h3 className="mb-4">Car Rental Specials</h3>
           <p className="mt-4">Check out our latest deals on car rentals!</p>
         </div>
