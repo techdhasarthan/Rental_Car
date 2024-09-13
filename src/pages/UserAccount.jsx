@@ -36,8 +36,8 @@ const UserProfile = () => {
   });
   const [userdata, setUserdata] = useState();
   const [isEditing, setIsEditing] = useState(false);
-  const [originalUserInfo, setOriginalUserInfo] = useState(userInfo);
-
+  // const [originalUserInfo, setOriginalUserInfo] = useState(userInfo);
+  const [count, setCount] = useState();
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
@@ -68,8 +68,8 @@ const UserProfile = () => {
             Age: vResponseObj.Age || "",
             "Sign Status": vResponseObj["Sign Status"] || "", // Ensure this field is correctly named
           };
-          setUserInfo(profileData);
-          setOriginalUserInfo(profileData);
+          // setUserInfo(profileData);
+          //  setOriginalUserInfo(profileData);
         } else {
           toast.error(
             `Failed to fetch profile data. Status: ${response.status}`
@@ -84,12 +84,12 @@ const UserProfile = () => {
     if (customerId) {
       fetchProfileData();
     }
-  }, [customerId, backendUrl, setUserInfo]);
+  }, [customerId, backendUrl, count]);
 
   const handleEditClick = () => {
     setIsEditing(!isEditing);
     if (!isEditing) {
-      setOriginalUserInfo(userInfo);
+      // setOriginalUserInfo(userInfo);
     }
   };
 
@@ -118,10 +118,11 @@ const UserProfile = () => {
         throw new Error(`Failed to update profile. Status: ${response.status}`);
       }
 
-      const updatedUserInfo = await response.json();
-      setUserInfo(updatedUserInfo);
-      setOriginalUserInfo(updatedUserInfo);
+      //   const updatedUserInfo = await response.json();
+      //  7 setUserInfo(updatedUserInfo);
+      //   setOriginalUserInfo(updatedUserInfo);
       setIsEditing(false);
+      setCount(count + 1);
       toast.success("Profile updated successfully!", {
         autoClose: 2000,
         className: "custom-toast",
@@ -135,7 +136,7 @@ const UserProfile = () => {
   };
 
   const handleCancel = () => {
-    setUserInfo(originalUserInfo);
+    // setUserInfo(originalUserInfo);
     setIsEditing(false);
   };
 
@@ -168,7 +169,7 @@ const UserProfile = () => {
     }
   };
 
-  localStorage.setItem("user", JSON.stringify(userInfo.Name));
+  // localStorage.setItem("user", JSON.stringify(userInfo.Name));
 
   return (
     <Helmet title="Profile">

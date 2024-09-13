@@ -42,6 +42,7 @@ const SignUp = () => {
 
       if (response.data.status == "true") {
         localStorage.setItem("userid", response.data.data.ID);
+
         toast.success("Registered Successfully.", {
           autoClose: 3000,
           position: "top-right",
