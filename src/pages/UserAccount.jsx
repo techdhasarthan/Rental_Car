@@ -19,26 +19,25 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import ProfileOption from "./ProfileOption";
-import { useUser } from "./UserContext";
 
 const UserProfile = () => {
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
-  const customerId = localStorage.getItem("userid") || "{}";
-  console.log(customerId);
-  
+  const customerId = localStorage.getItem("id");
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    id: customerId,
-    Name: userdata.Name,
-    Email_ID: userdata["Email ID"],
-    Age: userdata.Age,
-    Phone_Number: userdata["Phone Number"],
-    Alternative_Mobile_No: userdata["Alternative Mobile.NO"],
-  });
-  const [userdata, setUserdata] = useState();
+
   const [isEditing, setIsEditing] = useState(false);
-  // const [originalUserInfo, setOriginalUserInfo] = useState(userInfo);
-  const [count, setCount] = useState();
+  const [userInfo, setUserInfo] = useState({
+    id: "",
+    name: "",
+    phoneNumber: "",
+    password: "",
+    emailId: "",
+    alternativeMobileNo: "",
+    age: "",
+    signStatus: "active",
+  });
+  const [originalUserInfo, setOriginalUserInfo] = useState(userInfo);
+
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
@@ -46,31 +45,26 @@ const UserProfile = () => {
           `${backendUrl}/getCustomerProfileDetails`,
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ id: customerId }),
           }
         );
 
         if (response.ok) {
           const data = await response.json();
-          setUserdata(data);
-          console.log(data); // Check the structure of the response
           const vResponseObj = data.data;
           const profileData = {
-            ID: vResponseObj.ID || "",
-            Name: vResponseObj.Name || "",
-            "Phone Number": vResponseObj["Phone Number"] || "",
-            Password: vResponseObj.Password || "",
-            "Email ID": vResponseObj["Email ID"] || "",
-            "Alternative Mobile.NO":
-              vResponseObj["Alternative Mobile.NO"] || "",
-            Age: vResponseObj.Age || "",
-            "Sign Status": vResponseObj["Sign Status"] || "", // Ensure this field is correctly named
+            id: vResponseObj.ID || "",
+            name: vResponseObj.Name || "",
+            phoneNumber: vResponseObj["Phone Number"] || "",
+            password: vResponseObj.Password || "",
+            emailId: vResponseObj["Email ID"] || "",
+            alternativeMobileNo: vResponseObj["Alternative Mobile.NO"] || "",
+            age: vResponseObj.Age || "",
+            signStatus: vResponseObj["Sign Status"] || "",
           };
-          // setUserInfo(profileData);
-          //  setOriginalUserInfo(profileData);
+          setUserInfo(profileData);
+          setOriginalUserInfo(profileData);
         } else {
           toast.error(
             `Failed to fetch profile data. Status: ${response.status}`
@@ -85,21 +79,18 @@ const UserProfile = () => {
     if (customerId) {
       fetchProfileData();
     }
-  }, [customerId, backendUrl, count]);
+  }, [customerId, backendUrl]);
 
   const handleEditClick = () => {
     setIsEditing(!isEditing);
     if (!isEditing) {
-      // setOriginalUserInfo(userInfo);
+      setOriginalUserInfo(userInfo);
     }
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setUserInfo((prevInfo) => ({ ...prevInfo, [name]: value }));
   };
 
   const handleSave = async () => {
@@ -108,26 +99,24 @@ const UserProfile = () => {
         `${backendUrl}/updateCustomerRegistrationDetails`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(userInfo),
         }
       );
 
-      if (!response.ok) {
+      if (response.ok) {
+        const updatedUserInfo = await response.json();
+        console.log(updatedUserInfo);
+        setUserInfo(updatedUserInfo);
+        setOriginalUserInfo(updatedUserInfo);
+        setIsEditing(false);
+        toast.success("Profile updated successfully!", {
+          autoClose: 2000,
+          className: "custom-toast",
+        });
+      } else {
         throw new Error(`Failed to update profile. Status: ${response.status}`);
       }
-
-      //   const updatedUserInfo = await response.json();
-      //  7 setUserInfo(updatedUserInfo);
-      //   setOriginalUserInfo(updatedUserInfo);
-      setIsEditing(false);
-      setCount(count + 1);
-      toast.success("Profile updated successfully!", {
-        autoClose: 2000,
-        className: "custom-toast",
-      });
     } catch (error) {
       toast.error(`Failed to update profile: ${error.message}`, {
         autoClose: 3000,
@@ -137,7 +126,7 @@ const UserProfile = () => {
   };
 
   const handleCancel = () => {
-    // setUserInfo(originalUserInfo);
+    setUserInfo(originalUserInfo);
     setIsEditing(false);
   };
 
@@ -148,12 +137,7 @@ const UserProfile = () => {
         { id: customerId }
       );
 
-      if (response.data.status === "false") {
-        toast.error("Failed sign out", {
-          autoClose: 2000,
-          className: "custom-toast",
-        });
-      } else if (response.data.status === "true") {
+      if (response.data.status === "true") {
         toast.success("Sign out successfully", {
           autoClose: 2000,
           className: "custom-toast",
@@ -161,6 +145,11 @@ const UserProfile = () => {
         setTimeout(() => {
           navigate("/sign-in");
         }, 1000);
+      } else {
+        toast.error("Failed to sign out", {
+          autoClose: 2000,
+          className: "custom-toast",
+        });
       }
     } catch (error) {
       toast.error("Failed sign out. Please try again.", {
@@ -170,7 +159,7 @@ const UserProfile = () => {
     }
   };
 
-  // localStorage.setItem("user", JSON.stringify(userInfo.Name));
+  localStorage.setItem("user", JSON.stringify(userInfo.name));
 
   return (
     <Helmet title="Profile">
@@ -217,8 +206,8 @@ const UserProfile = () => {
                         <Input
                           type="text"
                           id="name"
-                          name="Name"
-                          value={formData.Name}
+                          name="name"
+                          value={userInfo.name}
                           onChange={handleInputChange}
                           placeholder="Enter your name"
                         />
@@ -230,47 +219,47 @@ const UserProfile = () => {
                         <Input
                           type="text"
                           id="age"
-                          name="Age"
-                          value={formData.Age}
+                          name="age"
+                          value={userInfo.age}
                           onChange={handleInputChange}
                           placeholder="Enter your age"
                         />
                       </FormGroup>
                       <FormGroup className="mb-2">
-                        <Label for="phone">
+                        <Label for="phoneNumber">
                           <strong>Phone:</strong>{" "}
                         </Label>
                         <Input
                           type="text"
-                          id="phone"
-                          name="Phone_Number"
-                          value={formData.Phone_Number}
+                          id="phoneNumber"
+                          name="phoneNumber"
+                          value={userInfo.phoneNumber}
                           onChange={handleInputChange}
                           placeholder="Enter your phone number"
                         />
                       </FormGroup>
                       <FormGroup className="mb-2">
-                        <Label for="alt_phone">
+                        <Label for="alternativeMobileNo">
                           <strong>Alternate Phone:</strong>{" "}
                         </Label>
                         <Input
                           type="text"
-                          id="alt_phone"
-                          name="Alternative_Mobile_No"
-                          value={formData.Alternative_Mobile_No}
+                          id="alternativeMobileNo"
+                          name="alternativeMobileNo"
+                          value={userInfo.alternativeMobileNo}
                           onChange={handleInputChange}
                           placeholder="Enter your alternate phone number"
                         />
                       </FormGroup>
                       <FormGroup className="mb-2">
-                        <Label for="email">
+                        <Label for="emailId">
                           <strong>Email:</strong>{" "}
                         </Label>
                         <Input
                           type="email"
-                          id="email"
-                          name="Email_ID"
-                          value={formData.Email_ID}
+                          id="emailId"
+                          name="emailId"
+                          value={userInfo.emailId}
                           onChange={handleInputChange}
                           placeholder="Enter your email"
                         />
@@ -284,20 +273,20 @@ const UserProfile = () => {
                   ) : (
                     <div className="large-text px-4">
                       <p>
-                        <strong>Name:</strong> {userdata.Name}
+                        <strong>Name:</strong> {userInfo.name}
                       </p>
                       <p>
-                        <strong>Age:</strong> {userdata.Age}
+                        <strong>Age:</strong> {userInfo.age}
                       </p>
                       <p>
-                        <strong>Phone:</strong> {userdata["Phone Number"]}
+                        <strong>Phone:</strong> {userInfo.phoneNumber}
                       </p>
                       <p>
                         <strong>Alternate Phone:</strong>{" "}
-                        {userdata["Alternative Mobile.NO"]}
+                        {userInfo.alternativeMobileNo}
                       </p>
                       <p>
-                        <strong>Email:</strong> {userdata["Email ID"]}
+                        <strong>Email:</strong> {userInfo.emailId}
                       </p>
                     </div>
                   )}

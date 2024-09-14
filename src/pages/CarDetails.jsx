@@ -4,10 +4,9 @@ import Helmet from "../components/Helmet/Helmet";
 import { useParams } from "react-router-dom";
 import "../styles/car-item.css";
 import Fulfillment from "../components/UI/Fulfillment";
-import { CarContext } from "./CarContext"; // Import CarContext
 
 const CarDetails = () => {
-  const { carDetails, setCarDetails } = useContext(CarContext); // Use the context
+  const [carDetails, setCarDetails] = useState(null); // State for car details
   const [loading, setLoading] = useState(true); // State for loading status
   const [error, setError] = useState(""); // State for error handling
   const { slug } = useParams(); // Extract car name (slug) from the URL
