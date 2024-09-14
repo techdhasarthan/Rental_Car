@@ -59,8 +59,6 @@ const CarListing = () => {
         const responseObj = result.data;
         const categoryValueString = responseObj["Property Value"];
         setCategoryOptions(categoryValueString.split(",") || []);
-        setFuelOptions(result.fuelOptions.split(",") || []);
-        setTransmissionOptions(result.transmissionOptions.split(",") || []);
         setDistancePlans(result.distancePlans.split(",") || []);
         setLocationOptions(result.locationOptions.split(",") || []); // Fetch location options
       } catch (error) {
@@ -105,15 +103,25 @@ const CarListing = () => {
 
   useEffect(() => {
     const applyFilters = async () => {
+      // Sending all filter options and the selected filter values
       const filterData = {
-        categoryArgs: sortCategory || "",
-        fuelType: sortFuel || "",
-        transmissionType: sortType || "",
-        kmLimit: selectedPlan || "",
-        location: selectedLocation || "", // Include location in filters
-        sortByPrice,
-        startDate,
-        endDate,
+        selectedFilters: {
+          categoryArgs: sortCategory || "",
+          fuelType: sortFuel || "",
+          transmissionType: sortType || "",
+          kmLimit: selectedPlan || "",
+          location: selectedLocation || "", // Include location in filters
+          sortByPrice,
+          startDate,
+          endDate,
+        },
+        allFilters: {
+          categoryOptions: categoryOptions || [],
+          fuelOptions: fuelOptions || [],
+          transmissionOptions: transmissionOptions || [],
+          distancePlans: distancePlans || [],
+          locationOptions: locationOptions || [],
+        }
       };
 
       try {
@@ -209,11 +217,9 @@ const CarListing = () => {
                     onChange={handleSortFuelChange}
                     value={sortFuel}>
                     <option value="">Fuel Type</option>
-                    {fuelOptions.map((fuel, index) => (
-                      <option key={index} value={fuel}>
-                        {fuel}
-                      </option>
-                    ))}
+                    <option >Pertrol</option>
+                    <option >Diesel</option>
+                    <option >Electric</option>
                   </select>
 
                   {/* Dropdown for transmissionOptions */}
@@ -222,11 +228,8 @@ const CarListing = () => {
                     onChange={handleSortTypeChange}
                     value={sortType}>
                     <option value="">Transmission Type</option>
-                    {transmissionOptions.map((transmission, index) => (
-                      <option key={index} value={transmission}>
-                        {transmission}
-                      </option>
-                    ))}
+                    <option >Manual</option>
+                    <option >Automatic</option>
                   </select>
 
                   {/* Dropdown for distancePlans */}
