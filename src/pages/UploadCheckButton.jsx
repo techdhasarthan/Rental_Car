@@ -25,7 +25,8 @@ const UploadCheckButton = () => {
         const data = await response.json();
 
         // Assuming the response JSON structure is { hasUploadedData: boolean }
-        setHasUploadedData(data.hasUploadedData);
+        setHasUploadedData(data.status);
+        alert(data.status);
       } catch (error) {
         console.error("Error checking upload status:", error);
       }
