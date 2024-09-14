@@ -6,6 +6,7 @@ import { Col } from "reactstrap";
 import PriceDetails from "../UI/PriceDetails";
 import FileUpload from "../../pages/FileUpload"; // Import FileUpload component
 import UploadConfirm from "../../pages/UploadConfirm";
+import UploadCheckButton from "../../pages/UploadCheckButton";
 
 const Fulfillment = () => {
   const toggleVisibility = () => {
@@ -187,7 +188,7 @@ const Fulfillment = () => {
             />
           </div>
 
-          <UploadConfirm />
+          <UploadCheckButton/>
         </div>
         <div className="fulfillment-container">
           <div className="radio-buttons">
