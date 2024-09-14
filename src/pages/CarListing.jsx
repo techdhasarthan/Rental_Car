@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 import Helmet from "../components/Helmet/Helmet";
@@ -36,74 +37,81 @@ const CarListing = () => {
   const handleLocationChange = (e) => setSelectedLocation(e.target.value); // New handler for location
   const handleApplyFilters = () => setFilterApplied((prev) => !prev);
 
+  // Fetching filter options (category, distance, location, etc.)
   useEffect(() => {
     const fetchFilterOptions = async () => {
       try {
-        var jsonObj = JSON.parse("{}");
-        jsonObj["Property Name"] = "Category";
-        const response = await fetch(
+        // Fetch category options
+        const categoryObj = JSON.parse("{}");
+        categoryObj["Property Name"] = "Category";
+        const categoryResponse = await fetch(
           `${BASE_URL}/getDefaultPropertyValuesByName`,
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(jsonObj),
+            body: JSON.stringify(categoryObj),
           }
         );
-        if (!response.ok) {
-          throw new Error("Failed to fetch filter options");
+        if (!categoryResponse.ok) {
+          throw new Error("Failed to fetch category options");
         }
-
-        const result = await response.json();
-        const responseObj = result.data;
-        const categoryValueString = responseObj["Property Value"];
+        const categoryResult = await categoryResponse.json();
+        const categoryValueString = categoryResult.data["Property Value"];
         setCategoryOptions(categoryValueString.split(",") || []);
-        setDistancePlans(result.distancePlans.split(",") || []);
-        setLocationOptions(result.locationOptions.split(",") || []); // Fetch location options
+
+        // Fetch distance options
+        const distanceObj = JSON.parse("{}");
+        distanceObj["Property Name"] = "Km Limit"; // Assuming "Distance" is the correct property name
+        const distanceResponse = await fetch(
+          `${BASE_URL}/getDefaultPropertyValuesByName`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(distanceObj),
+          }
+        );
+        if (!distanceResponse.ok) {
+          throw new Error("Failed to fetch distance options");
+        }
+        const distanceResult = await distanceResponse.json();
+        const distanceValueString = distanceResult.data["Property Value"];
+        setDistancePlans(distanceValueString.split(",") || []);  // Set the distance options
+
+        // Fetch location options
+        const locationObj = JSON.parse("{}");
+        locationObj["Property Name"] = "Branch";
+        const locationResponse = await fetch(
+          `${BASE_URL}/getDefaultPropertyValuesByName`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(locationObj),
+          }
+        );
+        if (!locationResponse.ok) {
+          throw new Error("Failed to fetch location options");
+        }
+        const locationResult = await locationResponse.json();
+        const locationValueString = locationResult.data["Property Value"];
+        setLocationOptions(locationValueString.split(",") || []);
+
       } catch (error) {
         console.error("Error fetching filter options:", error);
       }
     };
 
     fetchFilterOptions();
-  }, []);
+  }, [BASE_URL]);
 
-  useEffect(() => {
-    const fetchBranchData = async () => {
-      try {
-        var jsonObj = JSON.parse("{}");
-        jsonObj["Property Name"] = "Branch"; // Ensuring you're fetching branch data
-        const response = await fetch(
-          `${BASE_URL}/getDefaultPropertyValuesByName`, // Assuming this is the correct endpoint
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(jsonObj),
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch branch data");
-        }
-
-        const result = await response.json();
-        const responseObj = result.data;
-        const branchValueString = responseObj["Property Value"];
-        setLocationOptions(branchValueString.split(",") || []); // Set the branch options in the location dropdown
-      } catch (error) {
-        console.error("Error fetching branch data:", error);
-      }
-    };
-
-    fetchBranchData();
-  }, [BASE_URL]); // Use BASE_URL as a dependency if it might change
-
+  // Apply Filters
   useEffect(() => {
     const applyFilters = async () => {
-      // Sending all filter options and the selected filter values
       const filterData = {
         selectedFilters: {
           categoryArgs: sortCategory || "",
@@ -121,7 +129,7 @@ const CarListing = () => {
           transmissionOptions: transmissionOptions || [],
           distancePlans: distancePlans || [],
           locationOptions: locationOptions || [],
-        }
+        },
       };
 
       try {
@@ -152,6 +160,7 @@ const CarListing = () => {
     applyFilters();
   }, [filterApplied, refresh]);
 
+  // Refresh Filter
   const applyRefresh = () => {
     setRefresh(refresh + 1);
     setSortOrder("");
@@ -217,9 +226,9 @@ const CarListing = () => {
                     onChange={handleSortFuelChange}
                     value={sortFuel}>
                     <option value="">Fuel Type</option>
-                    <option >Pertrol</option>
-                    <option >Diesel</option>
-                    <option >Electric</option>
+                    <option value="Pertrol">Pertrol</option>
+                    <option value="Diesel">Diesel</option>
+                    <option value="Electric">Electric</option>
                   </select>
 
                   {/* Dropdown for transmissionOptions */}
@@ -228,8 +237,8 @@ const CarListing = () => {
                     onChange={handleSortTypeChange}
                     value={sortType}>
                     <option value="">Transmission Type</option>
-                    <option >Manual</option>
-                    <option >Automatic</option>
+                    <option value="Manual">Manual</option>
+                    <option value="Automatic">Automatic</option>
                   </select>
 
                   {/* Dropdown for distancePlans */}
@@ -265,7 +274,7 @@ const CarListing = () => {
                   <h4 className="text-center">No cars found</h4>
                 ) : (
                   filteredData.map((item) => (
-                    <CarItem item={item} key={item["ID"]} />
+                    <CarItem item={item} key={item.id} />
                   ))
                 )}
               </Row>
