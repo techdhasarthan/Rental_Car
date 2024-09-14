@@ -25,6 +25,7 @@ const UserProfile = () => {
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const customerId = localStorage.getItem("userid") || "{}";
   console.log(customerId);
+  
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     id: customerId,
