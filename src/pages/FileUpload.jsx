@@ -6,7 +6,7 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import axios from "axios"; // Import axios for making HTTP requests
 
-const FileUpload = ({ onUploadComplete }) => {
+const FileUpload = ({ onUploadComplete,id }) => {
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
   const [show, setShow] = useState(false);
@@ -37,9 +37,11 @@ const FileUpload = ({ onUploadComplete }) => {
         formData.append("files", file);
       });
 
-      formData.append("documentType", selectedDocumentType);
-      formData.append("documentNumber", documentNumber);
-      formData.append("nameOnDocument", nameOnDocument);
+      formData.append("Document Type", selectedDocumentType);
+      formData.append("Document Number", documentNumber);
+      formData.append("Name On Document", nameOnDocument);
+      formData.append("customerId", id);
+
 
       if (selectedDocumentType === "Driving License") {
         formData.append("issueDate", issueDate);
@@ -47,7 +49,7 @@ const FileUpload = ({ onUploadComplete }) => {
       }
 
       try {
-        const response = await axios.post(`${BASE_URL}/upload`, formData, {
+        const response = await axios.post(`${BASE_URL}/uploadCustomerDocuments`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

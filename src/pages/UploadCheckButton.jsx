@@ -26,7 +26,7 @@ const UploadCheckButton = () => {
 
         // Assuming the response JSON structure is { hasUploadedData: boolean }
         setHasUploadedData(data.status);
-        alert(data.status);
+        
       } catch (error) {
         console.error("Error checking upload status:", error);
       }
@@ -39,16 +39,16 @@ const UploadCheckButton = () => {
     // Handle upload completion (e.g., refresh the status or show a notification)
     if (success) {
       // Optionally, you might want to re-check upload status after a successful upload
-      setHasUploadedData(true);
+      //setHasUploadedData(true);
     }
   };
-
+ 
   return (
     <div>
-      {hasUploadedData ? (
-        <UploadConfirm />
+      {hasUploadedData ===true ? (
+       <UploadConfirm />
       ) : (
-        <FileUpload onUploadComplete={handleUploadComplete} />
+        <FileUpload onUploadComplete={handleUploadComplete} id={customerId}/>                
       )}
     </div>
   );
