@@ -113,7 +113,7 @@ const CarListing = () => {
   useEffect(() => {
     const applyFilters = async () => {
       const filterData = {
-        selectedFilters: {
+       
           categoryArgs: sortCategory || "",
           fuelType: sortFuel || "",
           transmissionType: sortType || "",
@@ -122,14 +122,13 @@ const CarListing = () => {
           sortByPrice,
           startDate,
           endDate,
-        },
-        allFilters: {
+      
           categoryOptions: categoryOptions || [],
           fuelOptions: fuelOptions || [],
           transmissionOptions: transmissionOptions || [],
           distancePlans: distancePlans || [],
           locationOptions: locationOptions || [],
-        },
+        
       };
 
       try {
