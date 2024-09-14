@@ -26,6 +26,7 @@ const UserProfile = () => {
   const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState(false);
+  const [fetchData, setFetchData] = useState(null); // Initialize as null
   const [userInfo, setUserInfo] = useState({
     id: "",
     name: "",
@@ -38,6 +39,7 @@ const UserProfile = () => {
   });
   const [originalUserInfo, setOriginalUserInfo] = useState(userInfo);
 
+  // Fetch profile data on mount
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
@@ -52,19 +54,21 @@ const UserProfile = () => {
 
         if (response.ok) {
           const data = await response.json();
-          const vResponseObj = data.data;
+          setFetchData(data.data); // Save the fetched data to state
+
           const profileData = {
-            id: vResponseObj.ID || "",
-            name: vResponseObj.Name || "",
-            phoneNumber: vResponseObj["Phone Number"] || "",
-            password: vResponseObj.Password || "",
-            emailId: vResponseObj["Email ID"] || "",
-            alternativeMobileNo: vResponseObj["Alternative Mobile.NO"] || "",
-            age: vResponseObj.Age || "",
-            signStatus: vResponseObj["Sign Status"] || "",
+            id: data.data.ID || "",
+            name: data.data.Name || "",
+            phoneNumber: data.data["Phone Number"] || "",
+            password: data.data.Password || "",
+            emailId: data.data["Email ID"] || "",
+            alternativeMobileNo: data.data["Alternative Mobile.NO"] || "",
+            age: data.data.Age || "",
+            signStatus: data.data["Sign Status"] || "active",
           };
-          setUserInfo(profileData);
-          setOriginalUserInfo(profileData);
+
+          setUserInfo(profileData); // Update the userInfo with fetched profile data
+          setOriginalUserInfo(profileData); // Save original user info for reset if needed
         } else {
           toast.error(
             `Failed to fetch profile data. Status: ${response.status}`
@@ -81,18 +85,13 @@ const UserProfile = () => {
     }
   }, [customerId, backendUrl]);
 
-  const handleEditClick = () => {
-    setIsEditing(!isEditing);
-    if (!isEditing) {
-      setOriginalUserInfo(userInfo);
-    }
-  };
-
+  // Handle input changes when editing
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUserInfo((prevInfo) => ({ ...prevInfo, [name]: value }));
   };
 
+  // Handle saving the profile and displaying backend response
   const handleSave = async () => {
     try {
       const response = await fetch(
@@ -100,16 +99,32 @@ const UserProfile = () => {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(userInfo),
+          body: JSON.stringify(userInfo), // Send the current user info
         }
       );
 
+      console.log(response);
+
       if (response.ok) {
-        const updatedUserInfo = await response.json();
-        console.log(updatedUserInfo);
-        setUserInfo(updatedUserInfo);
-        setOriginalUserInfo(updatedUserInfo);
-        setIsEditing(false);
+        const updatedData = await response.json();
+        alert(JSON.stringify(updatedData));
+        // Update userInfo with the response from the backend
+        const updatedUserInfo = {
+          id: updatedData.ID || userInfo.id,
+          name: updatedData.Name || userInfo.name,
+          phoneNumber: updatedData["Phone Number"] || userInfo.phoneNumber,
+          password: updatedData.Password || userInfo.password,
+          emailId: updatedData["Email ID"] || userInfo.emailId,
+          alternativeMobileNo: updatedData["Alternative Mobile.NO"] || userInfo.alternativeMobileNo,
+          age: updatedData.Age || userInfo.age,
+          signStatus: updatedData["Sign Status"] || userInfo.signStatus,
+        };
+
+        setUserInfo(updatedUserInfo); // Set the updated info in state
+        setOriginalUserInfo(updatedUserInfo); // Update original user info
+        setIsEditing(false); // Exit editing mode
+
+        // Display success notification
         toast.success("Profile updated successfully!", {
           autoClose: 2000,
           className: "custom-toast",
@@ -118,6 +133,7 @@ const UserProfile = () => {
         throw new Error(`Failed to update profile. Status: ${response.status}`);
       }
     } catch (error) {
+      // Display error notification
       toast.error(`Failed to update profile: ${error.message}`, {
         autoClose: 3000,
       });
@@ -125,11 +141,21 @@ const UserProfile = () => {
     }
   };
 
-  const handleCancel = () => {
-    setUserInfo(originalUserInfo);
-    setIsEditing(false);
+  // Handle editing toggles
+  const handleEditClick = () => {
+    setIsEditing(!isEditing);
+    if (!isEditing) {
+      setOriginalUserInfo(userInfo); // Save original state before editing
+    }
   };
 
+  // Handle cancel button click
+  const handleCancel = () => {
+    setUserInfo(originalUserInfo); // Revert to original data if canceled
+    setIsEditing(false); // Exit editing mode
+  };
+
+  // Handle user sign out
   const handleSignOut = async () => {
     try {
       const response = await axios.post(
@@ -138,7 +164,7 @@ const UserProfile = () => {
       );
 
       if (response.data.status === "true") {
-        toast.success("Sign out successfully", {
+        toast.success("Signed out successfully", {
           autoClose: 2000,
           className: "custom-toast",
         });
@@ -152,25 +178,25 @@ const UserProfile = () => {
         });
       }
     } catch (error) {
-      toast.error("Failed sign out. Please try again.", {
+      toast.error("Failed to sign out. Please try again.", {
         autoClose: 3000,
       });
       console.error("Error signing out:", error);
     }
   };
 
-  localStorage.setItem("user", JSON.stringify(userInfo.name));
+  localStorage.setItem("user", JSON.stringify(userInfo.name)); // Store user name in localStorage
 
   return (
     <Helmet title="Profile">
       <CommonSection title="Profile" />
       <section className="profile-section py-5">
         <Container>
-          <div className="profile-header">
+          {/* <div className="profile-header">
             <Button color="warning" onClick={handleSignOut}>
               <i className="ri-logout-box-line"></i> Sign Out
             </Button>
-          </div>
+          </div> */}
           <Row>
             <Col lg="12" md="12">
               <Card className="shadow">

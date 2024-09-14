@@ -10,14 +10,14 @@ const SignUp = () => {
 
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
-    ID: "", // Initialize with empty strings
-    Name: "",
-    "Phone Number": "",
-    Password: "",
-    "Email ID": "",
-    "Alternative Mobile.NO": "",
-    "Sign Status": "active", // Default value
-    Age: "",
+    id: "",
+    name: "",
+    phoneNumber: "",
+    password: "", // Corrected case for password
+    emailId: "",
+    alternativeMobileNo: "",
+    signStatus: "active", // Default value
+    age: "",
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -35,18 +35,13 @@ const SignUp = () => {
         `${backendUrl}/updateCustomerRegistrationDetails`,
         user
       );
-      console.log(response);
-      console.log(response.data);
-      console.log(response.data.status);
-      console.log(response.data.data);
 
-      if (response.data.status == "true") {
+      if (response.data.status === "true") {
         localStorage.setItem("userid", response.data.data.ID);
-
         toast.success("Registered Successfully.", {
           autoClose: 3000,
           position: "top-right",
-          className: "custom-toast-error",
+          className: "custom-toast-success",
         });
         setLoading(false);
         navigate("/sign-in");
@@ -73,7 +68,6 @@ const SignUp = () => {
       }
     });
   }, []);
-
   return (
     <main className="">
       <div className="box">
@@ -94,10 +88,10 @@ const SignUp = () => {
                     type="text"
                     className="input-field"
                     id="Name"
-                    name="Name"
+                    name="name"
                     required
                     placeholder=" "
-                    value={user.Name}
+                    value={user.name}
                     onChange={handleInputChange}
                   />
                   <label className="label" htmlFor="name">
@@ -109,10 +103,10 @@ const SignUp = () => {
                     type="tel"
                     className="input-field"
                     id="phone Number"
-                    name="Phone Number"
+                    name="phoneNumber"
                     required
                     placeholder=" "
-                    value={user["Phone Number"]}
+                    value={user.phoneNumber}
                     onChange={handleInputChange}
                   />
                   <label className="label" htmlFor="phoneNumber">
@@ -125,10 +119,10 @@ const SignUp = () => {
                     minLength="4"
                     className="input-field"
                     id="Password"
-                    name="Password"
+                    name="password"
                     required
                     placeholder=" "
-                    value={user.Password}
+                    value={user.password}
                     onChange={handleInputChange}
                   />
                   <label className="label" htmlFor="password">
