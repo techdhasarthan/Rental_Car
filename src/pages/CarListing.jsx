@@ -76,14 +76,16 @@ const CarListing = () => {
         );
         if (!distanceResponse.ok) {
           throw new Error("Failed to fetch distance options");
-        }
+        }        
         const distanceResult = await distanceResponse.json();
         const distanceValueString = distanceResult.data["Property Value"];
+        alert(distanceValueString);
         setDistancePlans(distanceValueString.split(",") || []);  // Set the distance options
 
         // Fetch location options
         const locationObj = JSON.parse("{}");
         locationObj["Property Name"] = "Branch";
+        alert(JSON.stringify(locationObj));
         const locationResponse = await fetch(
           `${BASE_URL}/getDefaultPropertyValuesByName`,
           {
@@ -99,6 +101,7 @@ const CarListing = () => {
         }
         const locationResult = await locationResponse.json();
         const locationValueString = locationResult.data["Property Value"];
+        alert(locationValueString);
         setLocationOptions(locationValueString.split(",") || []);
 
       } catch (error) {

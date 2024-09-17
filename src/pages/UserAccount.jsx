@@ -107,7 +107,7 @@ const UserProfile = () => {
 
       if (response.ok) {
         const updatedData = await response.json();
-        alert(JSON.stringify(updatedData));
+        console.log(JSON.stringify(updatedData));
         // Update userInfo with the response from the backend
         const updatedUserInfo = {
           id: updatedData.ID || userInfo.id,

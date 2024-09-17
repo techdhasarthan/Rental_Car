@@ -4,9 +4,9 @@ import { Container, Button } from "reactstrap";
 import "remixicon/fonts/remixicon.css";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import axios from "axios"; // Import axios for making HTTP requests
+import axios from "axios"; 
 
-const FileUpload = ({ onUploadComplete,id }) => {
+const FileUpload = ({ onUploadComplete, id }) => {
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
   const [show, setShow] = useState(false);
@@ -19,7 +19,15 @@ const FileUpload = ({ onUploadComplete,id }) => {
   const [expiryDate, setExpiryDate] = useState("");
 
   const handleShow = () => setShow(true);
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setSelectedFiles("");
+    setSelectedDocumentType("");
+    setDocumentNumber("");
+    setNameOnDocument("");
+    setIssueDate("");
+    setExpiryDate("");
+    setShow(false);
+  };
 
   const handleFileChange = (event) => {
     setSelectedFiles(event.target.files);
@@ -29,39 +37,54 @@ const FileUpload = ({ onUploadComplete,id }) => {
     setSelectedDocumentType(event.target.value);
   };
 
-  const handleFileUpload = async () => {
-    if (selectedFiles) {
-      const formData = new FormData();
+  const handleFileUpload = async (e) => {
+    e.preventDefault(); // Prevent default form submission behavior
 
-      Array.from(selectedFiles).forEach((file) => {
-        formData.append("files", file);
+    if (!selectedFiles || !id) {
+      console.error("No files selected or customer ID is missing.");
+      return;
+    }
+
+    const formData = new FormData();
+
+    /*Array.from(selectedFiles).forEach((file) => {
+      
+      formData.append("files", file);  
+    });*/
+  for(var gg=0 ; gg < selectedFiles.length; gg++){
+    formData.append("files", selectedFiles[gg]);  
+  }
+
+
+    formData.append("documentType", selectedDocumentType);
+    formData.append("documentNumber", documentNumber);
+    formData.append("nameOnDocument", nameOnDocument);
+    formData.append("customerId", id);
+    formData.append("issueDate", issueDate);
+    formData.append("expiryDate", expiryDate);
+
+    formData.forEach((value, key) => {
+      console.log(`${key}: ${value}`);
+    });
+
+    try {
+      const response = await fetch(`${BASE_URL}/uploadCustomerDocuments`, {
+        method: 'POST',
+        body: formData,  // Don't manually set Content-Type
       });
 
-      formData.append("Document Type", selectedDocumentType);
-      formData.append("Document Number", documentNumber);
-      formData.append("Name On Document", nameOnDocument);
-      formData.append("customerId", id);
-
-
-      if (selectedDocumentType === "Driving License") {
-        formData.append("issueDate", issueDate);
-        formData.append("expiryDate", expiryDate);
-      }
-
-      try {
-        const response = await axios.post(`${BASE_URL}/uploadCustomerDocuments`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-
-        setUploadResponse(response.data);
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Form submitted successfully:', result);
+        setUploadResponse(result);
         setShow(false);
-        onUploadComplete(true); // Notify parent component of successful upload
-      } catch (error) {
-        console.error("Error uploading file:", error);
-        onUploadComplete(false); // Notify parent component of failure
+        onUploadComplete(true); 
+      } else {
+        console.error('Failed to submit form');
       }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      onUploadComplete(false); // Notify parent component of failure
     }
   };
 
@@ -81,58 +104,63 @@ const FileUpload = ({ onUploadComplete,id }) => {
             <Modal.Title>Add Document</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form.Label className="my-2">Document Type</Form.Label>
-            <br />
-            <select className="select" onChange={handleDocumentTypeChange}>
-              <option value="">Select Document Type</option>
-              <option value="Driving License">Driving License</option>
-              <option value="Aadhar Card">Aadhar Card</option>
-              <option value="Pan Card">Pan Card</option>
-              <option value="Voter ID">Voter ID</option>
-            </select>
-
-            <Form.Label>Document Number</Form.Label>
-            <Form.Control
-              size="lg"
-              type="text"
-              value={documentNumber}
-              onChange={(e) => setDocumentNumber(e.target.value)}
-            />
-
-            <Form.Label>Name On Document</Form.Label>
-            <Form.Control
-              size="lg"
-              type="text"
-              value={nameOnDocument}
-              onChange={(e) => setNameOnDocument(e.target.value)}
-            />
-
-            {selectedDocumentType === "Driving License" && (
-              <div className="row">
-                <div className="col-md-6">
-                  <Form.Label>Issue Date</Form.Label>
-                  <Form.Control
-                    size="lg"
-                    type="date"
-                    value={issueDate}
-                    onChange={(e) => setIssueDate(e.target.value)}
-                  />
-                </div>
-                <div className="col-md-6">
-                  <Form.Label>Expiry Date</Form.Label>
-                  <Form.Control
-                    size="lg"
-                    type="date"
-                    value={expiryDate}
-                    onChange={(e) => setExpiryDate(e.target.value)}
-                  />
-                </div>
-              </div>
-            )}
-
             <Form.Group controlId="formFileMultiple" className="mb-3">
+              <Form.Label className="my-2">Document Type</Form.Label>
+              <br />
+              <select className="select" onChange={handleDocumentTypeChange}>
+                <option value="">Select Document Type</option>
+                <option value="Driving License">Driving License</option>
+                <option value="Aadhar Card">Aadhar Card</option>
+                <option value="Pan Card">Pan Card</option>
+                <option value="Voter ID">Voter ID</option>
+              </select>
+
+              <Form.Label>Document Number</Form.Label>
+              <Form.Control
+                size="lg"
+                type="text"
+                value={documentNumber}
+                onChange={(e) => setDocumentNumber(e.target.value)}
+              />
+
+              <Form.Label>Name On Document</Form.Label>
+              <Form.Control
+                size="lg"
+                type="text"
+                value={nameOnDocument}
+                onChange={(e) => setNameOnDocument(e.target.value)}
+              />
+
+              {selectedDocumentType === "Driving License" && (
+                <div className="row">
+                  <div className="col-md-6">
+                    <Form.Label>Issue Date</Form.Label>
+                    <Form.Control
+                      size="lg"
+                      type="date"
+                      value={issueDate}
+                      onChange={(e) => setIssueDate(e.target.value)}
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <Form.Label>Expiry Date</Form.Label>
+                    <Form.Control
+                      size="lg"
+                      type="date"
+                      value={expiryDate}
+                      onChange={(e) => setExpiryDate(e.target.value)}
+                    />
+                  </div>
+                </div>
+              )}
+
               <Form.Label>File upload</Form.Label>
-              <Form.Control type="file" multiple onChange={handleFileChange} />
+              <Form.Control
+                type="file"
+                multiple
+                onChange={handleFileChange}
+                accept="image/*"  // Only allow image files
+              />
             </Form.Group>
           </Modal.Body>
           <Modal.Footer>

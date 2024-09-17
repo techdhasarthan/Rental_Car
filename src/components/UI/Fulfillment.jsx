@@ -31,7 +31,7 @@ const Fulfillment = () => {
   const [loading, setLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
   const [option, setOption] = useState("");
-
+  const [resData,setResData] = useState('');
   const location = useLocation();
   const { startdate, enddate } = location.state || {}; // Retrieve dates from state
   const { slug } = useParams(); // Extract car name (slug) from the URL
@@ -114,6 +114,7 @@ const Fulfillment = () => {
         const data = await response.json();
         alert(JSON.stringify(data));
         console.log("Success:", data);
+        setResData(data.data);
       } catch (error) {
         setIsVisible(false);
         console.error("Error:", error);
@@ -187,8 +188,8 @@ const Fulfillment = () => {
               onChange={handleEndDateChange}
             />
           </div>
-
           <UploadCheckButton/>
+         
         </div>
         <div className="fulfillment-container">
           <div className="radio-buttons">
@@ -269,7 +270,7 @@ const Fulfillment = () => {
                 <div className="row">
                   <Col lg="12" className="mt-4">
                     <div className="payment__info mt-4">
-                      <PriceDetails />
+                      <PriceDetails response={resData}/>
                     </div>
                   </Col>
                 </div>
