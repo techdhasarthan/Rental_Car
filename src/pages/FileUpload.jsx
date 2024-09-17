@@ -4,7 +4,7 @@ import { Container, Button } from "reactstrap";
 import "remixicon/fonts/remixicon.css";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import axios from "axios"; 
+import axios from "axios";
 
 const FileUpload = ({ onUploadComplete, id }) => {
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
@@ -20,7 +20,7 @@ const FileUpload = ({ onUploadComplete, id }) => {
 
   const handleShow = () => setShow(true);
   const handleClose = () => {
-    setSelectedFiles("");
+    setSelectedFiles(null); // Reset file input
     setSelectedDocumentType("");
     setDocumentNumber("");
     setNameOnDocument("");
@@ -47,15 +47,12 @@ const FileUpload = ({ onUploadComplete, id }) => {
 
     const formData = new FormData();
 
-    /*Array.from(selectedFiles).forEach((file) => {
-      
-      formData.append("files", file);  
-    });*/
-  for(var gg=0 ; gg < selectedFiles.length; gg++){
-    formData.append("files", selectedFiles[gg]);  
-  }
+    // Append selected files
+    for (let i = 0; i < selectedFiles.length; i++) {
+      formData.append("files", selectedFiles[i]);
+    }
 
-
+    // Append document-related data
     formData.append("documentType", selectedDocumentType);
     formData.append("documentNumber", documentNumber);
     formData.append("nameOnDocument", nameOnDocument);
@@ -63,24 +60,25 @@ const FileUpload = ({ onUploadComplete, id }) => {
     formData.append("issueDate", issueDate);
     formData.append("expiryDate", expiryDate);
 
-    formData.forEach((value, key) => {
-      console.log(`${key}: ${value}`);
-    });
-
     try {
-      const response = await fetch(`${BASE_URL}/uploadCustomerDocuments`, {
-        method: 'POST',
-        body: formData,  // Don't manually set Content-Type
-      });
+      const response = await fetch(
+        `${BASE_URL}/uploadCustomerDocuments`,
+        {
+          method: "POST",
+          // Send FormData directly
+        },
+        { body: formData }
+      );
 
       if (response.ok) {
         const result = await response.json();
-        console.log('Form submitted successfully:', result);
+        console.log("Form submitted successfully:", result);
         setUploadResponse(result);
         setShow(false);
-        onUploadComplete(true); 
+        onUploadComplete(true); // Notify parent component of success
       } else {
-        console.error('Failed to submit form');
+        console.error("Failed to submit form:", response.status);
+        onUploadComplete(false); // Notify parent component of failure
       }
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -91,7 +89,7 @@ const FileUpload = ({ onUploadComplete, id }) => {
   return (
     <Container className="my-2 ms-5 pt-4">
       <div className="header">
-        <Button color="warning" className="btn-4" onClick={handleShow}>
+        <Button color="warning" className="btn-4 p-2" onClick={handleShow}>
           <i className="ri-file-upload-line"></i> Document Upload
         </Button>
 
@@ -107,7 +105,10 @@ const FileUpload = ({ onUploadComplete, id }) => {
             <Form.Group controlId="formFileMultiple" className="mb-3">
               <Form.Label className="my-2">Document Type</Form.Label>
               <br />
-              <select className="select" onChange={handleDocumentTypeChange}>
+              <select
+                className="select"
+                value={selectedDocumentType}
+                onChange={handleDocumentTypeChange}>
                 <option value="">Select Document Type</option>
                 <option value="Driving License">Driving License</option>
                 <option value="Aadhar Card">Aadhar Card</option>
@@ -159,7 +160,7 @@ const FileUpload = ({ onUploadComplete, id }) => {
                 type="file"
                 multiple
                 onChange={handleFileChange}
-                accept="image/*"  // Only allow image files
+                accept="image/*" // Only allow image files
               />
             </Form.Group>
           </Modal.Body>

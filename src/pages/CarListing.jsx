@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 import Helmet from "../components/Helmet/Helmet";
@@ -38,12 +37,11 @@ const CarListing = () => {
   const handleApplyFilters = () => setFilterApplied((prev) => !prev);
 
   // Fetching filter options (category, distance, location, etc.)
+  // useEffect to fetch filter options like category, distance, and location
   useEffect(() => {
     const fetchFilterOptions = async () => {
       try {
         // Fetch category options
-        const categoryObj = JSON.parse("{}");
-        categoryObj["Property Name"] = "Category";
         const categoryResponse = await fetch(
           `${BASE_URL}/getDefaultPropertyValuesByName`,
           {
@@ -51,19 +49,18 @@ const CarListing = () => {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(categoryObj),
+            body: JSON.stringify({ "Property Name": "Category" }),
           }
         );
         if (!categoryResponse.ok) {
           throw new Error("Failed to fetch category options");
         }
         const categoryResult = await categoryResponse.json();
-        const categoryValueString = categoryResult.data["Property Value"];
-        setCategoryOptions(categoryValueString.split(",") || []);
+        setCategoryOptions(
+          (categoryResult.data["Property Value"] || "").split(",")
+        );
 
         // Fetch distance options
-        const distanceObj = JSON.parse("{}");
-        distanceObj["Property Name"] = "Km Limit"; // Assuming "Distance" is the correct property name
         const distanceResponse = await fetch(
           `${BASE_URL}/getDefaultPropertyValuesByName`,
           {
@@ -71,21 +68,18 @@ const CarListing = () => {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(distanceObj),
+            body: JSON.stringify({ "Property Name": "Km Limit" }),
           }
         );
         if (!distanceResponse.ok) {
           throw new Error("Failed to fetch distance options");
-        }        
+        }
         const distanceResult = await distanceResponse.json();
-        const distanceValueString = distanceResult.data["Property Value"];
-        alert(distanceValueString);
-        setDistancePlans(distanceValueString.split(",") || []);  // Set the distance options
+        setDistancePlans(
+          (distanceResult.data["Property Value"] || "").split(",")
+        );
 
         // Fetch location options
-        const locationObj = JSON.parse("{}");
-        locationObj["Property Name"] = "Branch";
-        alert(JSON.stringify(locationObj));
         const locationResponse = await fetch(
           `${BASE_URL}/getDefaultPropertyValuesByName`,
           {
@@ -93,45 +87,42 @@ const CarListing = () => {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(locationObj),
+            body: JSON.stringify({ "Property Name": "Branch" }),
           }
         );
         if (!locationResponse.ok) {
           throw new Error("Failed to fetch location options");
         }
         const locationResult = await locationResponse.json();
-        const locationValueString = locationResult.data["Property Value"];
-        alert(locationValueString);
-        setLocationOptions(locationValueString.split(",") || []);
-
+        setLocationOptions(
+          (locationResult.data["Property Value"] || "").split(",")
+        );
       } catch (error) {
         console.error("Error fetching filter options:", error);
       }
     };
 
     fetchFilterOptions();
-  }, [BASE_URL]);
+  }, []); // Empty dependency array to run the effect only once
 
   // Apply Filters
   useEffect(() => {
     const applyFilters = async () => {
       const filterData = {
-       
-          categoryArgs: sortCategory || "",
-          fuelType: sortFuel || "",
-          transmissionType: sortType || "",
-          kmLimit: selectedPlan || "",
-          location: selectedLocation || "", // Include location in filters
-          sortByPrice,
-          startDate,
-          endDate,
-      
-          categoryOptions: categoryOptions || [],
-          fuelOptions: fuelOptions || [],
-          transmissionOptions: transmissionOptions || [],
-          distancePlans: distancePlans || [],
-          locationOptions: locationOptions || [],
-        
+        categoryArgs: sortCategory || "",
+        fuelType: sortFuel || "",
+        transmissionType: sortType || "",
+        kmLimit: selectedPlan || "",
+        location: selectedLocation || "", // Include location in filters
+        sortByPrice,
+        startDate,
+        endDate,
+
+        categoryOptions: categoryOptions || [],
+        fuelOptions: fuelOptions || [],
+        transmissionOptions: transmissionOptions || [],
+        distancePlans: distancePlans || [],
+        locationOptions: locationOptions || [],
       };
 
       try {
