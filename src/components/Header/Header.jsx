@@ -1,7 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Container } from "reactstrap";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import "../../styles/header.css";
+import "../../SCSS/headerScss.scss"; // Import your Sass file
+
 import profile from "../../assets/all-images/slider-img/profile.jpg";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -21,7 +22,7 @@ const Header = () => {
   const menuRef = useRef(null);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
-  
+
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const customerId = localStorage.getItem("id"); // Get customer ID from local storage
 
@@ -37,11 +38,14 @@ const Header = () => {
     const fetchUserProfile = async () => {
       try {
         if (customerId) {
-          const response = await fetch(`${backendUrl}/getCustomerProfileDetails`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id: customerId }),
-          });
+          const response = await fetch(
+            `${backendUrl}/getCustomerProfileDetails`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ id: customerId }),
+            }
+          );
 
           if (response.ok) {
             const data = await response.json();
@@ -53,7 +57,9 @@ const Header = () => {
             setUserName(profileData); // Set the user name in state
             setIsLoggedIn(true); // Set logged-in state to true
           } else {
-            toast.error(`Failed to fetch profile data. Status: ${response.status}`);
+            toast.error(
+              `Failed to fetch profile data. Status: ${response.status}`
+            );
           }
         }
       } catch (error) {
@@ -68,7 +74,10 @@ const Header = () => {
   // Handle user sign out
   const handleSignOut = async () => {
     try {
-      const response = await axios.post(`${backendUrl}/getCustomerRegistrationDetailsSignOut`, { id: customerId });
+      const response = await axios.post(
+        `${backendUrl}/getCustomerRegistrationDetailsSignOut`,
+        { id: customerId }
+      );
 
       if (response.data.status === "true") {
         toast.success("Signed out successfully", {
@@ -110,7 +119,9 @@ const Header = () => {
                 {navLinks.map((item, index) => (
                   <NavLink
                     to={item.path}
-                    className={({ isActive }) => (isActive ? "nav__active nav__item" : "nav__item")}
+                    className={({ isActive }) =>
+                      isActive ? "nav__active nav__item" : "nav__item"
+                    }
                     key={index}>
                     {item.display}
                   </NavLink>
@@ -118,15 +129,19 @@ const Header = () => {
               </div>
             </div>
             <div className="nav__right">
-              <div className="d-flex align-items-center justify-content-between w-100 gap-4 ">
+              <div className="d-flex align-items-center justify-content-between w-100 gap-4 profile ">
                 {!isLoggedIn ? (
-                  <Link to="/sign-in" className="d-flex shadow border-4 gap-1 text-white no-underline custom-hover p-3 ">
+                  <Link
+                    to="/sign-in"
+                    className="d-flex shadow border-4 gap-1 text-white no-underline custom-hover p-3 ">
                     <span className="custom-hover">
                       <i className="ri-login-box-line"></i> Login
                     </span>
                   </Link>
                 ) : (
-                  <div className="dropdown d-flex justify-content-end ps-5" ref={dropdownRef}>
+                  <div
+                    className="dropdown d-flex justify-content-end ps-5"
+                    ref={dropdownRef}>
                     <img
                       src={profile}
                       alt="avatar"
@@ -136,10 +151,17 @@ const Header = () => {
                       style={{ cursor: "pointer" }}
                     />
                     <div className="pt-2 text-light">
-                      <h6 className="profileName">{user?.name || "Guest"}</h6> {/* Display user's name */}
+                      <h6 className="profileName">{user?.name || "Guest"}</h6>{" "}
+                      {/* Display user's name */}
                     </div>
-                    <div className={`dropdown-menu ${showDropdown ? "show" : ""} mt-1`}>
-                      <Link to="/user-account" className="dropdown-item" onClick={() => setShowDropdown(false)}>
+                    <div
+                      className={`dropdown-menu ${
+                        showDropdown ? "show" : ""
+                      } mt-1`}>
+                      <Link
+                        to="/user-account"
+                        className="dropdown-item"
+                        onClick={() => setShowDropdown(false)}>
                         <i className="ri-user-line"></i> My Profile
                       </Link>
                       <span className="dropdown-item" onClick={handleSignOut}>

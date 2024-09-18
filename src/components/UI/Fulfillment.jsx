@@ -7,6 +7,7 @@ import PriceDetails from "../UI/PriceDetails";
 import FileUpload from "../../pages/FileUpload"; // Import FileUpload component
 import UploadConfirm from "../../pages/UploadConfirm";
 import UploadCheckButton from "../../pages/UploadCheckButton";
+import { Container } from "react-bootstrap";
 
 const Fulfillment = () => {
   const toggleVisibility = () => {
@@ -189,7 +190,6 @@ const Fulfillment = () => {
               onChange={handleEndDateChange}
             />
           </div>
-          <UploadCheckButton />
         </div>
         <div className="fulfillment-container">
           <div className="radio-buttons">
@@ -212,6 +212,8 @@ const Fulfillment = () => {
               Delivery
             </label>
           </div>
+
+          <UploadCheckButton />
 
           {selectedOption === "selfPickup" && (
             <div className="select-input-container">
@@ -252,23 +254,21 @@ const Fulfillment = () => {
           </p>
         </div>
       </div>
-      <div className="text-end me-5 ">
-        <div className="d-flex ">
-          <Col lg="12">
-            <div className=" ">
+      <div className="d-flex justify-content-end text-end me-3 flex-column flex-md-row">
+        <div className="w-100">
+          <div className="row">
+            <div className="col-lg-12">
               <button
                 onClick={toggleVisibility}
-                className={`custom-blue-btn rounded px-2 py-2 ${
+                className={`custom-blue-btn rounded px-2 py-2 w-100 w-md-auto ${
                   isVisible ? "show-text" : "hide-text"
                 }`}>
                 {isVisible ? "Not Now" : "Apply Now"}
               </button>
 
               <div className={`smooth-toggle ${isVisible ? "show" : ""} w-100`}>
-                {" "}
-                {/* Added w-100 to make it full width */}
                 <div className="row">
-                  <Col lg="12" className="mt-4">
+                  <div className="col-lg-12 mt-4">
                     <div className="payment__info mt-4">
                       <PriceDetails
                         response={resData}
@@ -276,11 +276,11 @@ const Fulfillment = () => {
                         endDate={endDate}
                       />
                     </div>
-                  </Col>
+                  </div>
                 </div>
               </div>
             </div>
-          </Col>
+          </div>
         </div>
       </div>
     </>

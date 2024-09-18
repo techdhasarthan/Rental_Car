@@ -13,7 +13,7 @@ import "./UploadConfirm.css"; // Ensure necessary styles are in place
 import invaild from "../../src/assets/all-images/slider-img/invaild.jpg";
 import validImage from "../../src/assets/all-images/slider-img/vaild.jpg"; // Path to the valid image
 
-function UploadConfirm(props) {
+function UploadConfirm() {
   const [modal, setModal] = useState(false);
   const [nestedModal, setNestedModal] = useState(false);
   const [closeAll, setCloseAll] = useState(false);

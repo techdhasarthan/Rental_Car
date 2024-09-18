@@ -60,3 +60,42 @@
     font-size: 16px;
     /* Adjust icon size */
 }
+
+/* General button styling */
+.btn-4 {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+/* Media query for small screens (mobile-first approach) */
+@media (max-width: 768px) {
+    .header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /* Center the button */
+
+    }
+
+    .btn-4 {
+        width: 100%;
+        /* Make the button take full width on small screens */
+        margin-top: 10px;
+    }
+}
+
+/* Optional customization for better alignment on medium and large screens */
+@media (min-width: 768px) {
+    .header {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .btn-4 {
+        width: auto;
+    }
+}

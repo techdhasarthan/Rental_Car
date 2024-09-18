@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "../../styles/priceDetails.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const PriceDetails = ({ response, startDate, endDate }) => {
   const { slug } = useParams();
@@ -122,8 +124,9 @@ const PriceDetails = ({ response, startDate, endDate }) => {
       const responseData = await apiResponse.json();
       if (apiResponse.ok) {
         setResData(responseData.data);
-        console.log("API Response Data:", combinedRequestBody);
+
         console.log("Reservation successful!");
+        toast.success("Car reservation successfully.");
       } else {
         throw new Error(`Failed to reserve. Status: ${apiResponse.status}`);
       }
@@ -163,7 +166,9 @@ const PriceDetails = ({ response, startDate, endDate }) => {
           onClick={handleReserveClick}>
           Reserve Now
         </button>
+        <ToastContainer />
       </div>
+      {/* Add this line */}
     </div>
   );
 };

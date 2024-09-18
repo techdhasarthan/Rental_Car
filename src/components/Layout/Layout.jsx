@@ -11,12 +11,11 @@ const Layout = ({ children }) => {
 
   return (
     <Fragment>
-      {!isAuthPage && <Header    />}
-      <div  className="">
-        <Routers   > {children}</Routers>
-       
+      {!isAuthPage && <Header />}
+      <div className="">
+        <Routers> {children}</Routers>
       </div>
-     {!isAuthPage && <Footer />}
+      {!isAuthPage && <Footer />}
     </Fragment>
   );
 };

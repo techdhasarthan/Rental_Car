@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import UploadConfirm from "./UploadConfirm"; // Adjust the import path as necessary
 import FileUpload from "./FileUpload"; // Adjust the import path as necessary
+import "bootstrap/dist/css/bootstrap.min.css"; // Ensure you import Bootstrap CSS
 
 const UploadCheckButton = () => {
   const [hasUploadedData, setHasUploadedData] = useState(false); // State to determine if data is uploaded
@@ -24,9 +25,8 @@ const UploadCheckButton = () => {
         // Convert response to JSON
         const data = await response.json();
 
-        // Assuming the response JSON structure is { hasUploadedData: boolean }
+        // Assuming the response JSON structure is { status: boolean }
         setHasUploadedData(data.status);
-        
       } catch (error) {
         console.error("Error checking upload status:", error);
       }
@@ -35,22 +35,8 @@ const UploadCheckButton = () => {
     checkUploadStatus();
   }, [BASE_URL, customerId]); // Add customerId as a dependency
 
-  const handleUploadComplete = (success) => {
-    // Handle upload completion (e.g., refresh the status or show a notification)
-    if (success) {
-      // Optionally, you might want to re-check upload status after a successful upload
-      //setHasUploadedData(true);
-    }
-  };
- 
   return (
-    <div>
-      {hasUploadedData ===true ? (
-       <UploadConfirm />
-      ) : (
-        <FileUpload onUploadComplete={handleUploadComplete} id={customerId}/>                
-      )}
-    </div>
+    <>{hasUploadedData ? <FileUpload id={customerId} /> : <UploadConfirm />}</>
   );
 };
 

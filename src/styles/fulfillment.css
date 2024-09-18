@@ -1,7 +1,7 @@
 /* Container for the entire fulfillment section */
 .fulfillment-container {
   padding: 25px;
-  max-width: 800px;
+  max-width: 100%;
   margin: 0 10px;
   border: 1px solid #ddd;
   /* Add a border for better separation */
@@ -15,7 +15,8 @@
   display: flex;
   gap: 20px;
   justify-content: space-between;
-  margin-bottom: 20px;
+
+
 }
 
 /* Styling for radio button labels */
@@ -118,4 +119,95 @@
 .custom-blue-btn:hover {
   transform: scale(1.05);
   /* slightly scales the button */
+}
+
+.custom-blue-btn {
+  background-color: #007bff;
+  /* You can customize the button color */
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.custom-blue-btn:hover {
+  background-color: #0056b3;
+  /* Button hover state */
+}
+
+.smooth-toggle {
+  transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+}
+
+.smooth-toggle.show {
+  max-height: 500px;
+  /* Adjust based on your content */
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .custom-blue-btn {
+    width: 100%;
+    /* Full width button on small screens */
+  }
+
+  .smooth-toggle {
+    flex-direction: column;
+    max-height: none;
+    /* Remove height limit on small screens */
+  }
+
+  .price-details-container {
+    padding: 10px;
+  }
+
+  .price-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+  }
+
+  .text-end {
+    text-align: left !important;
+    /* Align text to left for small screens */
+  }
+
+  .warning-btn {
+    width: 100%;
+    /* Full width Reserve button on smaller screens */
+  }
+
+  .payment__info {
+    margin-top: 20px;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .custom-blue-btn {
+    font-size: 14px;
+    /* Smaller font for very small screens */
+    padding: 10px;
+  }
+
+  .price-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .price-value {
+    font-weight: bold;
+    margin-top: 5px;
+  }
+
+  .d-flex {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .payment__info {
+    padding: 10px;
+  }
 }

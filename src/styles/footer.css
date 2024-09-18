@@ -55,7 +55,7 @@
   border: 1px solid #7c8a972f;
   border-radius: 50px;
   background: #020a4de9;
-  
+
 }
 
 .newsletter input {
@@ -67,11 +67,17 @@
 
 .newsletter span i {
   color: #fff;
-  
+
 }
 
 .footer__bottom {
   border-top: 1px solid #7c8a972f;
+}
+
+.quickLink {
+  padding-left: 100px;
+
+
 }
 
 @media only screen and (max-width: 768px) {
@@ -94,5 +100,17 @@
     font-size: 0.7rem;
   }
 
-  
+
+
+
+}
+
+@media only screen and (max-width: 426px) {
+
+
+  .quickLink {
+    padding-left: 1px;
+
+
+  }
 }

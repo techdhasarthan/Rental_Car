@@ -6,7 +6,7 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
 
-const FileUpload = ({ onUploadComplete, id }) => {
+const FileUpload = ({ id }) => {
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
   const [show, setShow] = useState(false);
@@ -61,120 +61,113 @@ const FileUpload = ({ onUploadComplete, id }) => {
     formData.append("expiryDate", expiryDate);
 
     try {
-      const response = await fetch(
-        `${BASE_URL}/uploadCustomerDocuments`,
-        {
-          method: "POST",
-          // Send FormData directly
-        },
-        { body: formData }
-      );
+      const response = await fetch(`${BASE_URL}/uploadCustomerDocuments`, {
+        method: "POST",
+        body: formData, // Correct placement of formData
+      });
 
       if (response.ok) {
         const result = await response.json();
         console.log("Form submitted successfully:", result);
         setUploadResponse(result);
         setShow(false);
-        onUploadComplete(true); // Notify parent component of success
       } else {
         console.error("Failed to submit form:", response.status);
-        onUploadComplete(false); // Notify parent component of failure
       }
     } catch (error) {
       console.error("Error uploading file:", error);
-      onUploadComplete(false); // Notify parent component of failure
     }
   };
 
   return (
-    <Container className="my-2 ms-5 pt-4">
-      <div className="header">
+    <div className="  d-flex justify-content-end text-end ">
+      <div className="header pb-3">
         <Button color="warning" className="btn-4 p-2" onClick={handleShow}>
           <i className="ri-file-upload-line"></i> Document Upload
         </Button>
-
-        <Modal
-          show={show}
-          onHide={handleClose}
-          backdrop="static"
-          keyboard={false}>
-          <Modal.Header closeButton>
-            <Modal.Title>Add Document</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form.Group controlId="formFileMultiple" className="mb-3">
-              <Form.Label className="my-2">Document Type</Form.Label>
-              <br />
-              <select
-                className="select"
-                value={selectedDocumentType}
-                onChange={handleDocumentTypeChange}>
-                <option value="">Select Document Type</option>
-                <option value="Driving License">Driving License</option>
-                <option value="Aadhar Card">Aadhar Card</option>
-                <option value="Pan Card">Pan Card</option>
-                <option value="Voter ID">Voter ID</option>
-              </select>
-
-              <Form.Label>Document Number</Form.Label>
-              <Form.Control
-                size="lg"
-                type="text"
-                value={documentNumber}
-                onChange={(e) => setDocumentNumber(e.target.value)}
-              />
-
-              <Form.Label>Name On Document</Form.Label>
-              <Form.Control
-                size="lg"
-                type="text"
-                value={nameOnDocument}
-                onChange={(e) => setNameOnDocument(e.target.value)}
-              />
-
-              {selectedDocumentType === "Driving License" && (
-                <div className="row">
-                  <div className="col-md-6">
-                    <Form.Label>Issue Date</Form.Label>
-                    <Form.Control
-                      size="lg"
-                      type="date"
-                      value={issueDate}
-                      onChange={(e) => setIssueDate(e.target.value)}
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <Form.Label>Expiry Date</Form.Label>
-                    <Form.Control
-                      size="lg"
-                      type="date"
-                      value={expiryDate}
-                      onChange={(e) => setExpiryDate(e.target.value)}
-                    />
-                  </div>
-                </div>
-              )}
-
-              <Form.Label>File upload</Form.Label>
-              <Form.Control
-                type="file"
-                multiple
-                onChange={handleFileChange}
-                accept="image/*" // Only allow image files
-              />
-            </Form.Group>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              color="warning"
-              className="btn-save"
-              onClick={handleFileUpload}>
-              Save
-            </Button>
-          </Modal.Footer>
-        </Modal>
       </div>
-    </Container>
+
+      <Modal
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add Document</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Group controlId="formFileMultiple" className="mb-3">
+            <Form.Label className="my-2">Document Type</Form.Label>
+            <br />
+            <select
+              className="select"
+              value={selectedDocumentType}
+              onChange={handleDocumentTypeChange}>
+              <option value="">Select Document Type</option>
+              <option value="Driving License">Driving License</option>
+              <option value="Aadhar Card">Aadhar Card</option>
+              <option value="Pan Card">Pan Card</option>
+              <option value="Voter ID">Voter ID</option>
+            </select>
+
+            <Form.Label>Document Number</Form.Label>
+            <Form.Control
+              size="lg"
+              type="text"
+              value={documentNumber}
+              onChange={(e) => setDocumentNumber(e.target.value)}
+            />
+
+            <Form.Label>Name On Document</Form.Label>
+            <Form.Control
+              size="lg"
+              type="text"
+              value={nameOnDocument}
+              onChange={(e) => setNameOnDocument(e.target.value)}
+            />
+
+            {selectedDocumentType === "Driving License" && (
+              <div className="row">
+                <div className="col-md-6">
+                  <Form.Label>Issue Date</Form.Label>
+                  <Form.Control
+                    size="lg"
+                    type="date"
+                    value={issueDate}
+                    onChange={(e) => setIssueDate(e.target.value)}
+                  />
+                </div>
+                <div className="col-md-6">
+                  <Form.Label>Expiry Date</Form.Label>
+                  <Form.Control
+                    size="lg"
+                    type="date"
+                    value={expiryDate}
+                    onChange={(e) => setExpiryDate(e.target.value)}
+                  />
+                </div>
+              </div>
+            )}
+
+            <Form.Label>File upload</Form.Label>
+            <Form.Control
+              type="file"
+              multiple
+              onChange={handleFileChange}
+              accept="image/*" // Only allow image files
+            />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            color="warning"
+            className="btn-save"
+            onClick={handleFileUpload}>
+            Save
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
   );
 };
 
