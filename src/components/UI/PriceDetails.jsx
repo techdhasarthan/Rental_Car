@@ -4,7 +4,7 @@ import "../../styles/priceDetails.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const PriceDetails = ({ response, startDate, endDate }) => {
+const PriceDetails = ({ response, startDate, endDate, imgurl }) => {
   const { slug } = useParams();
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
   const [profileData, setProfileData] = useState(null);
@@ -75,7 +75,7 @@ const PriceDetails = ({ response, startDate, endDate }) => {
         category: data.data?.["Category"] || "",
         limitkm: data.data?.["Limit Km"] || "",
         approveStatus: "",
-        carImageName: data.data?.["Car Image Name"] || "",
+        // carImageName: data.data?.["Car Image Name"] || "",
       };
 
       setCarData(carData);
@@ -93,6 +93,20 @@ const PriceDetails = ({ response, startDate, endDate }) => {
       return;
     }
 
+    // Define the variable imageName
+    let imageName = "";
+
+    // Ensure imgurl is defined and is a valid URL
+    if (imgurl) {
+      try {
+        const url = new URL(imgurl); // Create a URL object
+        const pathSegments = url.pathname.split("/"); // Split the path into segments
+        imageName = pathSegments[pathSegments.length - 1]; // Get the last segment
+      } catch (error) {
+        console.error("Invalid URL:", error);
+      }
+    }
+
     const combinedRequestBody = {
       ID: "",
       "Created Date": new Date().toISOString().split("T")[0],
@@ -108,7 +122,7 @@ const PriceDetails = ({ response, startDate, endDate }) => {
       "Car Rent Charges": response.carRentCharges,
       "Total Payable": response.totalPayable,
       "Approve Status": carData.approveStatus,
-      "Car Image Name": carData.carImageName,
+      "Car Image Name": imageName,
     };
 
     try {
@@ -125,7 +139,9 @@ const PriceDetails = ({ response, startDate, endDate }) => {
       if (apiResponse.ok) {
         setResData(responseData.data);
 
-        console.log("Reservation successful!");
+        console.log(
+          "Reservation successful!" + JSON.stringify(combinedRequestBody)
+        );
         toast.success("Car reservation successfully.");
       } else {
         throw new Error(`Failed to reserve. Status: ${apiResponse.status}`);
@@ -168,7 +184,6 @@ const PriceDetails = ({ response, startDate, endDate }) => {
         </button>
         <ToastContainer />
       </div>
-      {/* Add this line */}
     </div>
   );
 };

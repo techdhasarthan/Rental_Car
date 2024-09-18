@@ -9,7 +9,8 @@ import UploadConfirm from "../../pages/UploadConfirm";
 import UploadCheckButton from "../../pages/UploadCheckButton";
 import { Container } from "react-bootstrap";
 
-const Fulfillment = () => {
+const Fulfillment = ({ imgurl }) => {
+  const image = imgurl;
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
 
@@ -39,6 +40,7 @@ const Fulfillment = () => {
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
+    alert(image);
     const fetchCarDetails = async () => {
       try {
         const requestBody = { ID: slug };
@@ -163,6 +165,8 @@ const Fulfillment = () => {
     setEndDate(selectedEndDate);
   };
 
+  console.log(imgurl);
+
   return (
     <>
       <div className="pb-2  ">
@@ -275,6 +279,7 @@ const Fulfillment = () => {
                         response={resData}
                         startDate={startDate}
                         endDate={endDate}
+                        imgurl={image}
                       />
                     </div>
                   </div>

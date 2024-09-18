@@ -143,7 +143,7 @@ const CarDetails = () => {
                   </div>
                 </Col>
               </Row>
-              <Fulfillment />
+              <Fulfillment imgurl={`${BASE_URL}/` + carDetails?.imgUrl} />
             </Container>
           </Row>
         </Container>
