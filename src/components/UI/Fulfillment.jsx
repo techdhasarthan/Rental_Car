@@ -257,15 +257,16 @@ const Fulfillment = () => {
       <div className="d-flex justify-content-end text-end me-3 flex-column flex-md-row">
         <div className="w-100">
           <div className="row">
-            <div className="col-lg-12">
-              <button
-                onClick={toggleVisibility}
-                className={`custom-blue-btn rounded px-2 py-2 w-100 w-md-auto ${
-                  isVisible ? "show-text" : "hide-text"
-                }`}>
-                {isVisible ? "Not Now" : "Apply Now"}
-              </button>
-
+            <div className=" ">
+              <div className="applybutton text-end d-flex justify-content-end">
+                <button
+                  onClick={toggleVisibility}
+                  className={`custom-blue-btn rounded px-2 py-2  w-md-auto  ${
+                    isVisible ? "show-text" : "hide-text"
+                  }`}>
+                  {isVisible ? "Not Now" : "Apply Now"}
+                </button>
+              </div>
               <div className={`smooth-toggle ${isVisible ? "show" : ""} w-100`}>
                 <div className="row">
                   <div className="col-lg-12 mt-4">
