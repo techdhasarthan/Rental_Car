@@ -142,8 +142,12 @@ const PriceDetails = ({ response, startDate, endDate, imgurl }) => {
       );
 
       const responseData = await apiResponse.json();
-      if (apiResponse.ok) {
-        console.log(responseData);
+
+      const responseDataStatus = JSON.stringify(responseData.status);
+      if (responseDataStatus === "true") {
+        console.log(
+          "The response data received" + JSON.stringify(responseData.status)
+        );
         setResData(responseData.data);
 
         console.log(
@@ -151,7 +155,8 @@ const PriceDetails = ({ response, startDate, endDate, imgurl }) => {
         );
         toast.success("Car reservation successfully.");
       } else {
-        throw new Error(`Failed to reserve. Status: ${apiResponse.status}`);
+        toast.warn("Car is Unavailable, Plz Choose another date");
+        throw new Error(`Failed to reserve. Status: ${responseDataStatus}`);
       }
     } catch (error) {
       console.error("Error occurred during reservation:", error);
