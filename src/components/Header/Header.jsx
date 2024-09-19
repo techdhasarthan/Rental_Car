@@ -5,6 +5,7 @@ import "../../SCSS/headerScss.scss";
 import profile from "../../assets/all-images/slider-img/profile.jpg";
 import { toast } from "react-toastify";
 import axios from "axios";
+// import "../../styles/header.css";
 
 const navLinks = [
   { path: "/home", display: "Home" },
@@ -92,6 +93,19 @@ const Header = () => {
 
             <div className="navigation" ref={menuRef} onClick={toggleMenu}>
               <div className="menu">
+                <div className="dropdownMobileView" ref={dropdownRef}>
+                  <img
+                    src={profile}
+                    alt="avatar"
+                    className="img-fluid rounded-circle me-3 shadow-lg profile "
+                    width="35"
+                    onClick={toggleDropdown}
+                    style={{ cursor: "pointer" }}
+                  />
+                  <span className="profileMobileName text-black">
+                    {user?.name || "Guest"}
+                  </span>
+                </div>
                 {navLinks.map((item, index) => (
                   <NavLink
                     to={item.path}
@@ -106,37 +120,13 @@ const Header = () => {
                 {!isLoggedIn ? (
                   <Link
                     to="/sign-in"
-                    className="d-flex text-white no-underline custom-hover p-3 mt-3">
+                    className="d-flex text-white no-underline custom-hover p-3 mt-3 ">
                     <i className="ri-login-box-line"></i> Login
                   </Link>
                 ) : (
-                  <div
-                    className="dropdown d-flex justify-content-start mt-3 ps-5"
-                    ref={dropdownRef}>
-                    <img
-                      src={profile}
-                      alt="avatar"
-                      className="img-fluid rounded-circle me-3 shadow-lg profileimage "
-                      width="35"
-                      onClick={toggleDropdown}
-                      style={{ cursor: "pointer" }}
-                    />
-                    <div className="pt-2 text-black ">
-                      <h6 className="profileName">{user?.name || "Guest"}</h6>
-                    </div>
-                    <div
-                      className={`dropdown-menu ${showDropdown ? "show" : ""}`}>
-                      <Link
-                        to="/user-account"
-                        className="dropdown-item"
-                        onClick={() => setShowDropdown(false)}>
-                        <i className="ri-user-line"></i> My Profile
-                      </Link>
-                      <span className="dropdown-item" onClick={handleSignOut}>
-                        <i className="ri-logout-box-line"></i> Logout
-                      </span>
-                    </div>
-                  </div>
+                  <Link to="/sign-in">
+                    <div className="profileLogout ">Log Out</div>
+                  </Link>
                 )}
               </div>
             </div>
@@ -159,7 +149,9 @@ const Header = () => {
                     onClick={toggleDropdown}
                     style={{ cursor: "pointer" }}
                   />
-                  <span className="profileName">{user?.name || "Guest"}</span>
+                  <span className="profileName text-white">
+                    {user?.name || "Guest"}
+                  </span>
                   <div
                     className={`dropdown-menu ${showDropdown ? "show" : ""}`}>
                     <Link

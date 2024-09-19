@@ -337,11 +337,31 @@ $primary-color: #000d6b;
   font-family: "Cedarville Cursive", cursive;
 }
 
+.profileLogout {
+  display: none;
+}
+
+.dropdownMobileView {
+  display: none;
+}
+
 /* Media Queries */
 @media only screen and (max-width: 768px) {
+  .dropdownMobileView {
+    display: block;
+  }
+
+  .profileMobileName {
+    color: black;
+  }
+
   .mobile__menu {
     display: block;
     padding-right: 350px;
+  }
+
+  .profileLogout {
+    display: block;
   }
 
   .navigation {
