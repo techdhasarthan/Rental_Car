@@ -106,15 +106,16 @@ const PriceDetails = ({ response, startDate, endDate, imgurl }) => {
         console.error("Invalid URL:", error);
       }
     }
-    const currentDateTime = new Date().toISOString().split("T");
-    const date = currentDateTime[0];
-    const time = currentDateTime[1].split(":").slice(0, 2).join(":"); // Gets only hours and minutes
+    const now = new Date();
+    const date = now.toISOString().split("T")[0]; // Get the date part (YYYY-MM-DD)
+    const time = now.toTimeString().split(" ")[0].slice(0, 5); // Get time without seconds (HH:MM)
+    const currentDateTime = `${date}T${time}`;
 
-    const dateTime = `${date}T${time}`;
+    // Output: YYYY-MM-DD HH:MM
 
     const combinedRequestBody = {
       ID: "",
-      "Created Date": dateTime,
+      "Created Date": currentDateTime,
       "Customer Name": profileData.name,
       "Mobile Number": profileData.phoneNumber,
       "Email ID": profileData.emailId,
