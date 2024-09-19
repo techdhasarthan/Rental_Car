@@ -152,7 +152,12 @@ const Fulfillment = ({ imgurl }) => {
     const selectedStartDate = e.target.value;
     setStartDate(selectedStartDate);
   };
+  const currentDateTime = new Date();
 
+  // if (new Date(selectedStartDate) < currentDateTime) {
+  //   alert("Start time cannot be in the past.");
+  //   return;
+  // }
   const handleEndDateChange = (e) => {
     const selectedEndDate = e.target.value;
 
