@@ -30,3 +30,19 @@
 .upload_button {
     padding-top: 30px;
 }
+
+@media only screen and (min-width: 575px) {
+
+    .upload_button {
+        display: flex;
+        justify-content: end;
+        align-items: end;
+        width: 100%;
+    }
+
+    .Documentupload {
+        justify-content: end;
+        align-items: end;
+        width: 100%;
+    }
+}

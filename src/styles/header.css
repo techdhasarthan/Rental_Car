@@ -370,7 +370,7 @@
 
 
 
-@media only screen and (max-width: 768px) {
+@media only screen and (min-width: 768px) {
 
 
   .mobile__menu {
@@ -410,8 +410,18 @@
     display: block;
   }
 
+  .nav__right {
+    display: none;
+  }
 
 
 
+
+}
+
+@media only screen and (max-width: 575px) {
+  .nav__right {
+    display: none;
+  }
 
 }

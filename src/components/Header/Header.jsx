@@ -1,8 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Container } from "reactstrap";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import "../../SCSS/headerScss.scss"; // Import your Sass file
-
+import "../../SCSS/headerScss.scss";
 import profile from "../../assets/all-images/slider-img/profile.jpg";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -16,7 +15,7 @@ const navLinks = [
 ];
 
 const Header = () => {
-  const [user, setUserName] = useState({ name: "Guest" }); // Initial state with default user name
+  const [user, setUserName] = useState({ name: "Guest" });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const menuRef = useRef(null);
@@ -24,16 +23,11 @@ const Header = () => {
   const navigate = useNavigate();
 
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
-  const customerId = localStorage.getItem("id"); // Get customer ID from local storage
+  const customerId = localStorage.getItem("id");
 
   const toggleMenu = () => menuRef.current.classList.toggle("menu__active");
+  const toggleDropdown = () => setShowDropdown((prev) => !prev);
 
-  // Toggle dropdown visibility
-  const toggleDropdown = () => {
-    setShowDropdown((prev) => !prev);
-  };
-
-  // Fetch user profile data on mount
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -49,13 +43,11 @@ const Header = () => {
 
           if (response.ok) {
             const data = await response.json();
-            const profileData = {
-              name: data.data.Name || "Guest", // Fallback to "Guest" if name is missing
+            setUserName({
+              name: data.data.Name || "Guest",
               id: data.data.ID || "",
-            };
-
-            setUserName(profileData); // Set the user name in state
-            setIsLoggedIn(true); // Set logged-in state to true
+            });
+            setIsLoggedIn(true);
           } else {
             toast.error(
               `Failed to fetch profile data. Status: ${response.status}`
@@ -64,44 +56,28 @@ const Header = () => {
         }
       } catch (error) {
         toast.error(`An error occurred: ${error.message}`);
-        console.error("Error fetching profile data:", error);
       }
     };
 
-    fetchUserProfile(); // Fetch user profile when component mounts
+    fetchUserProfile();
   }, [customerId, backendUrl]);
 
-  // Handle user sign out
   const handleSignOut = async () => {
     try {
       const response = await axios.post(
         `${backendUrl}/getCustomerRegistrationDetailsSignOut`,
         { id: customerId }
       );
-
       if (response.data.status === "true") {
-        toast.success("Signed out successfully", {
-          autoClose: 2000,
-          className: "custom-toast",
-        });
-
-        // Clear local storage after successful sign-out
+        toast.success("Signed out successfully");
         localStorage.removeItem("id");
-        localStorage.removeItem("user");
-
-        setIsLoggedIn(false); // Update logged-in state
-        navigate("/sign-in"); // Navigate to the sign-in page
+        setIsLoggedIn(false);
+        navigate("/sign-in");
       } else {
-        toast.error("Failed to sign out", {
-          autoClose: 2000,
-          className: "custom-toast",
-        });
+        toast.error("Failed to sign out");
       }
     } catch (error) {
-      toast.error("Failed to sign out. Please try again.", {
-        autoClose: 3000,
-      });
-      console.error("Error signing out:", error);
+      toast.error("Failed to sign out. Please try again.");
     }
   };
 
@@ -126,38 +102,30 @@ const Header = () => {
                     {item.display}
                   </NavLink>
                 ))}
-              </div>
-            </div>
-            <div className="nav__right">
-              <div className="d-flex align-items-center justify-content-between w-100 gap-4 profile ">
+                {/* Add login/profile in mobile view */}
                 {!isLoggedIn ? (
                   <Link
                     to="/sign-in"
-                    className="d-flex shadow border-4 gap-1 text-white no-underline custom-hover p-3 ">
-                    <span className="custom-hover">
-                      <i className="ri-login-box-line"></i> Login
-                    </span>
+                    className="d-flex text-white no-underline custom-hover p-3 mt-3">
+                    <i className="ri-login-box-line"></i> Login
                   </Link>
                 ) : (
                   <div
-                    className="dropdown d-flex justify-content-end ps-5"
+                    className="dropdown d-flex justify-content-start mt-3 ps-5"
                     ref={dropdownRef}>
                     <img
                       src={profile}
                       alt="avatar"
-                      className="img-fluid rounded-circle me-3 shadow-lg profileimage"
+                      className="img-fluid rounded-circle me-3 shadow-lg profileimage "
                       width="35"
                       onClick={toggleDropdown}
                       style={{ cursor: "pointer" }}
                     />
-                    <div className="pt-2 text-light">
-                      <h6 className="profileName">{user?.name || "Guest"}</h6>{" "}
-                      {/* Display user's name */}
+                    <div className="pt-2 text-black ">
+                      <h6 className="profileName">{user?.name || "Guest"}</h6>
                     </div>
                     <div
-                      className={`dropdown-menu ${
-                        showDropdown ? "show" : ""
-                      } mt-1`}>
+                      className={`dropdown-menu ${showDropdown ? "show" : ""}`}>
                       <Link
                         to="/user-account"
                         className="dropdown-item"
@@ -171,6 +139,41 @@ const Header = () => {
                   </div>
                 )}
               </div>
+            </div>
+
+            {/* Profile/Login section in right corner for large screens */}
+            <div className="nav__right d-none d-md-flex align-items-center">
+              {!isLoggedIn ? (
+                <Link
+                  to="/sign-in"
+                  className="d-flex text-white no-underline custom-hover">
+                  <i className="ri-login-box-line"></i> Login
+                </Link>
+              ) : (
+                <div className="dropdown" ref={dropdownRef}>
+                  <img
+                    src={profile}
+                    alt="avatar"
+                    className="img-fluid rounded-circle me-3 shadow-lg profileimage "
+                    width="35"
+                    onClick={toggleDropdown}
+                    style={{ cursor: "pointer" }}
+                  />
+                  <span className="profileName">{user?.name || "Guest"}</span>
+                  <div
+                    className={`dropdown-menu ${showDropdown ? "show" : ""}`}>
+                    <Link
+                      to="/user-account"
+                      className="dropdown-item"
+                      onClick={() => setShowDropdown(false)}>
+                      <i className="ri-user-line"></i> My Profile
+                    </Link>
+                    <span className="dropdown-item" onClick={handleSignOut}>
+                      <i className="ri-logout-box-line"></i> Logout
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </Container>

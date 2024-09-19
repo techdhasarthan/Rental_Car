@@ -9,7 +9,7 @@
   /* https://media.giphy.com/media/36bx8slIfXXGg/giphy.gif */
   background-position: center;
   background-repeat: no-repeat;
-  background-size: calc(1600px);
+  background-size: calc(3000px);
 }
 
 .slider__item-02 {
@@ -82,4 +82,27 @@
   .slider__content h1 {
     font-size: 1.5rem;
   }
+
+  .slider__item-01 {
+    background: linear-gradient(rgb(0, 13, 107, 0.5), rgb(0, 13, 107, 0.5)),
+    ;
+
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: calc(1800px);
+  }
+}
+
+@media only screen and (max-width: 425px) {
+
+  .slider__item-01 {
+    padding-top: 200px;
+    background: linear-gradient(rgb(0, 13, 107, 0.5), rgb(0, 13, 107, 0.5)),
+    ;
+
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: calc(1700px);
+  }
+
 }

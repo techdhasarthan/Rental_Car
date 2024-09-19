@@ -111,9 +111,11 @@ function UploadConfirm() {
 
   return (
     <div className="ps-5 upload_button">
-      <Button color="warning" onClick={toggle}>
-        Document Upload
-      </Button>
+      <div className="Documentupload">
+        <Button color="warning" onClick={toggle}>
+          Document Upload
+        </Button>
+      </div>
       <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>Document Upload Options</ModalHeader>
         <ModalBody>
