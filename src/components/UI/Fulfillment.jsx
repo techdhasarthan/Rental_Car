@@ -8,6 +8,7 @@ import FileUpload from "../../pages/FileUpload"; // Import FileUpload component
 import UploadConfirm from "../../pages/UploadConfirm";
 import UploadCheckButton from "../../pages/UploadCheckButton";
 import { Container } from "react-bootstrap";
+import { toast, ToastContainer } from "react-toastify";
 
 const Fulfillment = ({ imgurl }) => {
   const image = imgurl;
@@ -151,18 +152,27 @@ const Fulfillment = ({ imgurl }) => {
   const handleStartDateChange = (e) => {
     const selectedStartDate = e.target.value;
     setStartDate(selectedStartDate);
-  };
-  const currentDateTime = new Date();
+    const currentDateTime = new Date();
 
-  // if (new Date(selectedStartDate) < currentDateTime) {
-  //   alert("Start time cannot be in the past.");
-  //   return;
-  // }
+    if (new Date(selectedStartDate) < currentDateTime) {
+      setStartDate("");
+
+      return;
+    }
+  };
+
+  const toast = () => {};
   const handleEndDateChange = (e) => {
     const selectedEndDate = e.target.value;
 
     if (new Date(selectedEndDate) < new Date(startDate)) {
-      alert("End date cannot be earlier than the start date.");
+      setEndDate("");
+      return;
+    }
+    const currentDateTime = new Date();
+
+    if (new Date(selectedEndDate) < currentDateTime) {
+      setEndDate("");
       return;
     }
 
@@ -171,6 +181,7 @@ const Fulfillment = ({ imgurl }) => {
 
   return (
     <>
+      <ToastContainer />
       <div className="pb-2  ">
         <div className="d-flex date_container flex-row me-3 ps-2 ">
           <div className="form-groups me-3">
