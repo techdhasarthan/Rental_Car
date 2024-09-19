@@ -109,7 +109,7 @@ const PriceDetails = ({ response, startDate, endDate, imgurl }) => {
 
     const combinedRequestBody = {
       ID: "",
-      "Created Date": new Date().toISOString().split("T")[0],
+      "Created Date": new Date(),
       "Customer Name": profileData.name,
       "Mobile Number": profileData.phoneNumber,
       "Email ID": profileData.emailId,
