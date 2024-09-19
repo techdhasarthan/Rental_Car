@@ -247,9 +247,13 @@ $primary-color: #000d6b;
   text-decoration: none;
   transition: 0.3s;
   gap: 4px;
+  display: flex;
+  border-bottom: 2px solid transparent;
 
   &:hover {
     color: #f9a826;
+    border-bottom: 2px solid #ff9800; // Example border color
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5); // Shadow effect on hover
   }
 }
 
@@ -386,12 +390,12 @@ $primary-color: #000d6b;
   .menu {
     width: 250px;
     height: 100%;
-    background: rgba(255, 255, 255, 0.7); /* 0.8 is the opacity level */
+    background: rgba(255, 255, 255, 0.9); /* 0.8 is the opacity level */
     display: flex;
     align-items: center;
     flex-direction: column;
     row-gap: 2rem;
-    padding-top: 20px;
+    padding-top: 14px;
 
     a {
       color: $primary-color;
@@ -408,6 +412,7 @@ $primary-color: #000d6b;
 
   .menu__active {
     display: block;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5); // Example shadow for the active menu
   }
 }
 

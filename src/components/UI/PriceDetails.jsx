@@ -143,6 +143,7 @@ const PriceDetails = ({ response, startDate, endDate, imgurl }) => {
 
       const responseData = await apiResponse.json();
       if (apiResponse.ok) {
+        console.log(responseData);
         setResData(responseData.data);
 
         console.log(

@@ -116,7 +116,8 @@ const Header = () => {
                       isActive ? "nav__active nav__item" : "nav__item"
                     }
                     key={index}>
-                    <i className={item.icon}></i> {item.display}
+                    <i className={item.icon}></i>
+                    <div className="pt-1"> {item.display}</div>
                   </NavLink>
                 ))}
                 {/* Add login/profile in mobile view */}
