@@ -236,12 +236,17 @@ $primary-color: #000d6b;
   display: flex;
   align-items: center;
   column-gap: 2.7rem;
+  i {
+    margin-right: 5px; // Adds space between icon and text
+    font-size: 1.2rem;
+  }
 }
 
 .nav__item {
   color: #fff;
   text-decoration: none;
   transition: 0.3s;
+  gap: 4px;
 
   &:hover {
     color: #f9a826;
@@ -349,12 +354,15 @@ $primary-color: #000d6b;
 @media only screen and (max-width: 768px) {
   .dropdownMobileView {
     display: block;
+    margin-right: 100px;
+    justify-content: left;
+    align-items: end;
+    display: flex;
   }
 
   .profileMobileName {
-    color: black;
+    padding-bottom: 6px;
   }
-
   .mobile__menu {
     display: block;
     padding-right: 350px;
@@ -378,17 +386,23 @@ $primary-color: #000d6b;
   .menu {
     width: 250px;
     height: 100%;
-    background: #fff;
+    background: rgba(255, 255, 255, 0.7); /* 0.8 is the opacity level */
     display: flex;
     align-items: center;
     flex-direction: column;
     row-gap: 2rem;
-    padding-top: 40px;
+    padding-top: 20px;
 
     a {
       color: $primary-color;
       font-weight: 600;
       font-size: 0.9rem;
+      margin-right: 120px;
+    }
+
+    i {
+      margin-right: 8px; // Adds space between icon and text
+      font-size: 1.2rem;
     }
   }
 

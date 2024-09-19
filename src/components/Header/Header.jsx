@@ -5,14 +5,13 @@ import "../../SCSS/headerScss.scss";
 import profile from "../../assets/all-images/slider-img/profile.jpg";
 import { toast } from "react-toastify";
 import axios from "axios";
-// import "../../styles/header.css";
 
 const navLinks = [
-  { path: "/home", display: "Home" },
-  { path: "/about", display: "About" },
-  { path: "/cars", display: "Cars" },
-  { path: "/blogs", display: "Blog" },
-  { path: "/contact", display: "Contact" },
+  { path: "/home", display: "Home", icon: "ri-home-4-fill" },
+  { path: "/about", display: "About", icon: "ri-error-warning-fill" },
+  { path: "/cars", display: "Cars", icon: "ri-car-fill" },
+  { path: "/blogs", display: "Blog", icon: "ri-article-fill" },
+  { path: "/contact", display: "Contact", icon: "ri-contacts-fill" },
 ];
 
 const Header = () => {
@@ -97,10 +96,14 @@ const Header = () => {
                   <img
                     src={profile}
                     alt="avatar"
-                    className="img-fluid rounded-circle me-3 shadow-lg profile "
+                    className="img-fluid rounded-circle me-3 shadow-lg profile"
                     width="35"
                     onClick={toggleDropdown}
-                    style={{ cursor: "pointer" }}
+                    style={{
+                      cursor: "pointer",
+                      border: "1px solid black",
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)",
+                    }}
                   />
                   <span className="profileMobileName text-black">
                     {user?.name || "Guest"}
@@ -113,20 +116,20 @@ const Header = () => {
                       isActive ? "nav__active nav__item" : "nav__item"
                     }
                     key={index}>
-                    {item.display}
+                    <i className={item.icon}></i> {item.display}
                   </NavLink>
                 ))}
                 {/* Add login/profile in mobile view */}
                 {!isLoggedIn ? (
                   <Link
                     to="/sign-in"
-                    className="d-flex text-white no-underline custom-hover p-3 mt-3 ">
+                    className="d-flex text-white no-underline custom-hover p-3 mt-3">
                     <i className="ri-login-box-line"></i> Login
                   </Link>
                 ) : (
-                  <Link to="/sign-in">
-                    <div className="profileLogout ">Log Out</div>
-                  </Link>
+                  <div onClick={handleSignOut}>
+                    <div className="profileLogout">Log Out</div>
+                  </div>
                 )}
               </div>
             </div>
@@ -144,7 +147,7 @@ const Header = () => {
                   <img
                     src={profile}
                     alt="avatar"
-                    className="img-fluid rounded-circle me-3 shadow-lg profileimage "
+                    className="img-fluid rounded-circle me-3 shadow-lg profileimage"
                     width="35"
                     onClick={toggleDropdown}
                     style={{ cursor: "pointer" }}

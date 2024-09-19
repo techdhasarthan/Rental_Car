@@ -40,7 +40,6 @@ const Fulfillment = ({ imgurl }) => {
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
-    alert(image);
     const fetchCarDetails = async () => {
       try {
         const requestBody = { ID: slug };
@@ -116,8 +115,8 @@ const Fulfillment = ({ imgurl }) => {
 
         const data = await response.json();
 
-        alert(JSON.stringify(data));
         console.log("Success:", data);
+
         setResData(data.data);
       } catch (error) {
         setIsVisible(false);
@@ -164,8 +163,6 @@ const Fulfillment = ({ imgurl }) => {
 
     setEndDate(selectedEndDate);
   };
-
-  console.log(imgurl);
 
   return (
     <>
