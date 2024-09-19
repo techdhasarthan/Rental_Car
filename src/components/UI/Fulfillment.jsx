@@ -39,6 +39,7 @@ const Fulfillment = ({ imgurl }) => {
   const { startdate, enddate } = location.state || {}; // Retrieve dates from state
   const { slug } = useParams(); // Extract car name (slug) from the URL
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+  const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
     const fetchCarDetails = async () => {
@@ -77,8 +78,27 @@ const Fulfillment = ({ imgurl }) => {
     fetchCarDetails();
   }, [slug, BASE_URL]);
 
+  useEffect(() => {
+    const isFormValid = startDate && endDate;
+    const isSelfPickupValid = selectedOption === "selfPickup" && option !== "";
+    const isDeliveryValid =
+      selectedOption === "delivery" && deliveryInfo.trim() !== "";
+
+    if (
+      startDate &&
+      endDate &&
+      selectedOption &&
+      (isSelfPickupValid || isDeliveryValid)
+    ) {
+      setIsFormValid(true); // Form is valid
+    } else {
+      setIsFormValid(false); // Form is invalid
+    }
+  }, [startDate, endDate, selectedOption, option, deliveryInfo]);
+
   const handleFulfillmentRequest = async () => {
-    if (startDate && endDate && selectedOption && carDetails.carName) {
+    alert("hitting");
+    if (isFormValid && carDetails.carName) {
       const requestData = {
         fulfillmentType: option || "",
         deliveryInfo: deliveryInfo || "",
@@ -115,9 +135,7 @@ const Fulfillment = ({ imgurl }) => {
         }
 
         const data = await response.json();
-
         console.log("Success:", data);
-
         setResData(data.data);
       } catch (error) {
         setIsVisible(false);
@@ -161,7 +179,6 @@ const Fulfillment = ({ imgurl }) => {
     }
   };
 
-  const toast = () => {};
   const handleEndDateChange = (e) => {
     const selectedEndDate = e.target.value;
 
@@ -278,9 +295,11 @@ const Fulfillment = ({ imgurl }) => {
               <div className="applybutton text-end d-flex justify-content-end">
                 <button
                   onClick={toggleVisibility}
-                  className={`custom-blue-btn rounded px-2 py-2  w-md-auto  ${
+                  className={`custom-blue-btn rounded px-2 py-2 w-md-auto ${
                     isVisible ? "show-text" : "hide-text"
-                  }`}>
+                  }`}
+                  disabled={!isFormValid} // Disable button if form is not valid
+                >
                   {isVisible ? "Not Now" : "Apply Now"}
                 </button>
               </div>
