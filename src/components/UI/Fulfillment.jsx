@@ -39,7 +39,6 @@ const Fulfillment = ({ imgurl }) => {
   const { startdate, enddate } = location.state || {}; // Retrieve dates from state
   const { slug } = useParams(); // Extract car name (slug) from the URL
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
-  const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
     const fetchCarDetails = async () => {
@@ -78,27 +77,9 @@ const Fulfillment = ({ imgurl }) => {
     fetchCarDetails();
   }, [slug, BASE_URL]);
 
-  useEffect(() => {
-    const isFormValid = startDate && endDate;
-    const isSelfPickupValid = selectedOption === "selfPickup" && option !== "";
-    const isDeliveryValid =
-      selectedOption === "delivery" && deliveryInfo.trim() !== "";
-
-    if (
-      startDate &&
-      endDate &&
-      selectedOption &&
-      (isSelfPickupValid || isDeliveryValid)
-    ) {
-      setIsFormValid(true); // Form is valid
-    } else {
-      setIsFormValid(false); // Form is invalid
-    }
-  }, [startDate, endDate, selectedOption, option, deliveryInfo]);
-
-  const handleFulfillmentRequest = async () => {
-    alert("hitting");
-    if (isFormValid && carDetails.carName) {
+  const handleFulfillmentRequest = async (e) => {
+    e.preventDefault();
+    if (startDate && endDate && selectedOption && carDetails.carName) {
       const requestData = {
         fulfillmentType: option || "",
         deliveryInfo: deliveryInfo || "",
@@ -151,8 +132,7 @@ const Fulfillment = ({ imgurl }) => {
   };
 
   const handleCheckboxChange = (event) => {
-    const { name } = event.target;
-    setSelectedOption(name);
+    setSelectedOption(event.target.value);
   };
 
   const handleDeliveryInfoChange = (event) => {
@@ -198,121 +178,132 @@ const Fulfillment = ({ imgurl }) => {
 
   return (
     <>
-      <ToastContainer />
-      <div className="pb-2  ">
-        <div className="d-flex date_container flex-row me-3 ps-2 ">
-          <div className="form-groups me-3">
-            <label htmlFor="startDate">Start Date & Time</label>
-            <input
-              type="datetime-local"
-              id="startDate"
-              className="form-control"
-              value={startDate}
-              min={today}
-              onChange={handleStartDateChange}
-            />
-          </div>
-
-          <div className="form-groups">
-            <label htmlFor="endDate">End Date & Time</label>
-            <input
-              type="datetime-local"
-              id="endDate"
-              className="form-control"
-              value={endDate}
-              min={startDate}
-              onChange={handleEndDateChange}
-            />
-          </div>
-        </div>
-        <div className="fulfillment-container">
-          <div className="radio-buttons">
-            <label>
+      <form onSubmit={handleFulfillmentRequest}>
+        <ToastContainer />
+        <div className="pb-2  ">
+          <div className="d-flex date_container flex-row me-3 ps-2 ">
+            <div className="form-groups me-3">
+              <label htmlFor="startDate">Start Date & Time</label>
               <input
-                type="checkbox"
-                name="selfPickup"
-                checked={selectedOption === "selfPickup"}
-                onChange={handleCheckboxChange}
-              />
-              Self-Pickup
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="delivery"
-                checked={selectedOption === "delivery"}
-                onChange={handleCheckboxChange}
-              />
-              Delivery
-            </label>
-          </div>
-
-          <UploadCheckButton />
-
-          {selectedOption === "selfPickup" && (
-            <div className="select-input-container">
-              <select
-                className="select-input"
-                value={option}
-                onChange={handleSelectChange}>
-                <option value="">Select an option</option>
-                <option value="Kilampakkam">Kilampakkam</option>
-                <option value="Koyambedu">Koyambedu</option>
-                <option value="Tambaram">Tambaram</option>
-              </select>
-            </div>
-          )}
-
-          {selectedOption === "delivery" && (
-            <div className="delivery-info-container">
-              <input
-                type="text"
-                className="input-fieldss"
-                placeholder="Enter delivery address"
-                value={deliveryInfo}
-                onChange={handleDeliveryInfoChange}
-              />
-              <textarea
-                className="text-areas"
-                placeholder="Enter delivery instructions or additional details"
-                value={extraInfo}
-                onChange={handleExtraInfoChange}
+                required
+                type="datetime-local"
+                id="startDate"
+                className="form-control"
+                value={startDate}
+                min={today}
+                onChange={handleStartDateChange}
               />
             </div>
-          )}
 
-          <p className="disclaimer">
-            <strong>Disclaimer :</strong> Delivery Charges may vary for outside
-            city limits locations including Airport pickup/drop. The same will
-            be confirmed upon KYC verification.
-          </p>
-        </div>
-      </div>
-      <div className="d-flex justify-content-end text-end me-3 flex-column flex-md-row">
-        <div className="w-100">
-          <div className="row">
-            <div className=" ">
-              <div className="applybutton text-end d-flex justify-content-end">
-                <button
-                  onClick={toggleVisibility}
-                  className={`custom-blue-btn rounded px-2 py-2 w-md-auto ${
-                    isVisible ? "show-text" : "hide-text"
-                  }`}
-                  disabled={!isFormValid} // Disable button if form is not valid
-                >
-                  {isVisible ? "Not Now" : "Apply Now"}
-                </button>
+            <div className="form-groups">
+              <label htmlFor="endDate">End Date & Time</label>
+              <input
+                required
+                type="datetime-local"
+                id="endDate"
+                className="form-control"
+                value={endDate}
+                min={startDate}
+                onChange={handleEndDateChange}
+              />
+            </div>
+          </div>
+          <div className="fulfillment-container">
+            <div className="radio-buttons">
+              <label>
+                <input
+                  required
+                  type="radio"
+                  name="fulfillmentOption"
+                  value="selfPickup"
+                  checked={selectedOption === "selfPickup"}
+                  onChange={handleCheckboxChange}
+                />
+                Self-Pickup
+              </label>
+              <label>
+                <input
+                  required
+                  type="radio"
+                  name="fulfillmentOption"
+                  value="delivery"
+                  checked={selectedOption === "delivery"}
+                  onChange={handleCheckboxChange}
+                />
+                Delivery
+              </label>
+            </div>
+
+            <UploadCheckButton />
+
+            {selectedOption === "selfPickup" && (
+              <div className="select-input-container">
+                <select
+                  required
+                  className="select-input"
+                  value={option}
+                  onChange={handleSelectChange}>
+                  <option value="">Select an option</option>
+                  <option value="Kilampakkam">Kilampakkam</option>
+                  <option value="Koyambedu">Koyambedu</option>
+                  <option value="Tambaram">Tambaram</option>
+                </select>
               </div>
-              <div className={`smooth-toggle ${isVisible ? "show" : ""} w-100`}>
-                <div className="row">
-                  <div className="col-lg-12 mt-4">
-                    <div className="payment__info mt-4">
-                      <PriceDetails
-                        response={resData}
-                        startDate={startDate}
-                        endDate={endDate}
-                        imgurl={image}
-                      />
+            )}
+
+            {selectedOption === "delivery" && (
+              <div className="delivery-info-container">
+                <input
+                  required
+                  type="text"
+                  className="input-fieldss"
+                  placeholder="Enter delivery address"
+                  value={deliveryInfo}
+                  onChange={handleDeliveryInfoChange}
+                />
+                <textarea
+                  required
+                  className="text-areas"
+                  placeholder="Enter delivery instructions or additional details"
+                  value={extraInfo}
+                  onChange={handleExtraInfoChange}
+                />
+              </div>
+            )}
+
+            <p className="disclaimer">
+              <strong>Disclaimer :</strong> Delivery Charges may vary for
+              outside city limits locations including Airport pickup/drop. The
+              same will be confirmed upon KYC verification.
+            </p>
+          </div>
+        </div>
+        <div className="d-flex justify-content-end text-end me-3 flex-column flex-md-row">
+          <div className="w-100">
+            <div className="row">
+              <div className=" ">
+                <div className="applybutton text-end d-flex justify-content-end">
+                  <button
+                    type="submit"
+                    onClick={toggleVisibility}
+                    className={`custom-blue-btn rounded px-2 py-2  w-md-auto  ${
+                      isVisible ? "show-text" : "hide-text"
+                    }`}>
+                    {isVisible ? "Not Now" : "Apply Now"}
+                  </button>
+                </div>
+                <div
+                  className={`smooth-toggle ${isVisible ? "show" : ""} w-100`}>
+                  <div className="row">
+                    <div className="col-lg-12 mt-4">
+                      <div className="payment__info mt-4">
+                        <PriceDetails
+                          response={resData}
+                          startDate={startDate}
+                          endDate={endDate}
+                          imgurl={image}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -320,7 +311,7 @@ const Fulfillment = ({ imgurl }) => {
             </div>
           </div>
         </div>
-      </div>
+      </form>
     </>
   );
 };

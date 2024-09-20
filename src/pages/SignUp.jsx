@@ -13,7 +13,7 @@ const SignUp = () => {
     id: "",
     name: "",
     phoneNumber: "",
-    password: "", // Corrected case for password
+    password: "",
     emailId: "",
     alternativeMobileNo: "",
     signStatus: "active", // Default value
@@ -68,6 +68,7 @@ const SignUp = () => {
       }
     });
   }, []);
+
   return (
     <main className="">
       <div className="box">
@@ -102,7 +103,7 @@ const SignUp = () => {
                   <input
                     type="tel"
                     className="input-field"
-                    id="phone Number"
+                    id="phoneNumber"
                     name="phoneNumber"
                     required
                     placeholder=" "
@@ -111,6 +112,51 @@ const SignUp = () => {
                   />
                   <label className="label" htmlFor="phoneNumber">
                     Phone Number
+                  </label>
+                </div>
+                <div className="input-wrap">
+                  <input
+                    type="email"
+                    className="input-field"
+                    id="emailId"
+                    name="emailId"
+                    required
+                    placeholder=" "
+                    value={user.emailId}
+                    onChange={handleInputChange}
+                  />
+                  <label className="label" htmlFor="emailId">
+                    Email ID
+                  </label>
+                </div>
+                <div className="input-wrap">
+                  <input
+                    type="tel"
+                    className="input-field"
+                    id="alternativeMobileNo"
+                    name="alternativeMobileNo"
+                    required
+                    placeholder=" "
+                    value={user.alternativeMobileNo}
+                    onChange={handleInputChange}
+                  />
+                  <label className="label" htmlFor="alternativeMobileNo">
+                    Alternative Mobile No
+                  </label>
+                </div>
+                <div className="input-wrap">
+                  <input
+                    type="number"
+                    className="input-field"
+                    id="age"
+                    name="age"
+                    required
+                    placeholder=" "
+                    value={user.age}
+                    onChange={handleInputChange}
+                  />
+                  <label className="label" htmlFor="age">
+                    Age
                   </label>
                 </div>
                 <div className="input-wrap">

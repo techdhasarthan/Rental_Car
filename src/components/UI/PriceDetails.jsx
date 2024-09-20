@@ -143,9 +143,9 @@ const PriceDetails = ({ response, startDate, endDate, imgurl }) => {
 
       const responseData = await apiResponse.json();
 
-      const responseDataStatus = responseData.status;
-      console.log(responseDataStatus);
-      if (responseDataStatus == "true") {
+      const responseDataStatus = JSON.stringify(responseData.status);
+
+      if (responseDataStatus === "true") {
         console.log(
           "The response data received" + JSON.stringify(responseData.status)
         );
