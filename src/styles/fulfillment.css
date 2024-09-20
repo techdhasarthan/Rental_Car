@@ -14,7 +14,7 @@
 .radio-buttons {
   display: flex;
   gap: 20px;
-  justify-content: space-between;
+
 
 
 }
@@ -25,11 +25,13 @@
   margin: 15px;
   /* Reduced margin for a tighter layout */
   font-weight: bold;
+
+
   /* Make labels more prominent */
 }
 
-.radio-buttons input[type="checkbox"] {
-  margin-right: 5px;
+.radio-buttons input[type="radio"] {
+  margin-right: 15px;
 }
 
 /* Container for select inputs */

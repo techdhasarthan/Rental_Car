@@ -209,15 +209,15 @@ const PriceDetails = ({ response, startDate, endDate, imgurl }) => {
     <div className="price-details-container">
       <div className="price-item">
         <span className="price-label">Booking Charges:</span>
-        <span className="price-value">₹ {response.carRentCharges}</span>
+        <span className="price-value">₹ {response.carRentCharges || 0.0} </span>
       </div>
       <div className="price-item">
         <span className="price-label">Delivery Charges:</span>
-        <span className="price-value">₹ {response.deliveryCharges}</span>
+        <span className="price-value">₹ {response.deliveryCharges || 0.0}</span>
       </div>
       <div className="price-item">
         <span className="price-label">Payable Amount:</span>
-        <span className="price-value">₹ {response.totalPayable}</span>
+        <span className="price-value">₹ {response.totalPayable || 0.0}</span>
       </div>
       <div className="payment text-end mt-3">
         <button

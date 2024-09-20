@@ -71,6 +71,26 @@
     border-radius: 5px;
 }
 
+.password-input-wrapper {
+    position: relative;
+}
+
+.password-input-wrapper input {
+    padding-right: 40px;
+    /* Ensure space for the eye icon inside the input */
+}
+
+.eye-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #888;
+}
+
+
 /* Media query for small screens (mobile-first approach) */
 @media (max-width: 768px) {
     .header {
