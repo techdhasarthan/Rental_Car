@@ -18,7 +18,22 @@ const Header = () => {
   const customerId = localStorage.getItem("id");
 
   const toggleMenu = () => menuRef.current.classList.toggle("menu__active");
+
   const toggleDropdown = () => setShowDropdown((prev) => !prev);
+
+  // Effect to handle clicks outside of the dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -83,7 +98,7 @@ const Header = () => {
             </span>
 
             <div className="navigation" ref={menuRef} onClick={toggleMenu}>
-              <div className="menu ">
+              <div className="menu">
                 <Link to="/user-account">
                   <div
                     className="dropdownMobileView text-decoration-none"
@@ -146,12 +161,11 @@ const Header = () => {
                   </Link>
                 ) : (
                   <div onClick={handleSignOut}>
-                    <div className="profileLogout ">
+                    <div className="profileLogout">
                       <button
                         type="button"
-                        className="btn  btn-warning d-flex align-items-center shadow-lg ">
-                        <i className="ri-logout-box-line me-2"></i>{" "}
-                        {/* Add margin-end for spacing */}
+                        className="btn btn-warning d-flex align-items-center shadow-lg ">
+                        <i className="ri-logout-box-line me-2"></i>
                         Log Out
                       </button>
                     </div>
