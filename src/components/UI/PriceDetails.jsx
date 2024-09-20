@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import "../../styles/priceDetails.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { message } from "antd";
 
 const PriceDetails = ({ response, startDate, endDate, imgurl }) => {
   const { slug } = useParams();
@@ -12,6 +13,7 @@ const PriceDetails = ({ response, startDate, endDate, imgurl }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [resData, setResData] = useState(null);
+  const [statues, setStatues] = useState();
   const customerId = localStorage.getItem("id");
 
   // Fetch Profile Data
@@ -74,7 +76,7 @@ const PriceDetails = ({ response, startDate, endDate, imgurl }) => {
         car_no: data.data?.["Car Number"] || "",
         category: data.data?.["Category"] || "",
         limitkm: data.data?.["Limit Km"] || "",
-        approveStatus: "",
+        approveStatus: "New Booking",
         // carImageName: data.data?.["Car Image Name"] || "",
       };
 
@@ -142,24 +144,50 @@ const PriceDetails = ({ response, startDate, endDate, imgurl }) => {
       );
 
       const responseData = await apiResponse.json();
+      console.log(
+        "mmmmmmm::" +
+          JSON.stringify(responseData) +
+          "<<<>>>" +
+          responseData.status +
+          "<<>>" +
+          typeof responseData["status"]
+      );
+      setStatues(responseData["status"]);
 
-      const responseDataStatus = JSON.stringify(responseData.status);
-
-      if (responseDataStatus === "true") {
+      if (responseData["status"] == "true") {
+        // Corrected from 'statues' to 'status'
         console.log(
-          "The response data received" + JSON.stringify(responseData.status)
+          "The response data received: " + JSON.stringify(responseData.status)
         );
         setResData(responseData.data);
 
         console.log(
-          "Reservation successful!" + JSON.stringify(combinedRequestBody)
+          "Reservation successful! " + JSON.stringify(combinedRequestBody)
         );
-        toast.success("Car reservation successfully.");
-      } else {
-        toast.warn(
-          "Car is Not Available, Please schedule some another time period"
-        );
-        throw new Error(`Failed to reserve. Status: ${responseDataStatus}`);
+
+        message.success({
+          content: "Car reservation successful!",
+          duration: 3, // Auto-close after 3 seconds
+          style: {
+            fontSize: "16px", // Larger font size
+            padding: "20px", // Increase padding for larger look
+            width: "300px",
+            marginLeft: "75vw",
+          },
+        });
+      } else if (responseData["status"] == "false") {
+        message.error({
+          content:
+            "Car is not available, please schedule for another time period.",
+          duration: 3, // Auto-close after 3 seconds
+          style: {
+            fontSize: "16px", // Larger font size
+            padding: "20px", // Increase padding for larger look
+
+            marginLeft: "60vw",
+          },
+        });
+        throw new Error(`Failed to reserve. Status: ${statues}`);
       }
     } catch (error) {
       console.error("Error occurred during reservation:", error);

@@ -115,7 +115,9 @@ const UserProfile = () => {
           phoneNumber: updatedData["Phone Number"] || userInfo.phoneNumber,
           password: updatedData.Password || userInfo.password,
           emailId: updatedData["Email ID"] || userInfo.emailId,
-          alternativeMobileNo: updatedData["Alternative Mobile.NO"] || userInfo.alternativeMobileNo,
+          alternativeMobileNo:
+            updatedData["Alternative Mobile.NO"] ||
+            userInfo.alternativeMobileNo,
           age: updatedData.Age || userInfo.age,
           signStatus: updatedData["Sign Status"] || userInfo.signStatus,
         };
@@ -256,6 +258,7 @@ const UserProfile = () => {
                           <strong>Phone:</strong>{" "}
                         </Label>
                         <Input
+                          disabled={true}
                           type="text"
                           id="phoneNumber"
                           name="phoneNumber"

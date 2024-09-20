@@ -91,24 +91,27 @@ const Header = () => {
             </span>
 
             <div className="navigation" ref={menuRef} onClick={toggleMenu}>
-              <div className="menu">
-                <div className="dropdownMobileView" ref={dropdownRef}>
-                  <img
-                    src={profile}
-                    alt="avatar"
-                    className="img-fluid rounded-circle me-3 shadow-lg profile"
-                    width="35"
-                    onClick={toggleDropdown}
-                    style={{
-                      cursor: "pointer",
-                      border: "1px solid black",
-                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)",
-                    }}
-                  />
-                  <span className="profileMobileName text-black">
-                    {user?.name || "Guest"}
-                  </span>
-                </div>
+              <div className="menu ">
+                <Link to="/user-account">
+                  <div className="dropdownMobileView " ref={dropdownRef}>
+                    <img
+                      src={profile}
+                      alt="avatar"
+                      className="img-fluid rounded-circle me-3 shadow-lg profile"
+                      width="35"
+                      onClick={toggleDropdown}
+                      style={{
+                        cursor: "pointer",
+                        border: "1px solid black",
+                        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)",
+                      }}
+                    />
+
+                    <span className="profileMobileName text-black">
+                      {user?.name || "Guest"}
+                    </span>
+                  </div>
+                </Link>
                 {navLinks.map((item, index) => (
                   <NavLink
                     to={item.path}

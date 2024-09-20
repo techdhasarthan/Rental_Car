@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Form, FormGroup, Label, Input, Alert } from "reactstrap";
 import axios from "axios";
 import "./Document.css";
@@ -7,8 +7,16 @@ const ChangePassword = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [id, setId] = useState("");
+
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+
+  // Fetch user ID from localStorage when component mounts
+  useEffect(() => {
+    const userId = localStorage.getItem("id");
+    setId(userId);
+  }, []); // Empty array means this effect runs only once after the component mounts
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
@@ -20,6 +28,7 @@ const ChangePassword = () => {
 
     try {
       const response = await axios.post("/api/change-password", {
+        id, // Send the id in the request
         currentPassword,
         newPassword,
       });
@@ -71,7 +80,7 @@ const ChangePassword = () => {
       </FormGroup>
       <div className="pb-3">
         <Button color="warning" type="submit" className="btn-with-icon">
-          <i class="ri-send-plane-fill"></i>Submit
+          <i className="ri-send-plane-fill"></i>Submit
         </Button>
       </div>
 
