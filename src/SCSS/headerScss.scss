@@ -256,6 +256,20 @@ $primary-color: #000d6b;
   }
 }
 
+.nav__item_cars {
+  color: #fff;
+  text-decoration: none;
+  transition: 0.3s;
+  gap: 4px;
+  display: flex;
+  border-bottom: 2px solid transparent;
+
+  &:hover {
+    color: #f9a826;
+    border-bottom: 2px solid #ff9800; // Example border color
+  }
+}
+
 .search__box {
   border: 1px solid #7c8a972f;
   padding: 7px 12px;
@@ -331,6 +345,22 @@ $primary-color: #000d6b;
   }
 }
 
+.nav__item_blog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.blog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 5px;
+  color: #ffffff;
+}
+
 .profileimage {
   transition: filter 0.3s ease-in-out, transform 250ms;
   border: black 1px solid;
@@ -351,6 +381,16 @@ $primary-color: #000d6b;
 
 .dropdownMobileView {
   display: none;
+}
+
+.MobileViewIcon_cars {
+  margin-left: 1px;
+}
+.MobileViewIcon_blog {
+  margin-right: 1px;
+}
+.MobileViewIcon_contact {
+  margin-right: 1px;
 }
 
 /* Media Queries */
@@ -374,6 +414,11 @@ $primary-color: #000d6b;
 
   .profileLogout {
     display: block;
+    padding-top: 300px;
+  }
+
+  .profileLogoutButton {
+    background-color: #ff9800;
   }
 
   .navigation {
@@ -395,7 +440,7 @@ $primary-color: #000d6b;
     align-items: center;
     flex-direction: column;
     row-gap: 2rem;
-    padding-top: 14px;
+    padding-top: 30px;
 
     a {
       color: $primary-color;
@@ -412,7 +457,44 @@ $primary-color: #000d6b;
 
   .menu__active {
     display: block;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5); // Example shadow for the active menu
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+  }
+  .MobileViewIcon_cars {
+    margin-right: 1px;
+  }
+  .MobileViewIcon_blog {
+    margin-right: 5px;
+  }
+  .MobileViewIcon_contact {
+    margin-left: 16px;
+  }
+
+  .nav__item {
+    padding-top: 20px;
+    padding-left: 20px;
+  }
+  .nav__item_blog {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    margin-left: 30px;
+    padding-top: 15px;
+    color: #000d6b;
+  }
+  .blog {
+    color: #000d6b;
+    padding-right: 15px;
+  }
+
+  .nav__item_cars {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    padding-left: 10px;
+    padding-top: 15px;
+    color: #000d6b;
   }
 }
 

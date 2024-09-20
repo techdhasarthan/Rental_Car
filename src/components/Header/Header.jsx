@@ -6,14 +6,6 @@ import profile from "../../assets/all-images/slider-img/profile.jpg";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-const navLinks = [
-  { path: "/home", display: "Home", icon: "ri-home-4-fill" },
-  { path: "/about", display: "About", icon: "ri-error-warning-fill" },
-  { path: "/cars", display: "Cars", icon: "ri-car-fill" },
-  { path: "/blogs", display: "Blog", icon: "ri-article-fill" },
-  { path: "/contact", display: "Contact", icon: "ri-contacts-fill" },
-];
-
 const Header = () => {
   const [user, setUserName] = useState({ name: "Guest" });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -93,7 +85,9 @@ const Header = () => {
             <div className="navigation" ref={menuRef} onClick={toggleMenu}>
               <div className="menu ">
                 <Link to="/user-account">
-                  <div className="dropdownMobileView " ref={dropdownRef}>
+                  <div
+                    className="dropdownMobileView text-decoration-none"
+                    ref={dropdownRef}>
                     <img
                       src={profile}
                       alt="avatar"
@@ -106,24 +100,44 @@ const Header = () => {
                         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)",
                       }}
                     />
-
-                    <span className="profileMobileName text-black">
+                    <span className="profileMobileName text-black text-decoration-none">
                       {user?.name || "Guest"}
                     </span>
                   </div>
                 </Link>
-                {navLinks.map((item, index) => (
-                  <NavLink
-                    to={item.path}
-                    className={({ isActive }) =>
-                      isActive ? "nav__active nav__item" : "nav__item"
-                    }
-                    key={index}>
-                    <i className={item.icon}></i>
-                    <div className="pt-1"> {item.display}</div>
-                  </NavLink>
-                ))}
-                {/* Add login/profile in mobile view */}
+
+                {/* Manually coded menu items */}
+                <NavLink to="/home" className="nav__item">
+                  <div className="MobileViewIcon">
+                    <i className="ri-home-4-fill"></i>
+                  </div>
+                  <div className="pt-1">Home</div>
+                </NavLink>
+                <NavLink to="/about" className="nav__item">
+                  <div className="MobileViewIcon">
+                    <i className="ri-error-warning-fill"></i>
+                  </div>
+                  <div className="pt-1">About</div>
+                </NavLink>
+                <NavLink to="/cars" className="nav__item_cars">
+                  <div className="MobileViewIcon_cars">
+                    <i className="ri-car-fill"></i>
+                  </div>
+                  <div className="pt-1 ">Cars</div>
+                </NavLink>
+                <NavLink to="/blogs" className="nav__item_blog">
+                  <div className="MobileViewIcon_blog ">
+                    <i className="ri-article-fill"></i>
+                  </div>
+                  <div className="pt-1 blog">Blog</div>
+                </NavLink>
+                <NavLink to="/contact" className="nav__item nav__item_contact">
+                  <div className="MobileViewIcon_contact">
+                    <i className="ri-contacts-fill"></i>
+                  </div>
+                  <div className="pt-1 ">Contact</div>
+                </NavLink>
+
                 {!isLoggedIn ? (
                   <Link
                     to="/sign-in"
@@ -132,13 +146,20 @@ const Header = () => {
                   </Link>
                 ) : (
                   <div onClick={handleSignOut}>
-                    <div className="profileLogout">Log Out</div>
+                    <div className="profileLogout ">
+                      <button
+                        type="button"
+                        className="btn  btn-warning d-flex align-items-center shadow-lg ">
+                        <i className="ri-logout-box-line me-2"></i>{" "}
+                        {/* Add margin-end for spacing */}
+                        Log Out
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Profile/Login section in right corner for large screens */}
             <div className="nav__right d-none d-md-flex align-items-center">
               {!isLoggedIn ? (
                 <Link
