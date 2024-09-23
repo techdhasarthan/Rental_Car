@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import "./Document.css";
-import { Container, Button } from "reactstrap";
+import { Button } from "reactstrap";
 import "remixicon/fonts/remixicon.css";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import axios from "axios";
 
 const FileUpload = ({ id }) => {
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
@@ -20,7 +19,8 @@ const FileUpload = ({ id }) => {
 
   const handleShow = () => setShow(true);
   const handleClose = () => {
-    setSelectedFiles(null); // Reset file input
+    // Reset all fields on close
+    setSelectedFiles(null);
     setSelectedDocumentType("");
     setDocumentNumber("");
     setNameOnDocument("");
@@ -38,7 +38,7 @@ const FileUpload = ({ id }) => {
   };
 
   const handleFileUpload = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault(); // Prevent form submission
 
     if (!selectedFiles || !id) {
       console.error("No files selected or customer ID is missing.");
@@ -63,14 +63,14 @@ const FileUpload = ({ id }) => {
     try {
       const response = await fetch(`${BASE_URL}/uploadCustomerDocuments`, {
         method: "POST",
-        body: formData, // Correct placement of formData
+        body: formData, // Send form data correctly
       });
 
       if (response.ok) {
         const result = await response.json();
         console.log("Form submitted successfully:", result);
         setUploadResponse(result);
-        setShow(false);
+        handleClose(); // Close modal after successful upload
       } else {
         console.error("Failed to submit form:", response.status);
       }
@@ -80,7 +80,7 @@ const FileUpload = ({ id }) => {
   };
 
   return (
-    <div className="  d-flex justify-content-end text-end ">
+    <div className="d-flex justify-content-end text-end">
       <div className="header pb-3">
         <Button color="warning" className="btn-4 p-2" onClick={handleShow}>
           <i className="ri-file-upload-line"></i> Document Upload
@@ -98,30 +98,30 @@ const FileUpload = ({ id }) => {
         <Modal.Body>
           <Form.Group controlId="formFileMultiple" className="mb-3">
             <Form.Label className="my-2">Document Type</Form.Label>
-            <br />
-            <select
-              className="select"
+            <Form.Select
+              aria-label="Document Type Select"
               value={selectedDocumentType}
               onChange={handleDocumentTypeChange}>
-              <option value="">Select Document Type</option>
+              <option value="">Open this select menu</option>
               <option value="Driving License">Driving License</option>
               <option value="Aadhar Card">Aadhar Card</option>
               <option value="Pan Card">Pan Card</option>
-              <option value="Voter ID">Voter ID</option>
-            </select>
+            </Form.Select>
+            <br />
 
             <Form.Label>Document Number</Form.Label>
             <Form.Control
-              size="lg"
               type="text"
+              placeholder="Enter Document Number"
               value={documentNumber}
               onChange={(e) => setDocumentNumber(e.target.value)}
             />
+            <br />
 
             <Form.Label>Name On Document</Form.Label>
             <Form.Control
-              size="lg"
               type="text"
+              placeholder="Enter Name On Document"
               value={nameOnDocument}
               onChange={(e) => setNameOnDocument(e.target.value)}
             />
@@ -131,7 +131,6 @@ const FileUpload = ({ id }) => {
                 <div className="col-md-6">
                   <Form.Label>Issue Date</Form.Label>
                   <Form.Control
-                    size="lg"
                     type="date"
                     value={issueDate}
                     onChange={(e) => setIssueDate(e.target.value)}
@@ -140,7 +139,6 @@ const FileUpload = ({ id }) => {
                 <div className="col-md-6">
                   <Form.Label>Expiry Date</Form.Label>
                   <Form.Control
-                    size="lg"
                     type="date"
                     value={expiryDate}
                     onChange={(e) => setExpiryDate(e.target.value)}
@@ -149,13 +147,10 @@ const FileUpload = ({ id }) => {
               </div>
             )}
 
-            <Form.Label>File upload</Form.Label>
-            <Form.Control
-              type="file"
-              multiple
-              onChange={handleFileChange}
-              accept="image/*" // Only allow image files
-            />
+            <br />
+
+            <Form.Label>File Upload</Form.Label>
+            <Form.Control type="file" multiple onChange={handleFileChange} />
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>

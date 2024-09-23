@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Container, Row, Col, Form, FormGroup, Input } from "reactstrap";
 import Helmet from "../components/Helmet/Helmet";
@@ -26,6 +26,50 @@ const socialLinks = [
 ];
 
 const Contact = () => {
+  const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const id = localStorage.getItem("id");
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Prepare data to send
+    const formData = {
+      id,
+      name,
+      email,
+      message,
+    };
+
+    // Send data to the backend
+    try {
+      alert(formData.message);
+      const response = await fetch(`${BASE_URL}/contact `, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        alert("Message sent successfully!");
+        // Optionally, clear the form fields after successful submission
+        setName("");
+        setEmail("");
+        setMessage("");
+      } else {
+        alert("Failed to send the message.");
+      }
+    } catch (error) {
+      console.error("Error sending the message:", error);
+      alert("An error occurred. Please try again.");
+    }
+  };
+
   return (
     <Helmet title="Contact">
       <CommonSection title="Contact" />
@@ -35,22 +79,32 @@ const Contact = () => {
             <Col lg="6" md="6">
               <h4 className="fw-bold mb-4">Get In Touch</h4>
 
-              <Form>
+              <Form onSubmit={handleSubmit}>
                 <FormGroup className="contact__form">
                   <Input
                     placeholder="Your Name"
                     type="text"
                     className="input"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                   />
                 </FormGroup>
                 <FormGroup className="contact__form">
-                  <Input placeholder="Email" type="email" className="input" />
+                  <Input
+                    placeholder="Email"
+                    type="email"
+                    className="input"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
                 </FormGroup>
                 <FormGroup className="contact__form">
                   <textarea
                     rows="5"
                     placeholder="Message"
-                    className="textarea"></textarea>
+                    className="textarea"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}></textarea>
                 </FormGroup>
 
                 <div className="text-left">
@@ -76,7 +130,7 @@ const Contact = () => {
                   </p>
                 </div>
                 <div className="d-flex  gap-2">
-                  <h6 className="fs-6 mb-0  " style={{ fontWeight: "600" }}>
+                  <h6 className="fs-6 mb-0" style={{ fontWeight: "600" }}>
                     Phone:
                   </h6>
                   <p className="section__description mb-0">+91 9962227523</p>
@@ -99,7 +153,7 @@ const Contact = () => {
                       to={item.url}
                       key={index}
                       className="social__link-icon pe-2">
-                      <i class={item.icon}></i>
+                      <i className={item.icon}></i>
                     </Link>
                   ))}
                 </div>

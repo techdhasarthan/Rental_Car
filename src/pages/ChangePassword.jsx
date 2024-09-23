@@ -105,7 +105,7 @@ const ChangePassword = () => {
           />
         </div>
       </FormGroup>
-      <div className="pb-3">
+      <div className="pb-3 d-flex  justify-content-end text-end align-content-end">
         <Button color="warning" type="submit" className="btn-with-icon">
           <i className="ri-send-plane-fill"></i>Submit
         </Button>

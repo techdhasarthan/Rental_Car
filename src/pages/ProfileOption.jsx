@@ -74,7 +74,7 @@ const ProfileOptions = () => {
     <div className="container-sm ">
       <Container className="my-4 rounded shadow border">
         <div className="pt-2">
-          <h4 className="fw-bold px-2 py-2">Profile Options</h4>
+          <h4 className="fw-bold px-2 py-2">My Account</h4>
         </div>
 
         {/* Navigation Tabs */}
@@ -93,7 +93,10 @@ const ProfileOptions = () => {
 
           {/* Dropdown for Booking */}
           <NavItem className="pt-2 px-1">
-            <Dropdown isOpen={dropdownOpen} toggle={toggleDropdown}>
+            <Dropdown
+              isOpen={dropdownOpen}
+              toggle={toggleDropdown}
+              className="dropdown_Booking">
               <DropdownToggle caret color={getDropdownColor()}>
                 Booking {/* Always show "Booking" */}
               </DropdownToggle>

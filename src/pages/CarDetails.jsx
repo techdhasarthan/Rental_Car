@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "reactstrap";
 import Helmet from "../components/Helmet/Helmet";
 import { useParams } from "react-router-dom";
@@ -75,7 +75,7 @@ const CarDetails = () => {
   // If the data was successfully fetched
   return (
     <Helmet title={carDetails?.carName}>
-      <section className=" ">
+      <section>
         <h2 className="section__title text-center my-3">ENQUIRY BREAKDOWN</h2>
         <Container>
           <Row>
@@ -87,20 +87,20 @@ const CarDetails = () => {
               />
             </Col>
 
-            <Col lg="6">
-              <div className="car__info mt-5">
-                <div className="d-flex align-items-center gap-5 mt-1">
+            <Col lg="6" className="car_details">
+              <div className="mt-5 car_details">
+                <div className=" align-items-center car_name gap-5 mt-1">
                   <h2 className="section__title">{carDetails?.carName}</h2>
                 </div>
                 <div className="d-flex align-items-center gap-5 mb-2 mt-2">
-                  <span className="d-flex align-items-center gap-2 fst-italic bold fs-5 fw-bold ">
+                  <span className="d-flex align-items-center gap-2 fst-italic bold fs-5 fw-bold">
                     <i className="ri-caravan-fill"></i> {carDetails?.car_no}
                   </span>
                 </div>
 
                 <div
-                  className="d-flex align-items-center"
-                  style={{ columnGap: "4rem" }}>
+                  className="d-flex align-items-center  carDetails"
+                  style={{ columnGap: "1rem" }}>
                   <span className="d-flex align-items-center gap-1 section__description">
                     <i
                       className="ri-roadster-line"
@@ -108,14 +108,14 @@ const CarDetails = () => {
                     {carDetails?.category}
                   </span>
 
-                  <span className="d-flex align-items-center gap-1 section__description">
+                  <span className=" d-flex align-items-center gap-1 section__description">
                     <i
                       className="ri-settings-2-line"
                       style={{ color: "#f9a826" }}></i>
                     {carDetails?.transmission_type}
                   </span>
 
-                  <span className="d-flex align-items-center gap-1 section__description">
+                  <span className="  d-flex align-items-center gap-1 section__description">
                     <i
                       className="ri-wheelchair-line"
                       style={{ color: "#f9a826" }}></i>
@@ -124,7 +124,7 @@ const CarDetails = () => {
                 </div>
 
                 <div
-                  className="d-flex align-items-center mt-2"
+                  className=" d-flex align-items-center mt-2"
                   style={{ columnGap: "2.1rem" }}>
                   <span className="d-flex align-items-center gap-1 section__description">
                     <p>
@@ -135,6 +135,7 @@ const CarDetails = () => {
                 </div>
               </div>
             </Col>
+
             <Container>
               <Row>
                 <Col lg="7" className="mt-4">

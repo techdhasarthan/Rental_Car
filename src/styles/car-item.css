@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Slab&display=swap');
 
-
-
 .car__item {
   border: 1px solid #7c8a9736;
   padding: 20px;
@@ -87,7 +85,9 @@
     font-size: 0.9rem;
   }
 
-
+  .section__description {
+    display: flex;
+  }
 }
 
 @media only screen and (max-width: 768px) {
@@ -112,4 +112,33 @@
   }
 }
 
-@media only screen and (max-width: 426px) {}
+@media only screen and (max-width: 576px) {
+  .car_details {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    column-gap: 1rem;
+  }
+
+  .car_details div {
+    flex: 1 1 48%;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    justify-content: center;
+  }
+
+  .car_name {
+    justify-content: center;
+    display: flex;
+  }
+
+  .carDetails span {
+    flex: 1 1 auto;
+  }
+
+  .car_details img {
+    width: 100%;
+    height: auto;
+  }
+}

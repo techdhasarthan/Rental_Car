@@ -1,5 +1,8 @@
 import { Col } from "reactstrap";
 import { Link } from "react-router-dom";
+import "aos/dist/aos.css"; // Import AOS styles
+import AOS from "aos";
+import { useEffect } from "react";
 
 const CarItem = (props) => {
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
@@ -14,8 +17,16 @@ const CarItem = (props) => {
     ID: id,
   } = props.item;
 
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // Animation duration (in milliseconds)
+      once: false, // Whether animation should happen only once
+      mirror: false, // Whether elements should animate out while scrolling past them
+    });
+  }, []);
+
   return (
-    <Col lg="4" md="4" sm="6" className="mb-5">
+    <Col lg="4" md="4" sm="6" className="mb-5" data-aos="flip-left">
       <div className="car__item">
         <div className="car__img">
           <img
