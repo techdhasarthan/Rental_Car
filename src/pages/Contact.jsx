@@ -37,23 +37,15 @@ const Contact = () => {
     e.preventDefault();
 
     // Prepare data to send
-    const formData = {
-      id,
-      name,
-      email,
-      message,
-    };
+    const jsonObj = JSON.parse("{}");
+    jsonObj["id"] = id;
+    jsonObj["name"] = name;
+    jsonObj["email"] = email;
+    jsonObj["message"] = message;
 
     // Send data to the backend
     try {
-      alert(formData.message);
-      const response = await fetch(`${BASE_URL}/contact `, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(`${BASE_URL}/contact `, jsonObj);
 
       if (response.ok) {
         alert("Message sent successfully!");
