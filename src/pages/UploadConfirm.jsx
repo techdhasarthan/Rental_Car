@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Modal,
@@ -12,6 +12,8 @@ import axios from "axios";
 import "./UploadConfirm.css"; // Ensure necessary styles are in place
 import invaild from "../../src/assets/all-images/slider-img/invaild.jpg";
 import validImage from "../../src/assets/all-images/slider-img/vaild.jpg"; // Path to the valid image
+import "aos/dist/aos.css"; // Import AOS styles
+import AOS from "aos";
 
 function UploadConfirm() {
   const [modal, setModal] = useState(false);
@@ -30,6 +32,14 @@ function UploadConfirm() {
   const [nameOnDocument, setNameOnDocument] = useState("");
   const [issueDate, setIssueDate] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
+
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // Animation duration (in milliseconds)
+      once: false, // Whether animation should happen only once
+      mirror: false, // Whether elements should animate out while scrolling past them
+    });
+  }, []);
 
   const toggle = () => setModal(!modal);
   const toggleNested = () => {
@@ -110,7 +120,7 @@ function UploadConfirm() {
   };
 
   return (
-    <div className="ps-5 upload_button">
+    <div className="ps-5 upload_button" data-aos="fade-up">
       <div className="Documentupload">
         <Button color="warning" onClick={toggle}>
           Document Upload

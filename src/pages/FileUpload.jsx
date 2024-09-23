@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Document.css";
 import { Button } from "reactstrap";
 import "remixicon/fonts/remixicon.css";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
+import "aos/dist/aos.css"; // Import AOS styles
+import AOS from "aos";
 
 const FileUpload = ({ id }) => {
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
@@ -17,16 +19,27 @@ const FileUpload = ({ id }) => {
   const [issueDate, setIssueDate] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
 
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: false,
+      mirror: false,
+    });
+  }, []);
+
   const handleShow = () => setShow(true);
   const handleClose = () => {
-    // Reset all fields on close
+    resetForm();
+    setShow(false);
+  };
+
+  const resetForm = () => {
     setSelectedFiles(null);
     setSelectedDocumentType("");
     setDocumentNumber("");
     setNameOnDocument("");
     setIssueDate("");
     setExpiryDate("");
-    setShow(false);
   };
 
   const handleFileChange = (event) => {
@@ -38,7 +51,7 @@ const FileUpload = ({ id }) => {
   };
 
   const handleFileUpload = async (e) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
 
     if (!selectedFiles || !id) {
       console.error("No files selected or customer ID is missing.");
@@ -47,10 +60,9 @@ const FileUpload = ({ id }) => {
 
     const formData = new FormData();
 
-    // Append selected files
-    for (let i = 0; i < selectedFiles.length; i++) {
-      formData.append("files", selectedFiles[i]);
-    }
+    Array.from(selectedFiles).forEach((file) => {
+      formData.append("files", file);
+    });
 
     // Append document-related data
     formData.append("documentType", selectedDocumentType);
@@ -59,11 +71,15 @@ const FileUpload = ({ id }) => {
     formData.append("customerId", id);
     formData.append("issueDate", issueDate);
     formData.append("expiryDate", expiryDate);
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
 
     try {
+      console.log(formData.getAll);
       const response = await fetch(`${BASE_URL}/uploadCustomerDocuments`, {
         method: "POST",
-        body: formData, // Send form data correctly
+        body: formData,
       });
 
       if (response.ok) {
@@ -76,11 +92,13 @@ const FileUpload = ({ id }) => {
       }
     } catch (error) {
       console.error("Error uploading file:", error);
+      handleClose();
+      alert("failed");
     }
   };
 
   return (
-    <div className="d-flex justify-content-end text-end">
+    <div className="d-flex justify-content-end text-end" data-aos="fade-down">
       <div className="header pb-3">
         <Button color="warning" className="btn-4 p-2" onClick={handleShow}>
           <i className="ri-file-upload-line"></i> Document Upload
@@ -102,7 +120,7 @@ const FileUpload = ({ id }) => {
               aria-label="Document Type Select"
               value={selectedDocumentType}
               onChange={handleDocumentTypeChange}>
-              <option value="">Open this select menu</option>
+              <option value="">Select Document Type</option>
               <option value="Driving License">Driving License</option>
               <option value="Aadhar Card">Aadhar Card</option>
               <option value="Pan Card">Pan Card</option>

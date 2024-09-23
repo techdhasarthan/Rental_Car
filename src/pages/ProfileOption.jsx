@@ -96,7 +96,7 @@ const ProfileOptions = () => {
             <Dropdown
               isOpen={dropdownOpen}
               toggle={toggleDropdown}
-              className="dropdown_Booking">
+              className="dropdown_Booking ">
               <DropdownToggle caret color={getDropdownColor()}>
                 Booking {/* Always show "Booking" */}
               </DropdownToggle>

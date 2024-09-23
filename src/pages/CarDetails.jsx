@@ -4,8 +4,17 @@ import Helmet from "../components/Helmet/Helmet";
 import { useParams } from "react-router-dom";
 import "../styles/car-item.css";
 import Fulfillment from "../components/UI/Fulfillment";
+import AOS from "aos";
+import "aos/dist/aos.css"; // Import AOS styles
 
 const CarDetails = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // Animation duration (in milliseconds)
+      once: false, // Whether animation should happen only once
+      mirror: false, // Whether elements should animate out while scrolling past them
+    });
+  }, []);
   const [carDetails, setCarDetails] = useState(null); // State for car details
   const [loading, setLoading] = useState(true); // State for loading status
   const [error, setError] = useState(""); // State for error handling
@@ -136,7 +145,7 @@ const CarDetails = () => {
               </div>
             </Col>
 
-            <Container>
+            <Container data-aos="fade-up">
               <Row>
                 <Col lg="7" className="mt-4">
                   <div className="booking-info mt-4">

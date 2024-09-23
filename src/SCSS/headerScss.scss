@@ -2,7 +2,7 @@ $primary-color: #000d6b;
 
 .header {
   &__top {
-    padding: 10px 0px;
+    padding: 10px 0;
     background: $primary-color;
     color: #fff;
 
@@ -42,7 +42,7 @@ $primary-color: #000d6b;
   }
 
   &__middle {
-    padding: 20px 0px;
+    padding: 20px 0;
 
     .logo {
       h1 {
@@ -103,44 +103,6 @@ $primary-color: #000d6b;
           color: #fff;
         }
       }
-    }
-  }
-}
-
-.location-selector {
-  display: flex;
-  align-items: center;
-
-  i {
-    font-size: 18px;
-    color: #fff;
-    margin-right: 8px;
-  }
-
-  select {
-    border: none;
-    outline: none;
-    font-size: 16px;
-    background-color: $primary-color;
-    color: #fff;
-    cursor: pointer;
-    flex: 1;
-
-    &:focus option {
-      background-color: #fff;
-      color: $primary-color;
-    }
-  }
-
-  option {
-    padding: 8px;
-    background-color: #fff;
-    color: $primary-color;
-    font-size: 16px;
-
-    &:hover {
-      background-color: #fff;
-      color: $primary-color;
     }
   }
 }
@@ -236,27 +198,16 @@ $primary-color: #000d6b;
   display: flex;
   align-items: center;
   column-gap: 2.7rem;
+
   i {
-    margin-right: 5px; // Adds space between icon and text
+    margin-right: 5px;
     font-size: 1.2rem;
   }
 }
 
-.nav__item {
-  color: #fff;
-  text-decoration: none;
-  transition: 0.3s;
-  gap: 4px;
-  display: flex;
-  border-bottom: 2px solid transparent;
-
-  &:hover {
-    color: #f9a826;
-    border-bottom: 2px solid #ff9800; // Example border color
-  }
-}
-
-.nav__item_cars {
+.nav__item,
+.nav__item_cars,
+.nav__item_blog {
   color: #fff;
   text-decoration: none;
   transition: 0.3s;
@@ -345,22 +296,6 @@ $primary-color: #000d6b;
   }
 }
 
-.nav__item_blog {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  color: #ffffff;
-}
-
-.blog {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-bottom: 5px;
-  color: #ffffff;
-}
-
 .profileimage {
   transition: filter 0.3s ease-in-out, transform 250ms;
   border: black 1px solid;
@@ -391,6 +326,10 @@ $primary-color: #000d6b;
 }
 .MobileViewIcon_contact {
   margin-right: 1px;
+}
+
+.nav__item_blog:hover {
+  color: #f1c40f;
 }
 
 /* Media Queries */
@@ -435,7 +374,7 @@ $primary-color: #000d6b;
   .menu {
     width: 250px;
     height: 100%;
-    background: rgba(255, 255, 255, 0.9); /* 0.8 is the opacity level */
+    background: rgba(255, 255, 255, 0.9);
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -450,8 +389,7 @@ $primary-color: #000d6b;
     }
 
     i {
-      margin-right: 8px; // Adds space between icon and text
-      font-size: 1.2rem;
+      margin-right: 8px;
     }
   }
 
@@ -459,68 +397,10 @@ $primary-color: #000d6b;
     display: block;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
   }
-  .MobileViewIcon_cars {
-    margin-right: 1px;
-  }
-  .MobileViewIcon_blog {
-    margin-right: 5px;
-  }
-  .MobileViewIcon_contact {
-    margin-left: 16px;
-  }
-
-  .nav__item {
-    padding-top: 20px;
-    padding-left: 20px;
-  }
-  .nav__item_blog {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-    margin-left: 30px;
-    padding-top: 15px;
-    color: #000d6b;
-  }
-  .blog {
-    color: #000d6b;
-    padding-right: 15px;
-  }
-
-  .nav__item_cars {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-    padding-left: 10px;
-    padding-top: 15px;
-    color: #000d6b;
-  }
 }
 
-@media only screen and (min-width: 425px) and (max-width: 768px) {
-  .nav__right {
-    display: none;
-  }
-
-  .dropdown {
-    display: none;
-  }
-}
-
-@media only screen and (max-width: 425px) {
-  .nav__right {
-    display: none;
-  }
+@media only screen and (max-width: 600px) {
   .mobile__menu {
-    display: block;
-    padding-right: 330px;
-  }
-}
-
-@media only screen and (max-width: 320px) {
-  .mobile__menu {
-    display: block;
-    padding-right: 260px;
+    padding-right: 200px;
   }
 }

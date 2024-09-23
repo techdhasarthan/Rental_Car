@@ -39,6 +39,10 @@
   align-items: center;
 }
 
+.nav__item_blog:hover {
+  color: #f1c40f;
+}
+
 .profileName {
   margin-right: 10px;
   color: #fff;

@@ -63,3 +63,12 @@ button {
   /* Darker shade on hover */
   border-color: rgb(0, 10, 90) !important;
 }
+
+
+
+@media only screen and (max-width:768px) {
+  .dropdown_Booking {
+
+    display: flex;
+  }
+}

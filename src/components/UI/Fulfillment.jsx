@@ -9,8 +9,17 @@ import UploadConfirm from "../../pages/UploadConfirm";
 import UploadCheckButton from "../../pages/UploadCheckButton";
 import { Container } from "react-bootstrap";
 import { toast, ToastContainer } from "react-toastify";
+import "aos/dist/aos.css"; // Import AOS styles
+import AOS from "aos";
 
 const Fulfillment = ({ imgurl }) => {
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // Animation duration (in milliseconds)
+      once: false, // Whether animation should happen only once
+      mirror: false, // Whether elements should animate out while scrolling past them
+    });
+  }, []);
   const image = imgurl;
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
@@ -281,7 +290,9 @@ const Fulfillment = ({ imgurl }) => {
             </p>
           </div>
         </div>
-        <div className="d-flex justify-content-end text-end me-3 flex-column flex-md-row">
+        <div
+          className="d-flex justify-content-end text-end me-3 flex-column flex-md-row"
+          data-aos="fade-up">
           <div className="w-100">
             <div className="row">
               <div className=" pt-3 ">

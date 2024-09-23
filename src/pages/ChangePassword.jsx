@@ -32,11 +32,13 @@ const ChangePassword = () => {
     }
 
     try {
-      const response = await axios.post("/api/change-password", {
-        id, // Send the id in the request
-        currentPassword,
-        newPassword,
-      });
+      console.log("id  current pas  new" + id, currentPassword, newPassword);
+      var jsonObj = JSON.parse("{}");
+      jsonObj["id"] = id;
+      jsonObj["currentPassword"] = currentPassword;
+      jsonObj["newPassword"] = newPassword;
+
+      const response = await axios.post("/api/change-password", jsonObj);
 
       setMessage(response.data);
       setError("");
