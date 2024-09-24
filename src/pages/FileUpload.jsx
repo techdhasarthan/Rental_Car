@@ -85,10 +85,13 @@ const FileUpload = ({ id }) => {
 
     try {
       console.log(jsonObj);
-      const response = await fetch(
-        `${BASE_URL}/uploadCustomerDocuments`,
-        jsonObj
-      );
+      const response = await fetch(`${BASE_URL}/uploadCustomerDocuments`, {
+        method: "POST", // Specify the method
+        headers: {
+          "Content-Type": "application/json", // Specify content type as JSON
+        },
+        body: JSON.stringify(jsonObj), // Convert the object to a JSON string
+      });
 
       if (response.ok) {
         const result = await response.json();
