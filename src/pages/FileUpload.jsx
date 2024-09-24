@@ -12,6 +12,7 @@ const FileUpload = ({ id }) => {
 
   const [show, setShow] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState(null);
+  const [uploadResponse, setUploadResponse] = useState(null);
   const [selectedDocumentType, setSelectedDocumentType] = useState("");
   const [documentNumber, setDocumentNumber] = useState("");
   const [nameOnDocument, setNameOnDocument] = useState("");
@@ -57,45 +58,34 @@ const FileUpload = ({ id }) => {
       return;
     }
 
-    // Function to convert file to base64
-    const toBase64 = (file) => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file); // Reads the file and encodes it as a base64 string
-        reader.onload = () => resolve(reader.result.split(",")[1]); // Only keep the Base64 part
-        reader.onerror = (error) => reject(error); // Rejects if there's an error
-      });
-    };
+    const formData = new FormData();
 
-    // Convert all files to base64
-    const filesBase64Array = await Promise.all(
-      Array.from(selectedFiles).map((file) => toBase64(file))
-    );
+    Array.from(selectedFiles).forEach((file) => {
+      formData.append("files", file);
+    });
 
-    // Create an object with the form data
-
-    const jsonObj = JSON.parse("{}");
-    jsonObj["documentType"] = selectedDocumentType;
-    jsonObj["documentNumber"] = documentNumber;
-    jsonObj["nameOnDocument"] = nameOnDocument;
-    jsonObj["customerId"] = id;
-    jsonObj["issueDate"] = issueDate;
-    jsonObj["expiryDate"] = expiryDate;
-    jsonObj["files"] = filesBase64Array;
+    // Append document-related data
+    formData.append("documentType", selectedDocumentType);
+    formData.append("documentNumber", documentNumber);
+    formData.append("nameOnDocument", nameOnDocument);
+    formData.append("customerId", id);
+    formData.append("issueDate", issueDate);
+    formData.append("expiryDate", expiryDate);
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
 
     try {
-      console.log(jsonObj);
+      console.log(formData.getAll);
       const response = await fetch(`${BASE_URL}/uploadCustomerDocuments`, {
-        method: "POST", // Specify the method
-        headers: {
-          "Content-Type": "application/json", // Specify content type as JSON
-        },
-        body: JSON.stringify(jsonObj), // Convert the object to a JSON string
+        method: "POST",
+        body: formData,
       });
 
       if (response.ok) {
         const result = await response.json();
         console.log("Form submitted successfully:", result);
+        setUploadResponse(result);
         handleClose(); // Close modal after successful upload
       } else {
         console.error("Failed to submit form:", response.status);
@@ -103,7 +93,7 @@ const FileUpload = ({ id }) => {
     } catch (error) {
       console.error("Error uploading file:", error);
       handleClose();
-      alert("Failed");
+      alert("failed");
     }
   };
 
