@@ -88,7 +88,7 @@ const CarDetails = () => {
         <h2 className="section__title text-center my-3">ENQUIRY BREAKDOWN</h2>
         <Container>
           <Row>
-            <Col lg="6">
+            <Col lg="6" data-aos="fade-right">
               <img
                 src={`${BASE_URL}/` + carDetails?.imgUrl}
                 alt={carDetails?.carName}
@@ -96,7 +96,7 @@ const CarDetails = () => {
               />
             </Col>
 
-            <Col lg="6" className="car_details">
+            <Col lg="6" className="car_details" data-aos="fade-left">
               <div className="mt-5 car_details">
                 <div className=" align-items-center car_name gap-5 mt-1">
                   <h2 className="section__title">{carDetails?.carName}</h2>

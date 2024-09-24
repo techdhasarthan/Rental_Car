@@ -240,3 +240,255 @@ function UploadConfirm() {
 }
 
 export default UploadConfirm;
+
+// import React, { useState, useEffect } from "react";
+// import {
+//   Button,
+//   Modal,
+//   ModalHeader,
+//   ModalBody,
+//   ModalFooter,
+//   Container,
+// } from "reactstrap";
+// import Form from "react-bootstrap/Form";
+// import axios from "axios";
+// import "./UploadConfirm.css"; // Ensure necessary styles are in place
+// import invalidImage from "../../src/assets/all-images/slider-img/invaild.jpg"; // Path to the invalid image
+// import validImage from "../../src/assets/all-images/slider-img/vaild.jpg"; // Path to the valid image
+// import "aos/dist/aos.css"; // Import AOS styles
+// import AOS from "aos";
+
+// function UploadConfirm() {
+//   const [modal, setModal] = useState(false);
+//   const [nestedModal, setNestedModal] = useState(false);
+//   const [closeAll, setCloseAll] = useState(false);
+//   const [isOldFile, setIsOldFile] = useState(false);
+//   const [isFileValid, setIsFileValid] = useState(false);
+//   const [hasUploadedFile, setHasUploadedFile] = useState(false);
+
+//   // File upload related states
+//   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+//   const [selectedFiles, setSelectedFiles] = useState(null);
+//   const [selectedDocumentType, setSelectedDocumentType] = useState("");
+//   const [documentNumber, setDocumentNumber] = useState("");
+//   const [nameOnDocument, setNameOnDocument] = useState("");
+//   const [issueDate, setIssueDate] = useState("");
+//   const [expiryDate, setExpiryDate] = useState("");
+
+//   useEffect(() => {
+//     AOS.init({
+//       duration: 1000,
+//       once: false,
+//       mirror: false,
+//     });
+//   }, []);
+
+//   const toggleModal = () => setModal(!modal);
+//   const toggleNestedModal = () => {
+//     setNestedModal(!nestedModal);
+//     setCloseAll(false);
+//   };
+//   const toggleCloseAll = () => {
+//     setNestedModal(!nestedModal);
+//     setCloseAll(true);
+//   };
+
+//   // Handle file selection
+//   const handleFileChange = (event) => {
+//     setSelectedFiles(event.target.files);
+//   };
+
+//   // Handle document type change
+//   const handleDocumentTypeChange = (event) => {
+//     setSelectedDocumentType(event.target.value);
+//   };
+
+//   // Convert file to Base64 format
+//   const convertFileToBase64 = (file) => {
+//     return new Promise((resolve, reject) => {
+//       const reader = new FileReader();
+//       reader.readAsDataURL(file);
+//       reader.onload = () => resolve(reader.result);
+//       reader.onerror = (error) => reject(error);
+//     });
+//   };
+
+//   // Upload the selected files as Base64
+//   const handleFileUpload = async () => {
+//     if (selectedFiles) {
+//       const base64Files = await Promise.all(
+//         Array.from(selectedFiles).map((file) => convertFileToBase64(file))
+//       );
+
+//       const uploadData = {
+//         files: base64Files,
+//         documentType: selectedDocumentType,
+//         documentNumber,
+//         nameOnDocument,
+//       };
+
+//       if (selectedDocumentType === "Driving License") {
+//         uploadData.issueDate = issueDate;
+//         uploadData.expiryDate = expiryDate;
+//       }
+
+//       try {
+//         const response = await axios.post(`${BASE_URL}/upload`, uploadData, {
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//         });
+
+//         console.log("Upload successful:", response.data);
+//         setHasUploadedFile(true);
+//         toggleNestedModal(); // Close the nested modal after upload
+//       } catch (error) {
+//         console.error("Error uploading file:", error);
+//       }
+//     }
+//   };
+
+//   // Check if an old file exists
+//   const handleOldFileClick = async () => {
+//     try {
+//       const response = await axios.get(`${BASE_URL}/check-file`, {
+//         params: {
+//           documentNumber, // Send necessary details to check the file
+//         },
+//       });
+
+//       // Assuming the response contains a flag 'fileExists' to indicate file presence
+//       setIsFileValid(response.data.fileExists);
+//     } catch (error) {
+//       console.error("Error checking file:", error);
+//       setIsFileValid(false); // If there's an error, assume the file is not found
+//     }
+
+//     setIsOldFile(true);
+//     toggleNestedModal(); // Open the nested modal
+//   };
+
+//   return (
+//     <div className="ps-5 upload_button" data-aos="fade-up">
+//       <div className="Documentupload">
+//         <Button color="warning" onClick={toggleModal}>
+//           Document Upload
+//         </Button>
+//       </div>
+//       <Modal isOpen={modal} toggle={toggleModal}>
+//         <ModalHeader toggle={toggleModal}>Document Upload Options</ModalHeader>
+//         <ModalBody>
+//           <Button
+//             color="success"
+//             className="file-option"
+//             onClick={() => {
+//               setIsOldFile(false);
+//               toggleNestedModal();
+//             }}
+//           >
+//             New File
+//           </Button>
+//           <Button
+//             color="success"
+//             className="file-option"
+//             onClick={handleOldFileClick}
+//           >
+//             Old File
+//           </Button>
+
+//           {/* Nested Modal for file upload or old file message */}
+//           <Modal
+//             isOpen={nestedModal}
+//             toggle={toggleNestedModal}
+//             onClosed={closeAll ? toggleModal : undefined}
+//           >
+//             <ModalHeader>
+//               {isOldFile ? "Old File" : "Upload Document"}
+//             </ModalHeader>
+//             <ModalBody>
+//               {isOldFile ? (
+//                 <div style={{ display: "flex", alignItems: "center" }}>
+//                   <img
+//                     src={isFileValid ? validImage : invalidImage}
+//                     alt={isFileValid ? "Valid Document" : "Invalid Document"}
+//                     style={{
+//                       maxWidth: "20%",
+//                       height: "auto",
+//                     }}
+//                   />
+//                   <h4>{isFileValid ? "Verified" : "File Not Found"}</h4>
+//                 </div>
+//               ) : (
+//                 <Container>
+//                   <Form.Group controlId="formFileMultiple" className="mb-3">
+//                     <Form.Label>Document Type</Form.Label>
+//                     <Form.Control
+//                       as="select"
+//                       onChange={handleDocumentTypeChange}
+//                     >
+//                       <option value="">Select Document Type</option>
+//                       <option value="Driving License">Driving License</option>
+//                       <option value="Aadhar Card">Aadhar Card</option>
+//                       <option value="Pan Card">Pan Card</option>
+//                       <option value="Voter ID">Voter ID</option>
+//                     </Form.Control>
+
+//                     <Form.Label>Document Number</Form.Label>
+//                     <Form.Control
+//                       type="text"
+//                       value={documentNumber}
+//                       onChange={(e) => setDocumentNumber(e.target.value)}
+//                     />
+
+//                     <Form.Label>Name on Document</Form.Label>
+//                     <Form.Control
+//                       type="text"
+//                       value={nameOnDocument}
+//                       onChange={(e) => setNameOnDocument(e.target.value)}
+//                     />
+
+//                     {selectedDocumentType === "Driving License" && (
+//                       <>
+//                         <Form.Label>Issue Date</Form.Label>
+//                         <Form.Control
+//                           type="date"
+//                           value={issueDate}
+//                           onChange={(e) => setIssueDate(e.target.value)}
+//                         />
+
+//                         <Form.Label>Expiry Date</Form.Label>
+//                         <Form.Control
+//                           type="date"
+//                           value={expiryDate}
+//                           onChange={(e) => setExpiryDate(e.target.value)}
+//                         />
+//                       </>
+//                     )}
+
+//                     <Form.Label>Upload File</Form.Label>
+//                     <Form.Control
+//                       type="file"
+//                       multiple
+//                       onChange={handleFileChange}
+//                     />
+//                   </Form.Group>
+
+//                   <Button color="primary" onClick={handleFileUpload}>
+//                     Upload
+//                   </Button>
+//                 </Container>
+//               )}
+//             </ModalBody>
+//             <ModalFooter>
+//               <Button color="primary" onClick={toggleNestedModal}>
+//                 Done
+//               </Button>
+//             </ModalFooter>
+//           </Modal>
+//         </ModalBody>
+//       </Modal>
+//     </div>
+//   );
+// }
+
+// export default UploadConfirm;

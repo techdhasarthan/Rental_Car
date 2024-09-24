@@ -6,6 +6,7 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import "aos/dist/aos.css"; // Import AOS styles
 import AOS from "aos";
+import axios from "axios";
 
 const FileUpload = ({ id }) => {
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
@@ -85,7 +86,7 @@ const FileUpload = ({ id }) => {
 
     try {
       console.log(jsonObj);
-      const response = await fetch(
+      const response = await axios.post(
         `${BASE_URL}/uploadCustomerDocuments`,
         jsonObj
       );
