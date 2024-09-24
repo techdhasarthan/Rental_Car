@@ -4,40 +4,63 @@ import FileUpload from "./FileUpload"; // Adjust the import path as necessary
 import "bootstrap/dist/css/bootstrap.min.css"; // Ensure you import Bootstrap CSS
 
 const UploadCheckButton = () => {
-  const [hasUploadedData, setHasUploadedData] = useState(false); // State to determine if data is uploaded
+  const [hasUploadedData, setHasUploadedData] = useState(null); // State to determine if data is uploaded
+  const [loading, setLoading] = useState(true); // Loading state
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
   const customerId = localStorage.getItem("id");
 
+  const checkUploadStatus = async () => {
+    try {
+      const jsonObj = { id: customerId };
+      const response = await fetch(
+        `${BASE_URL}/getCustomerRentCarBookedDocumentVerificationCheckStatus`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(jsonObj),
+        }
+      );
+
+      // Convert response to JSON
+      const Resdata = await response.json();
+      console.log("resdata", Resdata["status"]);
+      localStorage.setItem("status", Resdata["status"]);
+
+      // Assuming the response JSON structure is { status: boolean }
+      setHasUploadedData(Resdata["status"]); // Ensure data.status is a boolean
+    } catch (error) {
+      console.error("Error checking upload status:", error);
+    } finally {
+      setLoading(false); // Set loading to false once the API call is done
+    }
+  };
+
   useEffect(() => {
-    const checkUploadStatus = async () => {
-      try {
-        var jsonObj = JSON.parse("{}");
-        jsonObj["id"] = customerId;
-        const response = await fetch(
-          `${BASE_URL}/getCustomerRentCarBookedDocumentVerificationCheckStatus`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(jsonObj),
-          }
-        );
+    if (customerId) {
+      checkUploadStatus(); // Call the checkUploadStatus function
+    }
+  }, [customerId]); // Only need to run on customerId changes
 
-        // Convert response to JSON
-        const data = await response.json();
+  console.log("the hasUploadedData", typeof hasUploadedData);
 
-        // Assuming the response JSON structure is { status: boolean }
-        setHasUploadedData(data.status);
-      } catch (error) {
-        console.error("Error checking upload status:", error);
-      }
-    };
+  // If loading, display a loading message or spinner
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-    checkUploadStatus();
-  }, [BASE_URL, customerId]); // Add customerId as a dependency
+  // Render components based on the upload status
+  let content;
+  if (hasUploadedData === "true") {
+    content = <UploadConfirm />;
+  } else if (hasUploadedData === "false") {
+    content = (
+      <FileUpload id={customerId} onUploadSuccess={checkUploadStatus} />
+    );
+  } else {
+    content = <div>Error loading upload status.</div>; // Handle unexpected status
+  }
 
-  return (
-    <>{hasUploadedData ? <FileUpload id={customerId} /> : <UploadConfirm />}</>
-  );
+  return <>{content}</>; // Return the determined content based on state
 };
 
 export default UploadCheckButton;

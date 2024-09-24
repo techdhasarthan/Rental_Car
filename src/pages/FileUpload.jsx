@@ -6,8 +6,9 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import "aos/dist/aos.css"; // Import AOS styles
 import AOS from "aos";
+import { message } from "antd";
 
-const FileUpload = ({ id }) => {
+const FileUpload = ({ id, onUploadSuccess }) => {
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
   const [show, setShow] = useState(false);
@@ -53,6 +54,7 @@ const FileUpload = ({ id }) => {
   const handleFileUpload = async (e) => {
     e.preventDefault();
 
+    // Check if necessary variables are defined
     if (!selectedFiles || !id) {
       console.error("No files selected or customer ID is missing.");
       return;
@@ -60,40 +62,49 @@ const FileUpload = ({ id }) => {
 
     const formData = new FormData();
 
+    // Append the selected files to the form data
     Array.from(selectedFiles).forEach((file) => {
       formData.append("files", file);
     });
 
-    // Append document-related data
-    formData.append("documentType", selectedDocumentType);
-    formData.append("documentNumber", documentNumber);
-    formData.append("nameOnDocument", nameOnDocument);
+    // Append other document-related fields
+    formData.append("documentType", selectedDocumentType || "");
+    formData.append("documentNumber", documentNumber || "");
+    formData.append("nameOnDocument", nameOnDocument || "");
     formData.append("customerId", id);
-    formData.append("issueDate", issueDate);
-    formData.append("expiryDate", expiryDate);
+    formData.append("issueDate", issueDate || "");
+    formData.append("expiryDate", expiryDate || "");
+
+    // Log form data for debugging purposes
     for (let [key, value] of formData.entries()) {
       console.log(key, value);
     }
 
     try {
-      console.log(formData.getAll);
       const response = await fetch(`${BASE_URL}/uploadCustomerDocuments`, {
         method: "POST",
         body: formData,
       });
 
+      // Since Spring Boot is returning a simple string, use response.text() to read it
+      const result = await response.text();
+
       if (response.ok) {
-        const result = await response.json();
-        console.log("Form submitted successfully:", result);
-        setUploadResponse(result);
-        handleClose(); // Close modal after successful upload
+        message.success("Form submitted successfully:");
+
+        setUploadResponse(result); // You can set the "success" message in state or take further actions
+        handleClose();
+        onUploadSuccess(); // Call the success callback to notify parent
       } else {
-        console.error("Failed to submit form:", response.status);
+        message.error(
+          "Failed to submit form. Status:",
+          response.status,
+          "Message:",
+          result
+        );
       }
     } catch (error) {
-      console.error("Error uploading file:", error);
-      handleClose();
-      alert("failed");
+      message.error("Error uploading file:", error);
     }
   };
 

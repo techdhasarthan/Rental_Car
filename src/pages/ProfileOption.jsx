@@ -16,6 +16,7 @@ import Document from "./Document"; // Component for Document Upload
 import ChangePassword from "./ChangePassword"; // Component for Change Password
 import { useState } from "react";
 import "./UserProfile.css"; // Import your custom CSS
+import HorizontalCard from "../components/UI/Card";
 
 const ProfileOptions = () => {
   const [activeTab, setActiveTab] = useState("1");
@@ -150,7 +151,7 @@ const ProfileOptions = () => {
                       {/* Content specific to Completed Bookings */}
                       <i className="fas fa-calendar-check fa-4x text-success mb-3"></i>
                       <p className="text-muted">
-                        Here is the completed bookings content.
+                        <HorizontalCard />
                       </p>
                     </div>
                   )}

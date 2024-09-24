@@ -11,6 +11,7 @@ import { Container } from "react-bootstrap";
 import { toast, ToastContainer } from "react-toastify";
 import "aos/dist/aos.css"; // Import AOS styles
 import AOS from "aos";
+import { message } from "antd";
 
 const Fulfillment = ({ imgurl }) => {
   useEffect(() => {
@@ -90,6 +91,15 @@ const Fulfillment = ({ imgurl }) => {
 
   const handleFulfillmentRequest = async (e) => {
     e.preventDefault();
+
+    const documentStatus = localStorage.getItem("status");
+
+    if (documentStatus !== "true") {
+      message.error("Please upload the required documents before applying.");
+      setIsVisible(false);
+      return; // Stop further execution if the document is not uploaded
+    }
+
     if (startDate && endDate && selectedOption && carDetails.carName) {
       const requestData = {
         id: userid || "",

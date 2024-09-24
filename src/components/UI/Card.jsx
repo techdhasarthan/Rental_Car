@@ -1,25 +1,33 @@
 import React from "react";
-import "./card.css"; // External CSS file for styling
+import "./card.css";
 
-function Card() {
+const HorizontalCard = () => {
   return (
-    <div className="card">
-      <div className="card-image">
-        <img
-          src="https://via.placeholder.com/150" // Sample image
-          alt="Sample"
-        />
-      </div>
-      <div className="card-content">
-        <h3>Card Title</h3>
-        <p>
-          This is a brief description of the card content. You can provide any
-          relevant information here.
-        </p>
-        <button className="btn">Learn More</button>
+    <div className="card mb-3 custom-card w-100">
+      <div className="row g-0">
+        <div className="col-md-3">
+          <img
+            src="https://mdbcdn.b-cdn.net/wp-content/uploads/2020/06/vertical.webp"
+            alt="Trendy Pants and Shoes"
+            className="img-fluid rounded-start custom-image"
+          />
+        </div>
+        <div className="col-md-7">
+          <div className="card-body">
+            <h5 className="card-title">Card title</h5>
+            <p className="card-text">
+              This is a wider card with supporting text below as a natural
+              lead-in to additional content. This content is a little bit
+              longer.
+            </p>
+            <p className="card-text">
+              <small className="text-muted">Last updated 3 mins ago</small>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
-}
+};
 
-export default Card;
+export default HorizontalCard;

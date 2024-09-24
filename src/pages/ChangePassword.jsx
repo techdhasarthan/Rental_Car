@@ -23,44 +23,55 @@ const ChangePassword = () => {
     const userId = localStorage.getItem("id");
     setId(userId);
   }, []); // Empty array means this effect runs only once after the component mounts
-
   const handlePasswordChange = async (e) => {
     e.preventDefault();
 
+    // Check if the new password and confirm password match
     if (newPassword !== confirmPassword) {
-      setError("New passwords do not match!");
+      message.error("New passwords do not match!");
       return;
     }
 
     try {
+      // Prepare the data to be sent in the request
       const jsonObj = {
         id: id,
         currentPassword: currentPassword,
         newPassword: newPassword,
       };
 
-      const response = await axios.post(
-        `${BASE_URL}/updateCustomerPassword`,
-        jsonObj
-      );
+      // Use fetch API instead of axios
+      const response = await fetch(`${BASE_URL}/updateCustomerPassword`, {
+        method: "POST", // HTTP method
+        headers: {
+          "Content-Type": "application/json", // Send as JSON
+        },
+        body: JSON.stringify(jsonObj), // Convert data to JSON string
+      });
 
-      // Use Ant Design message for success
-      message.success(
-        response.data.message || "Password changed successfully!"
-      );
+      // Parse the JSON response
+      const data = await response.json();
 
-      // Clear the input fields after successful submission
-      setCurrentPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
-      setError("");
+      console.log(data["status"]);
+
+      // Check if the request was successful
+      if (data["status"] == "true") {
+        message.success("Password changed successfully!");
+
+        // Clear input fields after successful submission
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+        setError("");
+      } else if (data["status"] == "false") {
+        // If the response was not successful
+        setError(data.message || "Failed to change password.");
+        message.error(data.message || "Failed to change password.");
+      }
     } catch (err) {
-      // Log error details
+      // Handle any error during the fetch request
       console.error("Error changing password:", err);
-      setError(
-        "Failed to change password. Please check your current password and try again."
-      );
-      // Use Ant Design message for error
+      setError("Failed to change password. Please try again.");
       message.error("Failed to change password.");
     }
   };
