@@ -2,34 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import "../../styles/fulfillment.css"; // Import your CSS file for styling
 import "../../pages/ShowCarDetails.css";
-import { Col } from "reactstrap";
 import PriceDetails from "../UI/PriceDetails";
-import FileUpload from "../../pages/FileUpload"; // Import FileUpload component
-import UploadConfirm from "../../pages/UploadConfirm";
 import UploadCheckButton from "../../pages/UploadCheckButton";
-import { Container } from "react-bootstrap";
-import { toast, ToastContainer } from "react-toastify";
 import "aos/dist/aos.css"; // Import AOS styles
 import AOS from "aos";
 import { message } from "antd";
+import Spinner from "react-bootstrap/Spinner";
 
 const Fulfillment = ({ imgurl }) => {
-  useEffect(() => {
-    AOS.init({
-      duration: 1000, // Animation duration (in milliseconds)
-      once: false, // Whether animation should happen only once
-      mirror: false, // Whether elements should animate out while scrolling past them
-    });
-  }, []);
   const image = imgurl;
-  const toggleVisibility = () => {
-    setIsVisible(!isVisible);
-
-    if (!isVisible) {
-      handleFulfillmentRequest();
-    }
-  };
-
   const [carDetails, setCarDetails] = useState({
     carName: "",
     car_no: "",
@@ -37,25 +18,31 @@ const Fulfillment = ({ imgurl }) => {
   });
 
   const userid = localStorage.getItem("id");
-
-  const [isPriceDetailsVisible, setIsPriceDetailsVisible] = useState(false); // New state to control PriceDetails visibility
-
+  const [isPriceDetailsVisible, setIsPriceDetailsVisible] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const [deliveryInfo, setDeliveryInfo] = useState("");
   const [extraInfo, setExtraInfo] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [isVisible, setIsVisible] = useState(false);
+  const [loading, setLoading] = useState(false); // Set initial loading state to false
+  const [isButtonVisible, setIsButtonVisible] = useState(true); // State for button visibility
   const [option, setOption] = useState("");
   const [resData, setResData] = useState("");
   const location = useLocation();
-  const { startdate, enddate } = location.state || {}; // Retrieve dates from state
   const { slug } = useParams(); // Extract car name (slug) from the URL
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
+    AOS.init({
+      duration: 1000, // Animation duration (in milliseconds)
+      once: false, // Whether animation should happen only once
+      mirror: false, // Whether elements should animate out while scrolling past them
+    });
+  }, []);
+
+  useEffect(() => {
     const fetchCarDetails = async () => {
+      setLoading(true); // Start loading when fetching car details
       try {
         const requestBody = { ID: slug };
         const response = await fetch(
@@ -84,7 +71,7 @@ const Fulfillment = ({ imgurl }) => {
       } catch (err) {
         console.error(err.message);
       } finally {
-        setLoading(false);
+        setLoading(false); // Stop loading after fetching car details
       }
     };
 
@@ -93,13 +80,16 @@ const Fulfillment = ({ imgurl }) => {
 
   const handleFulfillmentRequest = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start loading when the request is initiated
+    setIsButtonVisible(false); // Hide the button when loading starts
 
     const documentStatus = localStorage.getItem("status");
 
     if (documentStatus !== "true") {
       message.error("Please upload the required documents before applying.");
-      setIsVisible(false);
-      return; // Stop further execution if the document is not uploaded
+      setLoading(false); // Stop loading if document is not uploaded
+      setIsButtonVisible(true); // Show the button again
+      return;
     }
 
     if (startDate && endDate && selectedOption && carDetails.carName) {
@@ -135,18 +125,22 @@ const Fulfillment = ({ imgurl }) => {
         );
 
         if (!response.ok) {
-          setIsVisible(false);
           throw new Error("Failed to submit fulfillment details");
         }
 
         const data = await response.json();
         console.log("Success:", data);
-        setIsPriceDetailsVisible(true);
+        setIsPriceDetailsVisible(true); // Show PriceDetails after data is fetched
         setResData(data.data);
       } catch (error) {
-        setIsVisible(false);
         console.error("Error:", error);
+      } finally {
+        setLoading(false); // Stop loading in both success and error cases
+        setIsButtonVisible(true); // Show the button again after loading completes
       }
+    } else {
+      setLoading(false); // Stop loading if conditions are not met
+      setIsButtonVisible(true); // Show the button again
     }
   };
 
@@ -179,7 +173,6 @@ const Fulfillment = ({ imgurl }) => {
 
     if (new Date(selectedStartDate) < currentDateTime) {
       setStartDate("");
-
       return;
     }
   };
@@ -204,9 +197,8 @@ const Fulfillment = ({ imgurl }) => {
   return (
     <>
       <form onSubmit={handleFulfillmentRequest}>
-        <ToastContainer />
-        <div className="pb-2  ">
-          <div className="d-flex date_container flex-row me-3 ps-2 ">
+        <div className="pb-2">
+          <div className="d-flex date_container flex-row me-3 ps-2">
             <div className="form-groups me-3">
               <label htmlFor="startDate">Start Date & Time</label>
               <input
@@ -297,9 +289,9 @@ const Fulfillment = ({ imgurl }) => {
             )}
 
             <p className="disclaimer">
-              <strong>Disclaimer :</strong> Delivery Charges may vary for
-              outside city limits locations including Airport pickup/drop. The
-              same will be confirmed upon KYC verification.
+              <strong>Disclaimer:</strong> Delivery Charges may vary for outside
+              city limits locations including Airport pickup. You can add
+              specific instructions related to delivery.
             </p>
           </div>
         </div>
@@ -310,11 +302,20 @@ const Fulfillment = ({ imgurl }) => {
             <div className="row">
               <div className="pt-3">
                 <div className="applybutton text-end d-flex justify-content-end">
-                  <button
-                    type="submit"
-                    className="custom-blue-btn rounded px-2 py-2 w-md-auto">
-                    Apply Now
-                  </button>
+                  {isButtonVisible && ( // Only show button if visible
+                    <button
+                      type="submit"
+                      className="custom-blue-btn rounded px-2 py-2 w-md-auto"
+                      disabled={loading} // Disable button while loading
+                    >
+                      Apply Now
+                    </button>
+                  )}
+                  {loading && (
+                    <Spinner animation="border" role="status" className="ms-2">
+                      <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                  )}
                 </div>
                 {isPriceDetailsVisible && (
                   <div className="smooth-toggle show w-100">

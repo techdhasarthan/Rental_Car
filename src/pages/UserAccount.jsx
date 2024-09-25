@@ -183,7 +183,7 @@ const UserProfile = () => {
                     Your Profile Information
                     {isEditing ? (
                       <Button
-                        color="link"
+                        color="warning"
                         onClick={handleCancel}
                         className="float-end">
                         <i
@@ -192,7 +192,7 @@ const UserProfile = () => {
                       </Button>
                     ) : (
                       <Button
-                        color="link"
+                        color="warning"
                         onClick={handleEditClick}
                         className="float-end">
                         <i

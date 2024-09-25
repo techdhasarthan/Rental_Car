@@ -44,7 +44,22 @@ const FileUpload = ({ id, onUploadSuccess }) => {
   };
 
   const handleFileChange = (event) => {
-    setSelectedFiles(event.target.files);
+    const files = event.target.files;
+    const rejectedFiles = Array.from(files).filter(
+      (file) =>
+        file.type ===
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+        file.type === "application/vnd.ms-excel"
+    );
+
+    if (rejectedFiles.length > 0) {
+      message.error("Excel files are not allowed.");
+      event.target.value = null; // Reset the input value
+      setSelectedFiles(null); // Reset selected files state
+      return;
+    }
+
+    setSelectedFiles(files);
   };
 
   const handleDocumentTypeChange = (event) => {
@@ -91,7 +106,6 @@ const FileUpload = ({ id, onUploadSuccess }) => {
 
       if (response.ok) {
         message.success("Form submitted successfully:");
-
         setUploadResponse(result); // You can set the "success" message in state or take further actions
         handleClose();
         onUploadSuccess(); // Call the success callback to notify parent
