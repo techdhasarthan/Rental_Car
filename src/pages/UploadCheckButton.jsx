@@ -23,7 +23,7 @@ const UploadCheckButton = () => {
 
       // Convert response to JSON
       const Resdata = await response.json();
-      console.log("resdata", Resdata["status"]);
+
       localStorage.setItem("status", Resdata["status"]);
 
       // Assuming the response JSON structure is { status: boolean }
@@ -40,8 +40,6 @@ const UploadCheckButton = () => {
       checkUploadStatus(); // Call the checkUploadStatus function
     }
   }, [customerId]); // Only need to run on customerId changes
-
-  console.log("the hasUploadedData", typeof hasUploadedData);
 
   // If loading, display a loading message or spinner
   if (loading) {

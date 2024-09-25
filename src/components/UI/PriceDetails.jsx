@@ -5,7 +5,15 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { message } from "antd";
 
-const PriceDetails = ({ response, startDate, endDate, imgurl }) => {
+const PriceDetails = ({
+  response,
+  startDate,
+  endDate,
+  imgurl,
+  fulfillmentType,
+  deliveryInfo,
+  extraInfo,
+}) => {
   const { slug } = useParams();
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
   const [profileData, setProfileData] = useState(null);
@@ -15,6 +23,8 @@ const PriceDetails = ({ response, startDate, endDate, imgurl }) => {
   const [resData, setResData] = useState(null);
   const [statues, setStatues] = useState();
   const customerId = localStorage.getItem("id");
+
+  const pickup = fulfillmentType === "" ? "Delivery" : "Self Pickup";
 
   // Fetch Profile Data
   const fetchProfileData = async () => {
@@ -125,13 +135,21 @@ const PriceDetails = ({ response, startDate, endDate, imgurl }) => {
       "Car Name": carData.carName,
       "From Date": startDate,
       "To Date": endDate,
-      "Pickup Type": carData.transmission_type,
+      "Pickup Type": pickup,
       "Delivery / pickup Charges": response.deliveryCharges,
       "Car Rent Charges": response.carRentCharges,
       "Total Payable": response.totalPayable,
       "Approve Status": carData.approveStatus,
       "Car Image Name": imageName,
+      "fulfillment Type": fulfillmentType,
+      "delivery Info": deliveryInfo,
+      "extra Info": extraInfo,
     };
+
+    localStorage.setItem(
+      "combinedRequestBody",
+      JSON.stringify(combinedRequestBody)
+    );
 
     try {
       const apiResponse = await fetch(
@@ -144,14 +162,7 @@ const PriceDetails = ({ response, startDate, endDate, imgurl }) => {
       );
 
       const responseData = await apiResponse.json();
-      console.log(
-        "mmmmmmm::" +
-          JSON.stringify(responseData) +
-          "<<<>>>" +
-          responseData.status +
-          "<<>>" +
-          typeof responseData["status"]
-      );
+      console.log("mmmmmmm::" + JSON.stringify(responseData["status"]));
       setStatues(responseData["status"]);
 
       if (responseData["status"] == "true") {

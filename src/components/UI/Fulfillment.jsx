@@ -326,6 +326,9 @@ const Fulfillment = ({ imgurl }) => {
                           startDate={startDate}
                           endDate={endDate}
                           imgurl={image}
+                          fulfillmentType={option}
+                          deliveryInfo={deliveryInfo}
+                          extraInfo={extraInfo}
                         />
                       </div>
                     </div>
