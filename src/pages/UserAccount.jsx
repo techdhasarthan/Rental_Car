@@ -19,6 +19,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import ProfileOption from "./ProfileOption";
+import user from "../assets/all-images/slider-img/profile.jpg";
 
 const UserProfile = () => {
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
@@ -26,7 +27,6 @@ const UserProfile = () => {
   const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState(false);
-  const [fetchData, setFetchData] = useState(null); // Initialize as null
   const [userInfo, setUserInfo] = useState({
     id: "",
     name: "",
@@ -36,39 +36,38 @@ const UserProfile = () => {
     alternativeMobileNo: "",
     age: "",
     signStatus: "active",
+    profileImage: null, // New: profile image
   });
   const [originalUserInfo, setOriginalUserInfo] = useState(userInfo);
+  const [profileImagePreview, setProfileImagePreview] = useState();
 
   // Fetch profile data on mount
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await fetch(
+        const response = await axios.post(
           `${backendUrl}/getCustomerProfileDetails`,
           {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id: customerId }),
+            id: customerId,
           }
         );
 
-        if (response.ok) {
-          const data = await response.json();
-          setFetchData(data.data); // Save the fetched data to state
-
+        if (response.data) {
+          const data = response.data.data;
           const profileData = {
-            id: data.data.ID || "",
-            name: data.data.Name || "",
-            phoneNumber: data.data["Phone Number"] || "",
-            password: data.data.Password || "",
-            emailId: data.data["Email ID"] || "",
-            alternativeMobileNo: data.data["Alternative Mobile.NO"] || "",
-            age: data.data.Age || "",
-            signStatus: data.data["Sign Status"] || "active",
+            id: data.ID || "",
+            name: data.Name || "",
+            phoneNumber: data["Phone Number"] || "",
+            password: data.Password || "",
+            emailId: data["Email ID"] || "",
+            alternativeMobileNo: data["Alternative Mobile.NO"] || "",
+            age: data.Age || "",
+            signStatus: data["Sign Status"] || "active",
+            profileImage: data.profileImage || user,
           };
-
-          setUserInfo(profileData); // Update the userInfo with fetched profile data
-          setOriginalUserInfo(profileData); // Save original user info for reset if needed
+          setUserInfo(profileData);
+          setOriginalUserInfo(profileData);
+          setProfileImagePreview(profileData.profileImage);
         } else {
           toast.error(
             `Failed to fetch profile data. Status: ${response.status}`
@@ -91,116 +90,93 @@ const UserProfile = () => {
     setUserInfo((prevInfo) => ({ ...prevInfo, [name]: value }));
   };
 
-  // Handle saving the profile and displaying backend response
+  // Handle profile image upload preview
+  const handleProfileImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setUserInfo((prevInfo) => ({ ...prevInfo, profileImage: file }));
+      setProfileImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  // Handle save profile changes (including image upload)
   const handleSave = async () => {
+    const formData = new FormData();
+    formData.append("id", userInfo.id);
+    formData.append("name", userInfo.name);
+    formData.append("phoneNumber", userInfo.phoneNumber);
+    formData.append("emailId", userInfo.emailId);
+    formData.append("alternativeMobileNo", userInfo.alternativeMobileNo);
+    formData.append("age", userInfo.age);
+    formData.append("profileImage", userInfo.profileImage); // Profile image
+
     try {
-      const response = await fetch(
-        `${backendUrl}/updateCustomerRegistrationDetails`,
+      const response = await axios.post(
+        `${backendUrl}/updateCustomerProfile`,
+        formData,
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(userInfo), // Send the current user info
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
 
-      console.log(response);
-
-      if (response.ok) {
-        const updatedData = await response.json();
-        console.log(JSON.stringify(updatedData));
-        // Update userInfo with the response from the backend
-        const updatedUserInfo = {
-          id: updatedData.ID || userInfo.id,
-          name: updatedData.Name || userInfo.name,
-          phoneNumber: updatedData["Phone Number"] || userInfo.phoneNumber,
-          password: updatedData.Password || userInfo.password,
-          emailId: updatedData["Email ID"] || userInfo.emailId,
-          alternativeMobileNo:
-            updatedData["Alternative Mobile.NO"] ||
-            userInfo.alternativeMobileNo,
-          age: updatedData.Age || userInfo.age,
-          signStatus: updatedData["Sign Status"] || userInfo.signStatus,
-        };
-
-        setUserInfo(updatedUserInfo); // Set the updated info in state
-        setOriginalUserInfo(updatedUserInfo); // Update original user info
+      if (response.status === 200) {
+        toast.success("Profile updated successfully!");
+        setOriginalUserInfo(userInfo); // Update original info
         setIsEditing(false); // Exit editing mode
 
-        // Display success notification
-        toast.success("Profile updated successfully!", {
-          autoClose: 2000,
-          className: "custom-toast",
-        });
+        localStorage.setItem(
+          "profileImage",
+          URL.createObjectURL(userInfo.profileImage)
+        );
       } else {
-        throw new Error(`Failed to update profile. Status: ${response.status}`);
+        toast.error("Failed to update profile.");
       }
     } catch (error) {
-      // Display error notification
-      toast.error(`Failed to update profile: ${error.message}`, {
-        autoClose: 3000,
-      });
-      console.error("Error updating profile:", error);
+      toast.error(`Error updating profile: ${error.message}`);
     }
   };
 
-  // Handle editing toggles
   const handleEditClick = () => {
-    setIsEditing(!isEditing);
-    if (!isEditing) {
-      setOriginalUserInfo(userInfo); // Save original state before editing
-    }
+    setIsEditing(true);
   };
 
-  // Handle cancel button click
   const handleCancel = () => {
-    setUserInfo(originalUserInfo); // Revert to original data if canceled
-    setIsEditing(false); // Exit editing mode
+    setUserInfo(originalUserInfo); // Reset to original data
+    setProfileImagePreview(originalUserInfo.profileImage);
+    setIsEditing(false);
   };
 
-  // Handle user sign out
-  const handleSignOut = async () => {
-    try {
-      const response = await axios.post(
-        `${backendUrl}/getCustomerRegistrationDetailsSignOut`,
-        { id: customerId }
-      );
-
-      if (response.data.status === "true") {
-        toast.success("Signed out successfully", {
-          autoClose: 2000,
-          className: "custom-toast",
-        });
-        setTimeout(() => {
-          navigate("/sign-in");
-        }, 1000);
-      } else {
-        toast.error("Failed to sign out", {
-          autoClose: 2000,
-          className: "custom-toast",
-        });
-      }
-    } catch (error) {
-      toast.error("Failed to sign out. Please try again.", {
-        autoClose: 3000,
-      });
-      console.error("Error signing out:", error);
-    }
+  const handleSignOut = () => {
+    // Sign out logic here
+    navigate("/sign-in");
   };
-
-  localStorage.setItem("user", JSON.stringify(userInfo.name)); // Store user name in localStorage
 
   return (
     <Helmet title="Profile">
       <CommonSection title="Profile" />
-      <section className="profile-section py-5">
+      <section className="profile-section py-5 ">
         <Container>
-          {/* <div className="profile-header">
-            <Button color="warning" onClick={handleSignOut}>
-              <i className="ri-logout-box-line"></i> Sign Out
-            </Button>
-          </div> */}
           <Row>
-            <Col lg="12" md="12">
+            <Col lg="4" md="12" className="text-center mt-4 mb-5 ">
+              {/* Profile Image */}
+              <div className="profile-image-wrapper ">
+                <img
+                  src={profileImagePreview || "/default-profile.png"}
+                  alt="Profile"
+                  className="profile-image img-fluid rounded-circle shadow-lg"
+                />
+                {isEditing && (
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleProfileImageChange}
+                  />
+                )}
+              </div>
+            </Col>
+            <Col lg="8" md="12">
               <Card className="shadow">
                 <CardBody>
                   <h4 className="fw-bold mb-4">
@@ -209,27 +185,28 @@ const UserProfile = () => {
                       <Button
                         color="link"
                         onClick={handleCancel}
-                        className="float-end button">
+                        className="float-end">
                         <i
-                          className="ri-close-fill icon-edit-save"
-                          aria-label="Cancel profile"></i>{" "}
+                          className="ri-close-fill"
+                          aria-label="Cancel profile"></i>
                       </Button>
                     ) : (
                       <Button
                         color="link"
                         onClick={handleEditClick}
-                        className="float-end button">
+                        className="float-end">
                         <i
-                          className="ri-edit-2-fill icon-edit-save"
-                          aria-label="Edit profile"></i>{" "}
+                          className="ri-edit-2-fill"
+                          aria-label="Edit profile"></i>
                       </Button>
                     )}
                   </h4>
+
                   {isEditing ? (
-                    <div className="large-text px-4">
+                    <div className="px-4">
                       <FormGroup className="mb-2">
                         <Label for="name">
-                          <strong>Name:</strong>{" "}
+                          <strong>Name:</strong>
                         </Label>
                         <Input
                           type="text"
@@ -237,12 +214,11 @@ const UserProfile = () => {
                           name="name"
                           value={userInfo.name}
                           onChange={handleInputChange}
-                          placeholder="Enter your name"
                         />
                       </FormGroup>
                       <FormGroup className="mb-2">
                         <Label for="age">
-                          <strong>Age:</strong>{" "}
+                          <strong>Age:</strong>
                         </Label>
                         <Input
                           type="text"
@@ -250,26 +226,23 @@ const UserProfile = () => {
                           name="age"
                           value={userInfo.age}
                           onChange={handleInputChange}
-                          placeholder="Enter your age"
                         />
                       </FormGroup>
                       <FormGroup className="mb-2">
                         <Label for="phoneNumber">
-                          <strong>Phone:</strong>{" "}
+                          <strong>Phone:</strong>
                         </Label>
                         <Input
-                          disabled={true}
                           type="text"
                           id="phoneNumber"
                           name="phoneNumber"
                           value={userInfo.phoneNumber}
-                          onChange={handleInputChange}
-                          placeholder="Enter your phone number"
+                          disabled
                         />
                       </FormGroup>
                       <FormGroup className="mb-2">
                         <Label for="alternativeMobileNo">
-                          <strong>Alternate Phone:</strong>{" "}
+                          <strong>Alternate Phone:</strong>
                         </Label>
                         <Input
                           type="text"
@@ -277,12 +250,11 @@ const UserProfile = () => {
                           name="alternativeMobileNo"
                           value={userInfo.alternativeMobileNo}
                           onChange={handleInputChange}
-                          placeholder="Enter your alternate phone number"
                         />
                       </FormGroup>
                       <FormGroup className="mb-2">
                         <Label for="emailId">
-                          <strong>Email:</strong>{" "}
+                          <strong>Email:</strong>
                         </Label>
                         <Input
                           type="email"
@@ -290,17 +262,14 @@ const UserProfile = () => {
                           name="emailId"
                           value={userInfo.emailId}
                           onChange={handleInputChange}
-                          placeholder="Enter your email"
                         />
                       </FormGroup>
-                      <div className="d-flex justify-content-end">
-                        <Button color="primary" onClick={handleSave}>
-                          Update Changes
-                        </Button>
-                      </div>
+                      <Button color="primary" onClick={handleSave}>
+                        Update Changes
+                      </Button>
                     </div>
                   ) : (
-                    <div className="large-text px-4">
+                    <div className="px-4">
                       <p>
                         <strong>Name:</strong> {userInfo.name}
                       </p>

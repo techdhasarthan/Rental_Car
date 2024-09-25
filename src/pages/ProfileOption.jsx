@@ -14,7 +14,7 @@ import {
 import classnames from "classnames";
 import Document from "./Document"; // Component for Document Upload
 import ChangePassword from "./ChangePassword"; // Component for Change Password
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./UserProfile.css"; // Import your custom CSS
 import HorizontalCard from "../components/UI/Card";
 
@@ -25,6 +25,33 @@ const ProfileOptions = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false); // State to handle dropdown visibility
   const [selectedBookingOption, setSelectedBookingOption] =
     useState("Upcoming Bookings"); // Track selected booking option
+
+  // New state to hold booking data
+  const [upcomingBookings, setUpcomingBookings] = useState([]);
+  const [completedBookings, setCompletedBookings] = useState([]);
+  const [loading, setLoading] = useState(true); // State to track loading
+
+  // Function to fetch booking data from API
+  const fetchBookingData = async () => {
+    setLoading(true);
+    try {
+      // Replace with your actual API endpoint
+      const response = await fetch("/api/bookings");
+      const data = await response.json();
+
+      // Assuming the API returns bookings categorized as upcoming and completed
+      setUpcomingBookings(data.upcoming || []);
+      setCompletedBookings(data.completed || []);
+    } catch (error) {
+      console.error("Error fetching bookings:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBookingData(); // Fetch booking data when the component loads
+  }, []);
 
   // Function to toggle tabs with fade effect
   const toggle = (tab) => {
@@ -137,24 +164,43 @@ const ProfileOptions = () => {
               {activeTab === "2" && (
                 <div className="text-center">
                   <h5 className="fw-bold mb-3">{selectedBookingOption}</h5>
-                  {selectedBookingOption === "Upcoming Bookings" && (
-                    <div>
-                      {/* Content specific to Upcoming Bookings */}
-                      <i className="fas fa-calendar-alt fa-4x text-primary mb-3"></i>
-                      <p className="text-muted">
-                        Here is the upcoming bookings content.
-                      </p>
-                    </div>
-                  )}
-                  {selectedBookingOption === "Completed Bookings" && (
-                    <div>
-                      {/* Content specific to Completed Bookings */}
-                      <i className="fas fa-calendar-check fa-4x text-success mb-3"></i>
-                      <p className="text-muted">
-                        <HorizontalCard />
-                      </p>
-                    </div>
-                  )}
+
+                  {/* Display loader if booking data is being fetched */}
+                  {loading && <p>Loading booking data...</p>}
+
+                  {/* Display Upcoming Bookings */}
+                  {selectedBookingOption === "Upcoming Bookings" &&
+                    !loading && (
+                      <div>
+                        {upcomingBookings.length > 0 ? (
+                          upcomingBookings.map((booking) => (
+                            <HorizontalCard
+                              key={booking.id}
+                              userdata={booking}
+                            />
+                          ))
+                        ) : (
+                          <p>No upcoming bookings available.</p>
+                        )}
+                      </div>
+                    )}
+
+                  {/* Display Completed Bookings */}
+                  {selectedBookingOption === "Completed Bookings" &&
+                    !loading && (
+                      <div>
+                        {completedBookings.length > 0 ? (
+                          completedBookings.map((booking) => (
+                            <HorizontalCard
+                              key={booking.id}
+                              userdata={booking}
+                            />
+                          ))
+                        ) : (
+                          <p>No completed bookings available.</p>
+                        )}
+                      </div>
+                    )}
                 </div>
               )}
             </TabPane>

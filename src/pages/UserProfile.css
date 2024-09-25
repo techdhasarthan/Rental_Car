@@ -64,11 +64,37 @@ button {
   border-color: rgb(0, 10, 90) !important;
 }
 
+.profile-image {
+
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 50%;
+  /* Make the image circular */
+  border: 1px solid #e1e0e0;
+  /* Optional border */
+}
+
+.profile-image-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+input[type="file"] {
+  display: block;
+  margin-top: 15px;
+}
+
 
 
 @media only screen and (max-width:768px) {
   .dropdown_Booking {
 
     display: flex;
+  }
+
+  .profile-section {
+    margin-bottom: 40px;
   }
 }

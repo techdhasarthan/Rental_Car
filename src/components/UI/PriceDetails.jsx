@@ -25,6 +25,7 @@ const PriceDetails = ({
   const customerId = localStorage.getItem("id");
 
   const pickup = fulfillmentType === "" ? "Delivery" : "Self Pickup";
+  const address = pickup === "Delivery" ? deliveryInfo : fulfillmentType;
 
   // Fetch Profile Data
   const fetchProfileData = async () => {
@@ -141,8 +142,8 @@ const PriceDetails = ({
       "Total Payable": response.totalPayable,
       "Approve Status": carData.approveStatus,
       "Car Image Name": imageName,
-      "fulfillment Type": fulfillmentType,
-      "delivery Info": deliveryInfo,
+      Address: address,
+
       "extra Info": extraInfo,
     };
 
