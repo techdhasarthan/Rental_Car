@@ -146,6 +146,7 @@ const PriceDetails = ({
 
       "Extra Info": extraInfo,
     };
+    
 
     localStorage.setItem(
       "combinedRequestBody",
