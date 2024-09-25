@@ -144,7 +144,7 @@ const PriceDetails = ({
       "Car Image Name": imageName,
       Address: address,
 
-      "extra Info": extraInfo,
+      "Extra Info": extraInfo,
     };
 
     localStorage.setItem(
