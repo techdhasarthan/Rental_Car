@@ -38,6 +38,8 @@ const Fulfillment = ({ imgurl }) => {
 
   const userid = localStorage.getItem("id");
 
+  const [isPriceDetailsVisible, setIsPriceDetailsVisible] = useState(false); // New state to control PriceDetails visibility
+
   const [selectedOption, setSelectedOption] = useState("");
   const [deliveryInfo, setDeliveryInfo] = useState("");
   const [extraInfo, setExtraInfo] = useState("");
@@ -139,6 +141,7 @@ const Fulfillment = ({ imgurl }) => {
 
         const data = await response.json();
         console.log("Success:", data);
+        setIsPriceDetailsVisible(true);
         setResData(data.data);
       } catch (error) {
         setIsVisible(false);
@@ -305,35 +308,33 @@ const Fulfillment = ({ imgurl }) => {
           data-aos="fade-up">
           <div className="w-100">
             <div className="row">
-              <div className=" pt-3 ">
+              <div className="pt-3">
                 <div className="applybutton text-end d-flex justify-content-end">
                   <button
                     type="submit"
-                    onClick={toggleVisibility}
-                    className={`custom-blue-btn rounded px-2 py-2  w-md-auto  ${
-                      isVisible ? "show-text" : "hide-text"
-                    }`}>
-                    {isVisible ? "Not Now" : "Apply Now"}
+                    className="custom-blue-btn rounded px-2 py-2 w-md-auto">
+                    Apply Now
                   </button>
                 </div>
-                <div
-                  className={`smooth-toggle ${isVisible ? "show" : ""} w-100`}>
-                  <div className="row">
-                    <div className="col-lg-12 mt-4">
-                      <div className="payment__info mt-4">
-                        <PriceDetails
-                          response={resData}
-                          startDate={startDate}
-                          endDate={endDate}
-                          imgurl={image}
-                          fulfillmentType={option}
-                          deliveryInfo={deliveryInfo}
-                          extraInfo={extraInfo}
-                        />
+                {isPriceDetailsVisible && (
+                  <div className="smooth-toggle show w-100">
+                    <div className="row">
+                      <div className="col-lg-12 mt-4">
+                        <div className="payment__info mt-4">
+                          <PriceDetails
+                            response={resData}
+                            startDate={startDate}
+                            endDate={endDate}
+                            imgurl={image}
+                            fulfillmentType={option}
+                            deliveryInfo={deliveryInfo}
+                            extraInfo={extraInfo}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>

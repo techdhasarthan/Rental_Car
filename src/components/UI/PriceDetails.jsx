@@ -146,7 +146,6 @@ const PriceDetails = ({
 
       "Extra Info": extraInfo,
     };
-    
 
     localStorage.setItem(
       "combinedRequestBody",
@@ -214,7 +213,7 @@ const PriceDetails = ({
     if (slug) {
       fetchCarDetails();
     }
-  }, [customerId, slug]);
+  }, [customerId, slug, response, BASE_URL]);
 
   if (error) return <div>Error: {error}</div>;
 
