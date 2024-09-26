@@ -1,41 +1,58 @@
 .custom-card {
-    height: 150px;
-
-    min-height: 150px;
-    box-shadow: 4px 4px 50px rgba(0, 0, 0, 0.1);
-    /* Adding a soft shadow */
-    border: none;
-    /* Remove border if needed */
-    transition: box-shadow 0.3s ease-in-out;
-    /* Smooth transition on hover */
-
-
+    border-radius: 15px;
+    /* Rounded corners */
+    padding: 15px;
+    /* Padding around the card content */
+    background-color: #fff;
+    /* Background color of the card */
+    transition: transform 0.3s;
+    /* Transition effect for hover */
 }
 
 .custom-card:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    /* Increase shadow on hover */
+    transform: scale(1.05);
+    /* Scale effect on hover */
 }
 
 .custom-image {
-    width: 350px;
-
-    height: 149px;
-
+    border-radius: 15px 0 0 15px;
+    /* Rounded corners for the image */
     object-fit: cover;
-
-
+    /* Ensure the image covers the area */
+    height: 100%;
+    /* Make sure image height is full */
 }
 
+.card-body {
+    display: flex;
+    flex-direction: column;
+    /* Stack content vertically */
+    justify-content: center;
+    /* Center content vertically */
+}
+
+.card-title {
+    font-size: 1.25rem;
+    /* Larger title font */
+    margin-bottom: 10px;
+    /* Space below title */
+}
+
+.card-text {
+    margin: 5px 0;
+    /* Space between text paragraphs */
+}
+
+/* Shadow effect */
+.shadow-lg {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    /* Subtle shadow for depth */
+}
+
+/* Additional responsive styles */
 @media (max-width: 768px) {
     .custom-card {
-        height: auto;
-        /* Make the card auto height on smaller screens */
-    }
-
-    .custom-image {
-        height: 200px;
-        width: 480px;
-        /* Set a fixed height for the image on small screens */
+        flex-direction: column;
+        /* Stack image and content on smaller screens */
     }
 }

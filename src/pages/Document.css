@@ -90,6 +90,37 @@
     color: #888;
 }
 
+.file-container {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Shadow effect */
+    transition: transform 0.3s, box-shadow 0.3s;
+    /* Transition effects */
+    background-color: #fff;
+    /* Background color */
+}
+
+.file-container:hover {
+    transform: translateY(-2px);
+    /* Slight lift on hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    /* Enhanced shadow on hover */
+}
+
+.file-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+    /* Rounded corners for the image */
+    object-fit: cover;
+    /* Ensures image covers the area without distortion */
+}
+
+
 
 /* Media query for small screens (mobile-first approach) */
 @media (max-width: 768px) {

@@ -2,34 +2,47 @@ import React from "react";
 import "./card.css";
 
 const HorizontalCard = ({ userdata }) => {
+  const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+
   // Destructure the userdata to get the details you want to display
-  const { carName, bookingDate, location, status, lastUpdated } = userdata;
+  const {
+    "Car Image Name": carImage,
+    "Car Name": carName,
+
+    "To Date": toDate,
+    "Total Payable": totalAmount,
+    "Car Number": carNumber,
+  } = userdata;
+
+  const fromDate = userdata["From Date"];
 
   return (
-    <div className="card mb-3 custom-card w-100">
+    <div className="card mb-3 custom-card w-100 shadow-lg">
       <div className="row g-0">
-        <div className="col-md-3">
+        <div className="col-md-4">
           <img
-            src="https://mdbcdn.b-cdn.net/wp-content/uploads/2020/06/vertical.webp" // Replace with a dynamic image from userdata if available
+            src={`${BASE_URL}/RetrieveFile/${carImage}`}
             alt={carName}
             className="img-fluid rounded-start custom-image"
           />
         </div>
-        <div className="col-md-7">
+        <div className="col-md-8">
           <div className="card-body">
             <h5 className="card-title fw-bolder">{carName}</h5>
             <p className="card-text">
-              <strong>Booking Date:</strong>{" "}
-              {new Date(bookingDate).toLocaleDateString()}
+              <strong>From:</strong> {fromDate}
             </p>
             <p className="card-text">
-              <strong>Location:</strong> {location}
+              <strong>To:</strong> {toDate}
             </p>
             <p className="card-text">
-              <strong>Status:</strong> {status}
+              <strong>Total Amount:</strong> ${totalAmount.toFixed(2)}
             </p>
             <p className="card-text">
-              <small className="text-muted">Last updated {lastUpdated}</small>
+              <strong>Car Number:</strong> {carNumber}
+            </p>
+            <p className="card-text">
+              <small className="text-muted">Last updated recently</small>
             </p>
           </div>
         </div>

@@ -19,29 +19,49 @@ import "./UserProfile.css"; // Import your custom CSS
 import HorizontalCard from "../components/UI/Card";
 
 const ProfileOptions = () => {
+  const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+  const ID = localStorage.getItem("id");
   const [activeTab, setActiveTab] = useState("1");
   const [fadeIn, setFadeIn] = useState(true);
-  const [bookingOption, setBookingOption] = useState("Upcoming Bookings"); // Default content option
+  const [bookingOption, setBookingOption] = useState("Upcoming Booking"); // Default content option
   const [dropdownOpen, setDropdownOpen] = useState(false); // State to handle dropdown visibility
   const [selectedBookingOption, setSelectedBookingOption] =
-    useState("Upcoming Bookings"); // Track selected booking option
+    useState("Upcoming Booking"); // Track selected booking option
+  const [count, setCount] = useState("");
 
   // New state to hold booking data
   const [upcomingBookings, setUpcomingBookings] = useState([]);
   const [completedBookings, setCompletedBookings] = useState([]);
   const [loading, setLoading] = useState(true); // State to track loading
 
-  // Function to fetch booking data from API
   const fetchBookingData = async () => {
     setLoading(true);
     try {
       // Replace with your actual API endpoint
-      const response = await fetch("/api/bookings");
+      const response = await fetch(
+        `${BASE_URL}/getCustomerViewCarBookingList`,
+        {
+          method: "POST", // Use POST method to send data
+          headers: {
+            "Content-Type": "application/json", // Specify the content type
+          },
+          body: JSON.stringify({
+            "Request Type": selectedBookingOption,
+            ID: ID, // Include the ID in your request
+          }),
+        }
+      );
+
+      // Check if the response is ok (status in the range 200-299)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
 
       // Assuming the API returns bookings categorized as upcoming and completed
-      setUpcomingBookings(data.upcoming || []);
-      setCompletedBookings(data.completed || []);
+      setUpcomingBookings(data.data || []);
+      setCompletedBookings(data.data || []);
     } catch (error) {
       console.error("Error fetching bookings:", error);
     } finally {
@@ -51,7 +71,7 @@ const ProfileOptions = () => {
 
   useEffect(() => {
     fetchBookingData(); // Fetch booking data when the component loads
-  }, []);
+  }, [count]);
 
   // Function to toggle tabs with fade effect
   const toggle = (tab) => {
@@ -80,6 +100,7 @@ const ProfileOptions = () => {
     setTimeout(() => {
       setFadeIn(true); // Trigger fade-in after selection
     }, 200);
+    setCount(count + 1);
   };
 
   // Determine the color based on the selected booking option
@@ -89,9 +110,9 @@ const ProfileOptions = () => {
       return "warning";
     }
     switch (selectedBookingOption) {
-      case "Upcoming Bookings":
+      case "Upcoming Booking":
         return "primary";
-      case "Completed Bookings":
+      case "Completed Booking":
         return "primary";
       default:
         return "warning";
@@ -130,14 +151,14 @@ const ProfileOptions = () => {
               </DropdownToggle>
               <DropdownMenu>
                 <DropdownItem
-                  onClick={() => handleDropdownClick("Upcoming Bookings")}
-                  active={selectedBookingOption === "Upcoming Bookings"}>
-                  Upcoming Bookings
+                  onClick={() => handleDropdownClick("Upcoming Booking")}
+                  active={selectedBookingOption === "Upcoming Booking"}>
+                  Upcoming Booking
                 </DropdownItem>
                 <DropdownItem
-                  onClick={() => handleDropdownClick("Completed Bookings")}
-                  active={selectedBookingOption === "Completed Bookings"}>
-                  Completed Bookings
+                  onClick={() => handleDropdownClick("Completed Booking")}
+                  active={selectedBookingOption === "Completed Booking"}>
+                  Completed Booking
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -168,25 +189,24 @@ const ProfileOptions = () => {
                   {/* Display loader if booking data is being fetched */}
                   {loading && <p>Loading booking data...</p>}
 
-                  {/* Display Upcoming Bookings */}
-                  {selectedBookingOption === "Upcoming Bookings" &&
-                    !loading && (
-                      <div>
-                        {upcomingBookings.length > 0 ? (
-                          upcomingBookings.map((booking) => (
-                            <HorizontalCard
-                              key={booking.id}
-                              userdata={booking}
-                            />
-                          ))
-                        ) : (
-                          <p>No upcoming bookings available.</p>
-                        )}
-                      </div>
-                    )}
+                  {/* Display Upcoming Booking */}
+                  {selectedBookingOption === "Upcoming Booking" && !loading && (
+                    <div>
+                      {upcomingBookings.length > 0 ? (
+                        upcomingBookings.map((booking) => (
+                          <HorizontalCard
+                            key={booking["ID"]}
+                            userdata={booking}
+                          />
+                        ))
+                      ) : (
+                        <p>No Upcoming Booking available.</p>
+                      )}
+                    </div>
+                  )}
 
-                  {/* Display Completed Bookings */}
-                  {selectedBookingOption === "Completed Bookings" &&
+                  {/* Display Completed Booking */}
+                  {selectedBookingOption === "Completed Booking" &&
                     !loading && (
                       <div>
                         {completedBookings.length > 0 ? (
@@ -197,7 +217,7 @@ const ProfileOptions = () => {
                             />
                           ))
                         ) : (
-                          <p>No completed bookings available.</p>
+                          <p>No Completed Booking available.</p>
                         )}
                       </div>
                     )}

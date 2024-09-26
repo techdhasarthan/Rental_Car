@@ -1,19 +1,45 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Container, Button } from "reactstrap";
+import { Container } from "reactstrap";
 import "remixicon/fonts/remixicon.css";
+import "./Document.css"; // Import the CSS file for styles
 
 const Document = () => {
+  const userdata = localStorage.getItem("combinedRequestBody"); // Get the data from localStorage
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
-  const [uploadedFiles, setUploadedFiles] = useState([]); // State to store multiple uploaded files
+  const parsedData = JSON.parse(userdata);
+
+  // Access the "Customer Name" and "Mobile Number" properties
+  const customerName = parsedData["Customer Name"];
+  const mobileNumber = parsedData["Mobile Number"];
+
+  const [uploadedFiles, setUploadedFiles] = useState([]); // State to store file names
 
   // Fetch the uploaded file data from the API
   const fetchUploadedFiles = async () => {
+    if (!userdata) {
+      console.log("No user data found in localStorage.");
+      return;
+    }
+
+    const jsonObj = {
+      "Customer Name": customerName,
+      "Mobile Number": mobileNumber,
+    };
+
     try {
-      const response = await axios.get(`${BASE_URL}/files`); // Replace with your actual API endpoint
-      setUploadedFiles(response.data); // Store the fetched data in state
-      console.log("Fetched uploaded files:", response.data);
+      const response = await axios.post(
+        `${BASE_URL}/getAllCustomerCarBookingDocumentsList`,
+        jsonObj
+      ); // Replace with your actual API endpoint
+
+      if (response.data.status === "true") {
+        const dataArray = response.data.data; // Assuming the data is an array
+        setUploadedFiles(dataArray); // Store all file data in state
+      } else {
+        console.log("No files found or API returned false status.");
+      }
     } catch (error) {
       console.error("Error fetching uploaded files:", error);
     }
@@ -25,31 +51,29 @@ const Document = () => {
   }, []); // Empty array to fetch data once on component mount
 
   return (
-    <Container>
-      <h2 className="fs-5 pt-2"></h2>
-      {/* <Button onClick={fetchUploadedFiles}>Refresh File List</Button>{" "} */}
-      {/* Button to refresh the file list manually */}
-      {/* Display uploaded files */}
+    <Container className="pt-4">
       {uploadedFiles.length > 0 ? (
         <div>
           {uploadedFiles.map((file, index) => (
-            <div
-              key={index}
-              style={{
-                marginBottom: "20px",
-                padding: "10px",
-                border: "1px solid #ccc",
-              }}>
-              <p>
-                <strong>File Name:</strong> {file.fileName}
-              </p>
-              <p>
-                <strong>Document Type:</strong> {file.documentType}
-              </p>
-              <p>
-                <strong>Upload Date:</strong> {file.uploadDate}
-              </p>
-              {/* Add more details if your API provides them */}
+            <div key={index} className="file-container">
+              {/* Display the image */}
+              <img
+                src={`${BASE_URL}/RetrieveFile/` + file["File Name"]}
+                alt={`File ${file["File Name"]}`} // Corrected to match the key
+                className="file-image"
+              />
+              <div className="pt-5">
+                {/* Display file details */}
+                <p>
+                  <strong>Document Type:</strong> {file["Document Type"]}
+                </p>
+                <p>
+                  <strong>Document Number:</strong> {file["Document Number"]}
+                </p>
+                <p>
+                  <strong>Name On Document:</strong> {file["Name On Document"]}
+                </p>
+              </div>
             </div>
           ))}
         </div>
