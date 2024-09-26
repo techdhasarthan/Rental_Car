@@ -45,6 +45,8 @@ const Contact = () => {
     jsonObj["Message"] = Message;
     jsonObj["Created Date"] = null;
 
+    
+    
     // Send data to the backend
 
     try {
