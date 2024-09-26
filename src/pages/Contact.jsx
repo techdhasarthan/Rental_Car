@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import { Container, Row, Col, Form, FormGroup, Input } from "reactstrap";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/CommonSection";
-
+import { message } from "antd";
 import "../styles/contact.css";
+import axios from "axios";
 
 const socialLinks = [
   {
@@ -29,8 +30,8 @@ const Contact = () => {
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const id = localStorage.getItem("id");
+  const [Message, setMessage] = useState("");
+  const id = "";
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -38,27 +39,40 @@ const Contact = () => {
 
     // Prepare data to send
     const jsonObj = JSON.parse("{}");
-    jsonObj["id"] = id;
-    jsonObj["name"] = name;
-    jsonObj["email"] = email;
-    jsonObj["message"] = message;
+    jsonObj["ID"] = id;
+    jsonObj["Name"] = name;
+    jsonObj["Contact"] = email + "";
+    jsonObj["Message"] = Message;
 
     // Send data to the backend
-    try {
-      const response = await fetch(`${BASE_URL}/contact `, jsonObj);
 
-      if (response.ok) {
-        alert("Message sent successfully!");
+    try {
+      const response = await fetch(
+        `${BASE_URL}/updateCustomerFeedbackDetails`,
+        {
+          method: "POST", // Set method to POST
+          headers: {
+            "Content-Type": "application/json", // Specify that we're sending JSON
+          },
+          body: JSON.stringify(jsonObj), // Convert the JSON object to a string before sending
+        }
+      );
+
+      const responseData = await response.json();
+
+      if (responseData["status"] === "true") {
+        message.success("Thank you for your feedback");
         // Optionally, clear the form fields after successful submission
         setName("");
         setEmail("");
         setMessage("");
       } else {
-        alert("Failed to send the message.");
+        message.error("Failed to send the message.");
       }
     } catch (error) {
       console.error("Error sending the message:", error);
-      alert("An error occurred. Please try again.");
+
+      message.error("An error occurred. Please try again.");
     }
   };
 
@@ -69,12 +83,13 @@ const Contact = () => {
         <Container>
           <Row>
             <Col lg="6" md="6">
-              <h4 className="fw-bold mb-4">Get In Touch</h4>
+              <h4 className="fw-bold mb-4">Feedback</h4>
 
               <Form onSubmit={handleSubmit}>
                 <FormGroup className="contact__form">
                   <Input
                     placeholder="Your Name"
+                    required
                     type="text"
                     className="input"
                     value={name}
@@ -83,8 +98,9 @@ const Contact = () => {
                 </FormGroup>
                 <FormGroup className="contact__form">
                   <Input
-                    placeholder="Email"
-                    type="email"
+                    required
+                    placeholder="Email / Phone Number"
+                    type="text"
                     className="input"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -92,10 +108,11 @@ const Contact = () => {
                 </FormGroup>
                 <FormGroup className="contact__form">
                   <textarea
+                    required
                     rows="5"
                     placeholder="Message"
                     className="textarea"
-                    value={message}
+                    value={Message}
                     onChange={(e) => setMessage(e.target.value)}></textarea>
                 </FormGroup>
 

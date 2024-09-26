@@ -136,7 +136,7 @@ const Fulfillment = ({ imgurl }) => {
         console.error("Error:", error);
       } finally {
         setLoading(false); // Stop loading in both success and error cases
-        setIsButtonVisible(true); // Show the button again after loading completes
+        setIsButtonVisible(false); // Show the button again after loading completes
       }
     } else {
       setLoading(false); // Stop loading if conditions are not met

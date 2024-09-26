@@ -38,7 +38,8 @@ const Footer = () => {
                 <Link to="/home" className=" d-flex align-items-center gap-2">
                   <i class="ri-car-line"></i>
                   <span>
-                    Lionea Car <br /> Service
+                    Car Rentals
+                    <br /> Service
                   </span>
                 </Link>
               </h1>
@@ -68,10 +69,12 @@ const Footer = () => {
           <Col lg="4" md="4" sm="6">
             <div className="mb-4">
               <h5 className="footer__link-title mb-4">Head Office</h5>
+
               <p className="office__info">
                 GA-2413 Genesis Creations Apartments Natham Link Road Egattur,
                 Navalur, Chennai, Tamil Nadu
               </p>
+
               <p className="office__info">Phone: +91 9962227523</p>
 
               <p className="office__info">Email: Lioneacars@gmail.com</p>
@@ -79,19 +82,6 @@ const Footer = () => {
               <p className="office__info">Office Time: 10am - 7pm</p>
             </div>
           </Col>
-
-          {/* <Col lg="3" md="4" sm="12">
-            <div className="mb-4">
-              <h5 className="footer__link-title">Newsletter</h5>
-              <p className="section__description">Subscribe our newsletter</p>
-              <div className="newsletter">
-                <input type="email" placeholder="Email" />
-                <span>
-                  <i class="ri-send-plane-line"></i>
-                </span>
-              </div>
-            </div>
-          </Col> */}
 
           <Col lg="12">
             <div className="footer__bottom">

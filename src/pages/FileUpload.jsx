@@ -54,8 +54,8 @@ const FileUpload = ({ id, onUploadSuccess }) => {
 
     if (rejectedFiles.length > 0) {
       message.error("Excel files are not allowed.");
-      event.target.value = null; // Reset the input value
-      setSelectedFiles(null); // Reset selected files state
+      event.target.value = ""; // Reset the input value
+      setSelectedFiles(""); // Reset selected files state
       return;
     }
 
@@ -110,12 +110,7 @@ const FileUpload = ({ id, onUploadSuccess }) => {
         handleClose();
         onUploadSuccess(); // Call the success callback to notify parent
       } else {
-        message.error(
-          "Failed to submit form. Status:",
-          response.status,
-          "Message:",
-          result
-        );
+        message.error("Failed to submit form. Status:");
       }
     } catch (error) {
       message.error("Error uploading file:", error);

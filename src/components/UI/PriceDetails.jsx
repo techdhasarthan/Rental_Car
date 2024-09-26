@@ -213,7 +213,7 @@ const PriceDetails = ({
     if (slug) {
       fetchCarDetails();
     }
-  }, [customerId, slug, response, BASE_URL]);
+  }, [customerId]);
 
   if (error) return <div>Error: {error}</div>;
 

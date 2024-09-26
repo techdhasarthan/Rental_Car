@@ -329,7 +329,7 @@ $primary-color: #000d6b;
 }
 
 .nav__item_blog:hover {
-  color: #f1c40f;
+  color: #f9a826;
 }
 
 /* Media Queries */
@@ -396,6 +396,21 @@ $primary-color: #000d6b;
   .menu__active {
     display: block;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+  }
+  .MobileViewIcon_contact {
+    margin-left: 9px;
+  }
+
+  .contact {
+    padding-right: 20px;
+  }
+
+  .MobileViewIcon_blog {
+    margin-left: -11px;
+  }
+
+  .MobileViewIcon_cars {
+    margin-left: -11px;
   }
 }
 

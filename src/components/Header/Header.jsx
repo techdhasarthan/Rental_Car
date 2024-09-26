@@ -150,7 +150,7 @@ const Header = () => {
                   <div className="MobileViewIcon_contact">
                     <i className="ri-contacts-fill"></i>
                   </div>
-                  <div className="pt-1 ">Contact</div>
+                  <div className="pt-1  ">Contact</div>
                 </NavLink>
 
                 {!isLoggedIn ? (
