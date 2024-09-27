@@ -19,7 +19,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import ProfileOption from "./ProfileOption";
-import user from "../assets/all-images/slider-img/profile.jpg";
+import user from "../assets/all-images/slider-img/profile.jpg"; // default profile image
 
 const UserProfile = () => {
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
@@ -36,10 +36,10 @@ const UserProfile = () => {
     alternativeMobileNo: "",
     age: "",
     signStatus: "active",
-    profileImage: null, // New: profile image
+    profileImage: null, // Profile image initially null
   });
   const [originalUserInfo, setOriginalUserInfo] = useState(userInfo);
-  const [profileImagePreview, setProfileImagePreview] = useState();
+  const [profileImagePreview, setProfileImagePreview] = useState(user); // default profile image
 
   // Fetch profile data on mount
   useEffect(() => {
@@ -47,13 +47,15 @@ const UserProfile = () => {
       try {
         const response = await axios.post(
           `${backendUrl}/getCustomerProfileDetails`,
-          {
-            id: customerId,
-          }
+          { id: customerId }
         );
 
         if (response.data) {
           const data = response.data.data;
+          const imageDataObj = response.data.hasOwnProperty("imageData")
+            ? response.data.imageData
+            : null;
+
           const profileData = {
             id: data.ID || "",
             name: data.Name || "",
@@ -63,13 +65,17 @@ const UserProfile = () => {
             alternativeMobileNo: data["Alternative Mobile.NO"] || "",
             age: data.Age || "",
             signStatus: data["Sign Status"] || "active",
-            profileImage: data.profileImage || user,
+            profileImage: imageDataObj
+              ? `${backendUrl}/RetrieveFile/${imageDataObj["File Name"]}`
+              : user, // Default or fetched image
           };
+
           localStorage.setItem("name", profileData.name);
           localStorage.setItem("phone number", profileData.phoneNumber);
+
           setUserInfo(profileData);
           setOriginalUserInfo(profileData);
-          setProfileImagePreview(profileData.profileImage);
+          setProfileImagePreview(profileData.profileImage); // Set preview to fetched image
         } else {
           toast.error(
             `Failed to fetch profile data. Status: ${response.status}`
@@ -93,45 +99,78 @@ const UserProfile = () => {
   };
 
   // Handle profile image upload preview
+  // When the user selects a file, it previews the image but doesn't upload it immediately
   const handleProfileImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setUserInfo((prevInfo) => ({ ...prevInfo, profileImage: file }));
-      setProfileImagePreview(URL.createObjectURL(file));
+      setUserInfo((prevInfo) => ({ ...prevInfo, profileImage: file })); // Set the file object
+      setProfileImagePreview(URL.createObjectURL(file)); // Show preview of the selected image
     }
   };
 
-  // Handle save profile changes (including image upload)
-  const handleSave = async () => {
+  // Image upload function (triggered by a separate upload button)
+  const handleProfileImageUpload = async () => {
     const formData = new FormData();
-    formData.append("id", userInfo.id);
-    formData.append("name", userInfo.name);
-    formData.append("phoneNumber", userInfo.phoneNumber);
-    formData.append("emailId", userInfo.emailId);
-    formData.append("alternativeMobileNo", userInfo.alternativeMobileNo);
-    formData.append("age", userInfo.age);
-    formData.append("profileImage", userInfo.profileImage); // Profile image
+    formData.append("customerId", customerId); // Attach user ID
+    formData.append("file", userInfo.profileImage); // Attach the profile image (file)
 
     try {
       const response = await axios.post(
-        `${backendUrl}/updateCustomerProfile`,
+        `${backendUrl}/uploadCustomerProfileImageFile`, // Separate API for image upload
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "multipart/form-data", // Important for file uploads
           },
         }
       );
 
+      if (response.data.status === "true") {
+        const imageUrl = `${backendUrl}/RetrieveFile/${response.data.fileName}`;
+
+        // Update the state to use the new image URL after successful upload
+        setUserInfo((prevInfo) => ({
+          ...prevInfo,
+          profileImage: imageUrl, // Update profile image with the URL from the backend
+        }));
+
+        // Update the preview to reflect the uploaded image URL
+        setProfileImagePreview(imageUrl); // Set the preview to the uploaded image
+
+        toast.success("Profile image uploaded successfully!");
+      } else {
+        toast.error("Failed to upload profile image.");
+      }
+    } catch (error) {
+      toast.error(`Error uploading profile image: ${error.message}`);
+    }
+  };
+
+  // Handle save profile changes (including image if uploaded)
+  const handleSave = async () => {
+    // Update the profile details without needing the profile image to be re-uploaded
+    const updateUserData = {
+      id: userInfo.id,
+      name: userInfo.name,
+      phoneNumber: userInfo.phoneNumber,
+      emailId: userInfo.emailId,
+      alternativeMobileNo: userInfo.alternativeMobileNo,
+      age: userInfo.age,
+      password: userInfo.password,
+      signStatus: userInfo.signStatus,
+      profileImage: userInfo.profileImage, // Ensure profileImage includes the uploaded one
+    };
+
+    try {
+      const response = await axios.post(
+        `${backendUrl}/updateCustomerRegistrationDetails`,
+        updateUserData
+      );
+
       if (response.status === 200) {
         toast.success("Profile updated successfully!");
-        setOriginalUserInfo(userInfo); // Update original info
+        setOriginalUserInfo(userInfo); // Update original info with new profile image
         setIsEditing(false); // Exit editing mode
-
-        localStorage.setItem(
-          "profileImage",
-          URL.createObjectURL(userInfo.profileImage)
-        );
       } else {
         toast.error("Failed to update profile.");
       }
@@ -146,7 +185,7 @@ const UserProfile = () => {
 
   const handleCancel = () => {
     setUserInfo(originalUserInfo); // Reset to original data
-    setProfileImagePreview(originalUserInfo.profileImage);
+    setProfileImagePreview(userInfo.profileImage); // Reset image
     setIsEditing(false);
   };
 
@@ -158,23 +197,31 @@ const UserProfile = () => {
   return (
     <Helmet title="Profile">
       <CommonSection title="Profile" />
-      <section className="profile-section py-5 ">
+      <section className="profile-section py-5">
         <Container>
           <Row>
-            <Col lg="4" md="12" className="text-center mt-4 mb-5 ">
+            <Col lg="4" md="12" className="text-center mt-4 mb-5">
               {/* Profile Image */}
-              <div className="profile-image-wrapper ">
+              <div className="profile-image-wrapper">
                 <img
-                  src={profileImagePreview || "/default-profile.png"}
+                  src={profileImagePreview || user} // Use preview or default
                   alt="Profile"
                   className="profile-image img-fluid rounded-circle shadow-lg"
                 />
                 {isEditing && (
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleProfileImageChange}
-                  />
+                  <>
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleProfileImageChange}
+                    />
+                    <Button
+                      color="primary"
+                      className="mt-2"
+                      onClick={handleProfileImageUpload}>
+                      Upload Image
+                    </Button>
+                  </>
                 )}
               </div>
             </Col>
