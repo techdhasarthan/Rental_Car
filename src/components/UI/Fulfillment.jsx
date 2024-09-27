@@ -9,6 +9,8 @@ import AOS from "aos";
 import { message } from "antd";
 import Spinner from "react-bootstrap/Spinner";
 
+import { Container, Row, Col } from "reactstrap";
+
 const Fulfillment = ({ imgurl }) => {
   const image = imgurl;
   const [carDetails, setCarDetails] = useState({
@@ -196,151 +198,158 @@ const Fulfillment = ({ imgurl }) => {
 
   return (
     <>
-      <form onSubmit={handleFulfillmentRequest}>
-        <div className="pb-2">
-          <div className="d-flex date_container flex-row me-3 ps-2">
-            <div className="form-groups me-3">
-              <label htmlFor="startDate">Start Date & Time</label>
-              <input
-                required
-                type="datetime-local"
-                id="startDate"
-                className="form-control"
-                value={startDate}
-                min={today}
-                onChange={handleStartDateChange}
-              />
-            </div>
-
-            <div className="form-groups">
-              <label htmlFor="endDate">End Date & Time</label>
-              <input
-                required
-                type="datetime-local"
-                id="endDate"
-                className="form-control"
-                value={endDate}
-                min={startDate}
-                onChange={handleEndDateChange}
-              />
-            </div>
-          </div>
-          <div className="fulfillment-container">
-            <div className="radio-buttons">
-              <label>
-                <input
-                  required
-                  type="radio"
-                  name="fulfillmentOption"
-                  value="selfPickup"
-                  checked={selectedOption === "selfPickup"}
-                  onChange={handleCheckboxChange}
-                />
-                Self-Pickup
-              </label>
-              <label>
-                <input
-                  required
-                  type="radio"
-                  name="fulfillmentOption"
-                  value="delivery"
-                  checked={selectedOption === "delivery"}
-                  onChange={handleCheckboxChange}
-                />
-                Delivery
-              </label>
-            </div>
-
-            <UploadCheckButton />
-
-            {selectedOption === "selfPickup" && (
-              <div className="select-input-container">
-                <select
-                  required
-                  className="select-input"
-                  value={option}
-                  onChange={handleSelectChange}>
-                  <option value="">Select an option</option>
-                  <option value="Kilampakkam">Kilampakkam</option>
-                  <option value="Koyambedu">Koyambedu</option>
-                  <option value="Tambaram">Tambaram</option>
-                </select>
-              </div>
-            )}
-
-            {selectedOption === "delivery" && (
-              <div className="delivery-info-container">
-                <input
-                  required
-                  type="text"
-                  className="input-fieldss"
-                  placeholder="Enter delivery address"
-                  value={deliveryInfo}
-                  onChange={handleDeliveryInfoChange}
-                />
-                <textarea
-                  required
-                  className="text-areas"
-                  placeholder="Enter delivery instructions or additional details"
-                  value={extraInfo}
-                  onChange={handleExtraInfoChange}
-                />
-              </div>
-            )}
-
-            <p className="disclaimer">
-              <strong>Disclaimer:</strong> Delivery Charges may vary for outside
-              city limits locations including Airport pickup. You can add
-              specific instructions related to delivery.
-            </p>
-          </div>
-        </div>
-        <div
-          className="d-flex justify-content-end text-end me-3 flex-column flex-md-row"
-          data-aos="fade-up">
-          <div className="w-100">
-            <div className="row">
-              <div className="pt-3">
-                <div className="applybutton text-end d-flex justify-content-end">
-                  {isButtonVisible && ( // Only show button if visible
-                    <button
-                      type="submit"
-                      className="custom-blue-btn rounded px-2 py-2 w-md-auto"
-                      disabled={loading} // Disable button while loading
-                    >
-                      Apply Now
-                    </button>
-                  )}
-                  {loading && (
-                    <Spinner animation="border" role="status" className="ms-2">
-                      <span className="visually-hidden">Loading...</span>
-                    </Spinner>
-                  )}
+      <Container>
+        <Col>
+          <form onSubmit={handleFulfillmentRequest}>
+            <div className="pb-2">
+              <div className="d-flex date_container flex-row me-3 ps-2">
+                <div className="form-groups me-3">
+                  <label htmlFor="startDate">Start Date & Time</label>
+                  <input
+                    required
+                    type="datetime-local"
+                    id="startDate"
+                    className="form-control"
+                    value={startDate}
+                    min={today}
+                    onChange={handleStartDateChange}
+                  />
                 </div>
-                {isPriceDetailsVisible && (
-                  <div className="smooth-toggle show w-100">
-                    <div className="row">
-                      <div className="col-lg-12 mt-4">
-                        <div className="payment__info mt-4">
-                          <PriceDetails
-                            response={resData}
-                            startDate={startDate}
-                            endDate={endDate}
-                            imgurl={image}
-                            fulfillmentType={option}
-                            deliveryInfo={deliveryInfo}
-                            extraInfo={extraInfo}
-                          />
-                        </div>
-                      </div>
-                    </div>
+
+                <div className="form-groups">
+                  <label htmlFor="endDate">End Date & Time</label>
+                  <input
+                    required
+                    type="datetime-local"
+                    id="endDate"
+                    className="form-control"
+                    value={endDate}
+                    min={startDate}
+                    onChange={handleEndDateChange}
+                  />
+                </div>
+              </div>
+              <div className="fulfillment-container">
+                <div className="radio-buttons">
+                  <label>
+                    <input
+                      required
+                      type="radio"
+                      name="fulfillmentOption"
+                      value="selfPickup"
+                      checked={selectedOption === "selfPickup"}
+                      onChange={handleCheckboxChange}
+                    />
+                    Self-Pickup
+                  </label>
+                  <label>
+                    <input
+                      required
+                      type="radio"
+                      name="fulfillmentOption"
+                      value="delivery"
+                      checked={selectedOption === "delivery"}
+                      onChange={handleCheckboxChange}
+                    />
+                    Delivery
+                  </label>
+                </div>
+
+                <UploadCheckButton />
+
+                {selectedOption === "selfPickup" && (
+                  <div className="select-input-container">
+                    <select
+                      required
+                      className="select-input"
+                      value={option}
+                      onChange={handleSelectChange}>
+                      <option value="">Select an option</option>
+                      <option value="Kilampakkam">Kilampakkam</option>
+                      <option value="Koyambedu">Koyambedu</option>
+                      <option value="Tambaram">Tambaram</option>
+                    </select>
                   </div>
                 )}
+
+                {selectedOption === "delivery" && (
+                  <div className="delivery-info-container">
+                    <input
+                      required
+                      type="text"
+                      className="input-fieldss"
+                      placeholder="Enter delivery address"
+                      value={deliveryInfo}
+                      onChange={handleDeliveryInfoChange}
+                    />
+                    <textarea
+                      required
+                      className="text-areas"
+                      placeholder="Enter delivery instructions or additional details"
+                      value={extraInfo}
+                      onChange={handleExtraInfoChange}
+                    />
+                  </div>
+                )}
+
+                <p className="disclaimer">
+                  <strong>Disclaimer:</strong> Delivery Charges may vary for
+                  outside city limits locations including Airport pickup. You
+                  can add specific instructions related to delivery.
+                </p>
               </div>
             </div>
-          </div>
-        </div>
-      </form>
+            <div
+              className="d-flex justify-content-end text-end me-3 flex-column flex-md-row"
+              data-aos="fade-up">
+              <div className="w-100">
+                <div className="row">
+                  <div className="pt-3">
+                    <div className="applybutton text-end d-flex justify-content-end">
+                      {isButtonVisible && ( // Only show button if visible
+                        <button
+                          type="submit"
+                          className="custom-blue-btn rounded px-2 py-2 w-md-auto"
+                          disabled={loading} // Disable button while loading
+                        >
+                          Apply Now
+                        </button>
+                      )}
+                      {loading && (
+                        <Spinner
+                          animation="border"
+                          role="status"
+                          className="ms-2">
+                          <span className="visually-hidden">Loading...</span>
+                        </Spinner>
+                      )}
+                    </div>
+                    {isPriceDetailsVisible && (
+                      <div className="smooth-toggle show w-100">
+                        <div className="row">
+                          <div className="col-lg-12 mt-4">
+                            <div className="payment__info mt-4">
+                              <PriceDetails
+                                response={resData}
+                                startDate={startDate}
+                                endDate={endDate}
+                                imgurl={image}
+                                fulfillmentType={option}
+                                deliveryInfo={deliveryInfo}
+                                extraInfo={extraInfo}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </Col>
+      </Container>
     </>
   );
 };
