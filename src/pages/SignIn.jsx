@@ -23,17 +23,51 @@ const SignIn = () => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
+  const validateForm = () => {
+    const { phoneNumber, password } = user;
+
+    // Phone number validation (must be exactly 10 digits)
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+      toast.error("Phone number must be exactly 10 digits.", {
+        autoClose: 3000,
+        position: "top-right",
+        className: "custom-toast-error",
+      });
+      return false;
+    }
+
+    // Password validation (must be exactly 4 digits)
+    const passwordRegex = /^[0-9]{4}$/;
+    if (!passwordRegex.test(password)) {
+      toast.error("Password must be exactly 4 digits.", {
+        autoClose: 3000,
+        position: "top-right",
+        className: "custom-toast-error",
+      });
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent default form submission
     setLoading(true); // Show loading message
     setError(""); // Reset error message
+
+    // Validate the form before making the API call
+    if (!validateForm()) {
+      setLoading(false);
+      return;
+    }
 
     try {
       const response = await axios.post(`${BASE_URL}/customerSignIn`, user);
       setLoading(false); // Hide loading message
       if (response.data.status === "false") {
         toast.error("Invalid Argument.");
-        navigate("/sign-in"); // Pass user data to the home page
+        navigate("/sign-in"); // Redirect back to sign-in page on error
       } else {
         setTimeout(() => {
           toast.success("Phone Number & Password Correct.");
@@ -107,11 +141,11 @@ const SignIn = () => {
 
                 <input type="submit" value="Sign In" className="sign-btn" />
                 {loading && (
-                  <div className="loading ">Signing in, please wait...</div>
+                  <div className="loading">Signing in, please wait...</div>
                 )}
                 {error && <div className="error">{error}</div>}
 
-                <p className="text  mt-3">
+                <p className="text mt-3">
                   Forgotten your password or your login details?&nbsp;
                   <Link to="#">Get help</Link> &nbsp; signing in
                 </p>
@@ -119,7 +153,7 @@ const SignIn = () => {
             </form>
           </div>
         </div>
-        <div className="car-rental-info ">
+        <div className="car-rental-info">
           <h3 className="mb-4">Car Rental Specials(Replace by Lionea) </h3>
 
           <p className="mt-4">Check out our latest deals on car rentals!</p>
