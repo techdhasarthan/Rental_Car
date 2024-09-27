@@ -65,6 +65,8 @@ const UserProfile = () => {
             signStatus: data["Sign Status"] || "active",
             profileImage: data.profileImage || user,
           };
+          localStorage.setItem("name", profileData.name);
+          localStorage.setItem("phone number", profileData.phoneNumber);
           setUserInfo(profileData);
           setOriginalUserInfo(profileData);
           setProfileImagePreview(profileData.profileImage);
