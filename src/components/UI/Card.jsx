@@ -36,7 +36,7 @@ const HorizontalCard = ({ userdata }) => {
               <strong>To:</strong> {toDate}
             </p>
             <p className="card-text">
-              <strong>Total Amount:</strong> ${totalAmount.toFixed(2)}
+              <strong>Total Amount:</strong> ${totalAmount}
             </p>
             <p className="card-text">
               <strong>Car Number:</strong> {carNumber}
