@@ -133,6 +133,7 @@ const UserProfile = () => {
 
       if (response.data.status === "true") {
         const imageUrl = `${backendUrl}/RetrieveFile/${response.data.fileName}`;
+        localStorage.setItem("UserImage", imageUrl);
 
         setUserInfo((prevInfo) => ({
           ...prevInfo,

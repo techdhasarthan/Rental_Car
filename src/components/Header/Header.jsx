@@ -16,6 +16,7 @@ const Header = () => {
 
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const customerId = localStorage.getItem("id");
+  const imageUrl = localStorage.getItem("UserImage");
 
   const toggleMenu = () => menuRef.current.classList.toggle("menu__active");
 
@@ -50,6 +51,7 @@ const Header = () => {
 
           if (response.ok) {
             const data = await response.json();
+
             setUserName({
               name: data.data.Name || "Guest",
               id: data.data.ID || "",
@@ -104,7 +106,7 @@ const Header = () => {
                     className="dropdownMobileView text-decoration-none"
                     ref={dropdownRef}>
                     <img
-                      src={profile}
+                      src={imageUrl || profile}
                       alt="avatar"
                       className="img-fluid rounded-circle me-3 shadow-lg profile"
                       width="35"
@@ -180,9 +182,9 @@ const Header = () => {
               ) : (
                 <div className="dropdown" ref={dropdownRef}>
                   <img
-                    src={profile}
+                    src={imageUrl || profile}
                     alt="avatar"
-                    className="img-fluid rounded-circle me-3 shadow-lg profileimage"
+                    className="img-fluid rounded-circle me-3 shadow-lg profileimage "
                     width="35"
                     onClick={toggleDropdown}
                     style={{ cursor: "pointer" }}
