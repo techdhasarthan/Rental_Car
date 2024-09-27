@@ -156,9 +156,7 @@ const Header = () => {
                 {!isLoggedIn ? (
                   <Link
                     to="/sign-in"
-                    className="d-flex text-white no-underline custom-hover p-3 mt-3">
-                    <i className="ri-login-box-line"></i> Login
-                  </Link>
+                    className="d-flex text-white no-underline custom-hover p-3 mt-3"></Link>
                 ) : (
                   <div onClick={handleSignOut}>
                     <div className="profileLogout">
@@ -178,9 +176,7 @@ const Header = () => {
               {!isLoggedIn ? (
                 <Link
                   to="/sign-in"
-                  className="d-flex text-white no-underline custom-hover">
-                  <i className="ri-login-box-line"></i> Login
-                </Link>
+                  className="d-flex text-white no-underline custom-hover"></Link>
               ) : (
                 <div className="dropdown" ref={dropdownRef}>
                   <img
