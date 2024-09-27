@@ -16,7 +16,7 @@ const SignUp = () => {
     password: "",
     emailId: "",
     alternativeMobileNo: "",
-    signStatus: "active", // Default value
+    signStatus: "active",
     age: "",
   });
   const [error, setError] = useState("");
@@ -27,9 +27,74 @@ const SignUp = () => {
     setUser({ ...user, [name]: value });
   };
 
+  const validateForm = () => {
+    const { phoneNumber, emailId, age, password, alternativeMobileNo } = user;
+
+    // Phone number validation (must be exactly 10 digits)
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+      toast.error("Phone number must be exactly 10 digits.", {
+        autoClose: 3000,
+        position: "top-right",
+        className: "custom-toast-error",
+      });
+      return false;
+    }
+
+    // Alternative phone number validation (must be exactly 10 digits)
+    if (!phoneRegex.test(alternativeMobileNo)) {
+      toast.error("Alternative mobile number must be exactly 10 digits.", {
+        autoClose: 3000,
+        position: "top-right",
+        className: "custom-toast-error",
+      });
+      return false;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailId)) {
+      toast.error("Invalid email address.", {
+        autoClose: 3000,
+        position: "top-right",
+        className: "custom-toast-error",
+      });
+      return false;
+    }
+
+    // Age validation (must be between 15 and 80)
+    if (age < 15 || age > 80) {
+      toast.error("Age must be between 15 and 80.", {
+        autoClose: 3000,
+        position: "top-right",
+        className: "custom-toast-error",
+      });
+      return false;
+    }
+
+    // Password validation (must be exactly 4 digits)
+    const passwordRegex = /^[0-9]{4}$/;
+    if (!passwordRegex.test(password)) {
+      toast.error("Password must be exactly 4 digits.", {
+        autoClose: 3000,
+        position: "top-right",
+        className: "custom-toast-error",
+      });
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
+
+    if (!validateForm()) {
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await axios.post(
         `${backendUrl}/updateCustomerRegistrationDetails`,
