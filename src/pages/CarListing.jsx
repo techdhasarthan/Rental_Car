@@ -8,6 +8,9 @@ import { useState, useEffect } from "react";
 import PricingPlan from "../components/UI/Planing";
 
 const CarListing = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scrolls to the top when component mounts
+  }, []); // Empty dependency array means this runs only on mount
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
   const [sortByPrice, setSortOrder] = useState("");
   const [sortCategory, setSortCategory] = useState("");

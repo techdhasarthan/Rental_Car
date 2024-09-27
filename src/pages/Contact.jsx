@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Container, Row, Col, Form, FormGroup, Input } from "reactstrap";
 import Helmet from "../components/Helmet/Helmet";
@@ -27,6 +27,9 @@ const socialLinks = [
 ];
 
 const Contact = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scrolls to the top when component mounts
+  }, []); // Empty dependency array means this runs only on mount
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -45,8 +48,6 @@ const Contact = () => {
     jsonObj["Message"] = Message;
     jsonObj["Created Date"] = null;
 
-    
-    
     // Send data to the backend
 
     try {

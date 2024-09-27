@@ -14,6 +14,7 @@ const CarDetails = () => {
       once: false, // Whether animation should happen only once
       mirror: false, // Whether elements should animate out while scrolling past them
     });
+    window.scrollTo(0, 0);
   }, []);
   const [carDetails, setCarDetails] = useState(null); // State for car details
   const [loading, setLoading] = useState(true); // State for loading status
