@@ -11,6 +11,7 @@ import {
   DropdownMenu,
   DropdownItem,
   Col,
+  Row,
 } from "reactstrap";
 import classnames from "classnames";
 import Document from "./Document"; // Component for Document Upload
@@ -192,35 +193,43 @@ const ProfileOptions = () => {
 
                   {/* Display Upcoming Booking */}
                   {selectedBookingOption === "Upcoming Booking" && !loading && (
-                    <div className="d-flex justify-content-around">
+                    <Row className="g-4 justify-content-around">
+                      {" "}
+                      {/* Added g-4 for consistent gutter spacing */}
                       {upcomingBookings.length > 0 ? (
                         upcomingBookings.map((booking) => (
-                          <HorizontalCard
-                            key={booking["ID"]}
-                            userdata={booking}
-                          />
+                          <Col lg="5" md="5" sm="12" key={booking["ID"]}>
+                            {" "}
+                            {/* Set lg=6 for 50% width */}
+                            <HorizontalCard userdata={booking} />
+                          </Col>
                         ))
                       ) : (
-                        <p>No Upcoming Booking available.</p>
+                        <Col>
+                          <p>No Upcoming Booking available.</p>
+                        </Col>
                       )}
-                    </div>
+                    </Row>
                   )}
 
                   {/* Display Completed Booking */}
                   {selectedBookingOption === "Completed Booking" &&
                     !loading && (
-                      <div>
+                      <Row className="g-4 justify-content-around">
                         {completedBookings.length > 0 ? (
                           completedBookings.map((booking) => (
-                            <HorizontalCard
-                              key={booking.id}
-                              userdata={booking}
-                            />
+                            <Col lg="5" md="5" sm="12" key={booking["ID"]}>
+                              {" "}
+                              {/* Set lg=6 for 50% width */}
+                              <HorizontalCard userdata={booking} />
+                            </Col>
                           ))
                         ) : (
-                          <p>No Completed Booking available.</p>
+                          <Col>
+                            <p>No Completed Booking available.</p>
+                          </Col>
                         )}
-                      </div>
+                      </Row>
                     )}
                 </div>
               )}

@@ -16,11 +16,7 @@
     width: 100%;
 }
 
-.card-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
+
 
 .card-title {
     font-size: 1.25rem;
