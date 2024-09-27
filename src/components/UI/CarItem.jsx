@@ -30,7 +30,7 @@ const CarItem = (props) => {
       <div className="car__item">
         <div className="car__img">
           <img
-            src={`${BASE_URL}/` + imgUrl}
+            src={`${BASE_URL}/RetrieveFile/` + imgUrl}
             alt=""
             className="w-100"
             style={{ height: "180px" }}

@@ -90,7 +90,7 @@ const CarDetails = () => {
           <Row>
             <Col lg="6" data-aos="fade-right">
               <img
-                src={`${BASE_URL}/` + carDetails?.imgUrl}
+                src={`${BASE_URL}/RetrieveFile/` + carDetails?.imgUrl}
                 alt={carDetails?.carName}
                 className="w-100 mt-5"
               />
