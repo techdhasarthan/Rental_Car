@@ -1,58 +1,64 @@
 .custom-card {
     border-radius: 15px;
-    /* Rounded corners */
     padding: 15px;
-    /* Padding around the card content */
     background-color: #fff;
-    /* Background color of the card */
     transition: transform 0.3s;
-    /* Transition effect for hover */
 }
 
 .custom-card:hover {
     transform: scale(1.05);
-    /* Scale effect on hover */
 }
 
 .custom-image {
     border-radius: 15px 0 0 15px;
-    /* Rounded corners for the image */
     object-fit: cover;
-    /* Ensure the image covers the area */
     height: 100%;
-    /* Make sure image height is full */
+    width: 100%;
 }
 
 .card-body {
     display: flex;
     flex-direction: column;
-    /* Stack content vertically */
     justify-content: center;
-    /* Center content vertically */
 }
 
 .card-title {
     font-size: 1.25rem;
-    /* Larger title font */
     margin-bottom: 10px;
-    /* Space below title */
+}
+
+.card-text-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
 }
 
 .card-text {
     margin: 5px 0;
-    /* Space between text paragraphs */
+    line-height: 1.5;
 }
 
-/* Shadow effect */
-.shadow-lg {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    /* Subtle shadow for depth */
-}
-
-/* Additional responsive styles */
-@media (max-width: 768px) {
+/* Responsive Styles */
+@media (max-width: 800px) {
     .custom-card {
         flex-direction: column;
-        /* Stack image and content on smaller screens */
     }
+
+    .custom-image {
+        border-radius: 15px 15px 0 0;
+        height: auto;
+    }
+
+    .card-body {
+        text-align: center;
+    }
+
+    .card-text-group {
+        grid-template-columns: 1fr;
+        text-align: left;
+    }
+}
+
+.shadow-lg {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }

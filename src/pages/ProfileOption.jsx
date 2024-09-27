@@ -10,6 +10,7 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
+  Col,
 } from "reactstrap";
 import classnames from "classnames";
 import Document from "./Document"; // Component for Document Upload
@@ -184,14 +185,14 @@ const ProfileOptions = () => {
             <TabPane tabId="2">
               {activeTab === "2" && (
                 <div className="text-center">
-                  <h5 className="fw-bold mb-3">{selectedBookingOption}</h5>
+                  <h5 className="fw-bold mb-5 ">{selectedBookingOption}</h5>
 
                   {/* Display loader if booking data is being fetched */}
                   {loading && <p>Loading booking data...</p>}
 
                   {/* Display Upcoming Booking */}
                   {selectedBookingOption === "Upcoming Booking" && !loading && (
-                    <div>
+                    <div className="d-flex justify-content-around">
                       {upcomingBookings.length > 0 ? (
                         upcomingBookings.map((booking) => (
                           <HorizontalCard

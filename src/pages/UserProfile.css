@@ -126,6 +126,31 @@ input[type="file"] {
   /* Darker color on hover */
 }
 
+.user-info .info-item {
+  margin-bottom: 1rem;
+  /* Adds space between each key-value pair */
+}
+
+.user-info .info-item strong {
+  min-width: 150px;
+  /* Set a minimum width for the label to align properly */
+  text-align: left;
+}
+
+.user-info .info-item span {
+  margin-left: 10px;
+  /* Adjust the spacing between label and value */
+  flex-grow: 1;
+  /* Allows the value to take up the remaining space */
+}
+
+.bold-colon {
+  font-weight: bold;
+  /* Ensure the colon is bold */
+  margin-right: 5px;
+  /* Optional: space between the colon and the value */
+}
+
 
 
 @media only screen and (max-width:768px) {

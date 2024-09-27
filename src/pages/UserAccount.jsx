@@ -331,23 +331,40 @@ const UserProfile = () => {
                       </Button>
                     </div>
                   ) : (
-                    <div className="px-4">
-                      <p>
-                        <strong>Name:</strong> {userInfo.name}
-                      </p>
-                      <p>
-                        <strong>Age:</strong> {userInfo.age}
-                      </p>
-                      <p>
-                        <strong>Phone:</strong> {userInfo.phoneNumber}
-                      </p>
-                      <p>
-                        <strong>Alternate Phone:</strong>{" "}
-                        {userInfo.alternativeMobileNo}
-                      </p>
-                      <p>
-                        <strong>Email:</strong> {userInfo.emailId}
-                      </p>
+                    <div className="user-info px-4">
+                      <div className="info-item d-flex">
+                        <strong>Name</strong>
+                        <span className="ml-3">
+                          <span className="fw-bolder">:</span> {userInfo.name}
+                        </span>
+                      </div>
+                      <div className="info-item d-flex">
+                        <strong>Age</strong>
+                        <span className="ml-3">
+                          <span className="fw-bolder">:</span> {userInfo.age}
+                        </span>
+                      </div>
+                      <div className="info-item d-flex">
+                        <strong>Phone</strong>
+                        <span className="ml-3">
+                          <span className="fw-bolder">:</span>{" "}
+                          {userInfo.phoneNumber}
+                        </span>
+                      </div>
+                      <div className="info-item d-flex">
+                        <strong>Alternate Phone</strong>
+                        <span className="ml-3">
+                          <span className="fw-bolder">:</span>{" "}
+                          {userInfo.alternativeMobileNo}
+                        </span>
+                      </div>
+                      <div className="info-item d-flex">
+                        <strong>Email</strong>
+                        <span className="ml-3">
+                          <span className="fw-bolder">:</span>{" "}
+                          {userInfo.emailId}
+                        </span>
+                      </div>
                     </div>
                   )}
                 </CardBody>

@@ -91,6 +91,8 @@
 }
 
 .file-container {
+    display: flex;
+    gap: 10px;
     margin-bottom: 20px;
     padding: 15px;
     border: 1px solid #ccc;
@@ -102,6 +104,8 @@
     /* Transition effects */
     background-color: #fff;
     /* Background color */
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 .file-container:hover {
@@ -112,15 +116,39 @@
 }
 
 .file-image {
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
     border-radius: 5px;
     /* Rounded corners for the image */
     object-fit: cover;
     /* Ensures image covers the area without distortion */
 }
 
+.file-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
+.file-details {
+    flex: 1;
+    padding-left: 20px;
+}
+
+
+.download-icon {
+    font-size: 2rem;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+
+.info-item {
+    margin-bottom: 8px;
+
+
+
+}
 
 /* Media query for small screens (mobile-first approach) */
 @media (max-width: 768px) {
@@ -148,5 +176,29 @@
 
     .btn-4 {
         width: auto;
+    }
+}
+
+
+@media (max-width: 576px) {
+    .file-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .file-image,
+    .file-icon {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .file-details {
+        width: 100%;
+        padding-left: 0;
+    }
+
+    .download-icon {
+        align-self: flex-end;
     }
 }
