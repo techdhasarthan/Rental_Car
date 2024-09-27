@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import {
   Container,
@@ -40,6 +40,8 @@ const UserProfile = () => {
   });
   const [originalUserInfo, setOriginalUserInfo] = useState(userInfo);
   const [profileImagePreview, setProfileImagePreview] = useState(user); // default profile image
+
+  const fileInputRef = useRef(null); // Ref for hidden file input
 
   // Fetch profile data on mount
   useEffect(() => {
@@ -99,13 +101,17 @@ const UserProfile = () => {
   };
 
   // Handle profile image upload preview
-  // When the user selects a file, it previews the image but doesn't upload it immediately
   const handleProfileImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setUserInfo((prevInfo) => ({ ...prevInfo, profileImage: file })); // Set the file object
       setProfileImagePreview(URL.createObjectURL(file)); // Show preview of the selected image
     }
+  };
+
+  // Trigger the hidden file input when the button is clicked
+  const handleProfileImageClick = () => {
+    fileInputRef.current.click(); // This triggers the hidden file input
   };
 
   // Image upload function (triggered by a separate upload button)
@@ -128,13 +134,11 @@ const UserProfile = () => {
       if (response.data.status === "true") {
         const imageUrl = `${backendUrl}/RetrieveFile/${response.data.fileName}`;
 
-        // Update the state to use the new image URL after successful upload
         setUserInfo((prevInfo) => ({
           ...prevInfo,
           profileImage: imageUrl, // Update profile image with the URL from the backend
         }));
 
-        // Update the preview to reflect the uploaded image URL
         setProfileImagePreview(imageUrl); // Set the preview to the uploaded image
 
         toast.success("Profile image uploaded successfully!");
@@ -146,9 +150,8 @@ const UserProfile = () => {
     }
   };
 
-  // Handle save profile changes (including image if uploaded)
+  // Handle save profile changes
   const handleSave = async () => {
-    // Update the profile details without needing the profile image to be re-uploaded
     const updateUserData = {
       id: userInfo.id,
       name: userInfo.name,
@@ -210,16 +213,26 @@ const UserProfile = () => {
                 />
                 {isEditing && (
                   <>
+                    {/* Hidden File Input */}
                     <Input
                       type="file"
                       accept="image/*"
                       onChange={handleProfileImageChange}
+                      innerRef={fileInputRef}
+                      style={{ display: "none" }} // Hide file input
                     />
+                    {/* Button to trigger file input */}
+                    <Button
+                      className="profile-image-btn"
+                      onClick={handleProfileImageClick}>
+                      <i className="ri-image-add-line profile-image-icon"></i>
+                    </Button>
+                    {/* Button to upload the image */}
                     <Button
                       color="primary"
-                      className="mt-2"
+                      className="mt-4"
                       onClick={handleProfileImageUpload}>
-                      Upload Image
+                      <i className="ri-upload-line"></i> Upload Image
                     </Button>
                   </>
                 )}

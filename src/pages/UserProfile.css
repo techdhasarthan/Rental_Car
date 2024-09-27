@@ -76,6 +76,7 @@ button {
 }
 
 .profile-image-wrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -84,6 +85,45 @@ button {
 input[type="file"] {
   display: block;
   margin-top: 15px;
+}
+
+.profile-image-btn {
+  position: absolute;
+  /* Absolute position for placement */
+  top: 67%;
+
+  left: 65%;
+  /* Center horizontally */
+  transform: translate(-50%, -50%);
+  /* Center the button */
+  width: 40px;
+  /* Adjust size as needed */
+  height: 40px;
+  /* Make it circular */
+  border-radius: 50%;
+  /* Make the button circular */
+  background-color: rgb(16, 82, 230);
+  /* Button color */
+  border: none;
+  /* Remove border */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 10;
+  /* Make sure it appears above other elements */
+}
+
+.profile-image-icon {
+  font-size: 1rem;
+  /* Large icon size */
+  color: #ffffff;
+  /* Icon color */
+}
+
+.profile-image-btn:hover {
+  background-color: #0056b3;
+  /* Darker color on hover */
 }
 
 
@@ -96,5 +136,30 @@ input[type="file"] {
 
   .profile-section {
     margin-bottom: 40px;
+  }
+}
+
+
+@media only screen and (max-width:1024px) {
+  .profile-image-btn {
+    left: 70%;
+  }
+}
+
+@media only screen and (max-width:768px) {
+  .profile-image-btn {
+    left: 60%;
+  }
+}
+
+@media only screen and (max-width:425px) {
+  .profile-image-btn {
+    left: 65%;
+  }
+}
+
+@media only screen and (max-width:320px) {
+  .profile-image-btn {
+    left: 70%;
   }
 }
