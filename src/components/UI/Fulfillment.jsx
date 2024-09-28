@@ -202,7 +202,7 @@ const Fulfillment = ({ imgurl }) => {
         <Col>
           <form onSubmit={handleFulfillmentRequest}>
             <div className="pb-2">
-              <div className="d-flex date_container flex-row me-3 ps-2">
+              <div className="d-flex date_container flex-wrap  me-3 ps-2">
                 <div className="form-groups me-3">
                   <label htmlFor="startDate">Start Date & Time</label>
                   <input
