@@ -61,12 +61,14 @@ const PricingPlan = ({ setStartDateProp, setEndDateProp }) => {
   return (
     <div className="button-group mb-5">
       <div className="input-form-feild">
-        <div className="form-groups">
-          <label htmlFor="startDate">Start Date </label>
+        <div className="form-groups ">
+          <label htmlFor="startDate" className="text-white">
+            Start Date{" "}
+          </label>
           <input
             type="datetime-local"
             id="startDate"
-            className="form-control"
+            className="form-control3"
             value={startDate}
             min={getMinDateTime()} // Set min to current date/time
             onChange={handleStartDateChange} // Handle start date change
@@ -74,11 +76,13 @@ const PricingPlan = ({ setStartDateProp, setEndDateProp }) => {
         </div>
 
         <div className="form-groups">
-          <label htmlFor="endDate">End Date </label>
+          <label htmlFor="endDate" className="text-white">
+            End Date{" "}
+          </label>
           <input
             type="datetime-local"
             id="endDate"
-            className="form-control2"
+            className="form-control4"
             value={endDate}
             min={startDate || getMinDateTime()} // Set min to startDate or current date/time
             onChange={handleEndDateChange} // Handle end date change

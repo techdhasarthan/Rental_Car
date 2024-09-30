@@ -150,6 +150,10 @@
 
 }
 
+.custom-placeholder::placeholder {
+    color: black;
+}
+
 /* Media query for small screens (mobile-first approach) */
 @media (max-width: 768px) {
     .header {

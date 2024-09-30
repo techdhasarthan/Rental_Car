@@ -6,6 +6,8 @@ import "../styles/car-item.css";
 import Fulfillment from "../components/UI/Fulfillment";
 import AOS from "aos";
 import "aos/dist/aos.css"; // Import AOS styles
+import PriceDetails from "../components/UI/PriceDetails";
+import carData from "../assets/data/carData";
 
 const CarDetails = () => {
   useEffect(() => {
@@ -16,12 +18,21 @@ const CarDetails = () => {
     });
     window.scrollTo(0, 0);
   }, []);
+
+  const [options, setOption] = useState("");
   const [carDetails, setCarDetails] = useState(null); // State for car details
   const [loading, setLoading] = useState(true); // State for loading status
   const [error, setError] = useState(""); // State for error handling
+  const [responseData, setResponseData] = useState(null); // State for price details
   const { slug } = useParams(); // Extract car name (slug) from the URL
 
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+
+  // Fetch start and end dates from local storage
+  const startdate =
+    localStorage.getItem("fromdate") || localStorage.getItem("startdate");
+  const enddate =
+    localStorage.getItem("todate") || localStorage.getItem("enddate");
 
   // Fetch car details from the API
   useEffect(() => {
@@ -44,6 +55,7 @@ const CarDetails = () => {
         }
 
         const data = await response.json();
+
         const carData = {
           id: data.data?.ID || "",
           imgUrl: data.data?.["Image URL"] || "",
@@ -56,7 +68,9 @@ const CarDetails = () => {
           limitkm: data.data?.["Limit Km"] || "",
         };
 
-        setCarDetails(carData); // Store car details in context
+        setCarDetails(carData); // Update state with car details
+        localStorage.setItem("carname", carData.carName);
+        localStorage.setItem("carno", carData.car_no);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -65,7 +79,7 @@ const CarDetails = () => {
     };
 
     fetchCarDetails();
-  }, [slug, BASE_URL, setCarDetails]);
+  }, [slug, BASE_URL]);
 
   // If the data is still loading
   if (loading) {
@@ -88,69 +102,118 @@ const CarDetails = () => {
       <section>
         <h2 className="section__title text-center my-3">ENQUIRY BREAKDOWN</h2>
         <Container>
-          <Row>
-            <Col lg="5" data-aos="fade-right">
-              <img
-                src={`${BASE_URL}/RetrieveFile/` + carDetails?.imgUrl}
-                alt={carDetails?.carName}
-                className="w-100 mt-5"
-              />
-            </Col>
-
-            <Col lg="3" className="car_details" data-aos="fade-left">
-              <div className="mt-5 car_details">
-                <div className=" align-items-center car_name gap-5 mt-1">
-                  <h2 className="section__title">{carDetails?.carName}</h2>
-                </div>
-                <div className="d-flex align-items-center gap-5 mb-2 mt-2">
-                  <span className="d-flex align-items-center gap-2 fst-italic bold fs-5 fw-bold">
-                    <i className="ri-caravan-fill"></i> {carDetails?.car_no}
-                  </span>
-                </div>
-
+          <Row className="justify-content-start">
+            <Col lg="8">
+              {/* Main Wrapper */}
+              <div className="car-details-container">
+                {/* Car Image and Details Side by Side */}
                 <div
-                  className="d-flex align-items-center  carDetails"
-                  style={{ columnGap: "1rem" }}>
-                  <span className="d-flex align-items-center gap-1 section__description">
-                    <i
-                      className="ri-roadster-line"
-                      style={{ color: "#f9a826" }}></i>
-                    {carDetails?.category}
-                  </span>
+                  className="d-flex flex-wrap"
+                  style={{
+                    border: "0.5px solid #B8B8B8",
+                    borderRadius: "8px",
+                  }}>
+                  {/* Car Image */}
+                  <Col lg="5" className="mb-4 ps-5 pt-4" data-aos="fade-right">
+                    <img
+                      src={`${BASE_URL}/RetrieveFile/${carDetails?.imgUrl}`}
+                      alt={carDetails?.carName}
+                      className="w-75"
+                    />
+                  </Col>
 
-                  <span className=" d-flex align-items-center gap-1 section__description">
-                    <i
-                      className="ri-settings-2-line"
-                      style={{ color: "#f9a826" }}></i>
-                    {carDetails?.transmission_type}
-                  </span>
+                  {/* Car Details */}
+                  <Col lg="7" className="car_details" data-aos="fade-left">
+                    <div className="">
+                      {/* Car Name */}
+                      <div className="car_name mt-1">
+                        <h2 className="section__title">
+                          {carDetails?.carName}
+                        </h2>
+                      </div>
 
-                  <span className="  d-flex align-items-center gap-1 section__description">
-                    <i
-                      className="ri-wheelchair-line"
-                      style={{ color: "#f9a826" }}></i>
-                    {carDetails?.no_seat} Seats
-                  </span>
+                      {/* Car Number */}
+                      <div className="d-flex align-items-center gap-5 mb-2 mt-2">
+                        <span className="d-flex align-items-center gap-2 fst-italic bold fs-5 fw-bold">
+                          Car Number: {carDetails?.car_no}
+                        </span>
+                      </div>
+
+                      {/* Car Details */}
+                      <div
+                        className="d-flex align-items-center"
+                        style={{ columnGap: "1rem" }}>
+                        <span className="d-flex align-items-center gap-1 section__description">
+                          <i
+                            className="ri-roadster-line"
+                            style={{ color: "#f9a826" }}></i>
+                          {carDetails?.category}
+                        </span>
+
+                        <span className="d-flex align-items-center gap-1 section__description">
+                          <i
+                            className="ri-settings-2-line"
+                            style={{ color: "#f9a826" }}></i>
+                          {carDetails?.transmission_type}
+                        </span>
+
+                        <span className="d-flex align-items-center gap-1 section__description">
+                          <i
+                            className="ri-wheelchair-line"
+                            style={{ color: "#f9a826" }}></i>
+                          {carDetails?.no_seat} Seats
+                        </span>
+                      </div>
+
+                      {/* Free Kilometers */}
+                      <div
+                        className="d-flex align-items-center mt-2"
+                        style={{ columnGap: "2.1rem" }}>
+                        <span className="d-flex align-items-center gap-1 section__description">
+                          <p>
+                            <strong>Total Free Kms:</strong>{" "}
+                            {carDetails?.limitkm || "N/A"}
+                          </p>
+                        </span>
+
+                        <span className="d-flex align-items-center gap-1 section__description">
+                          <p>
+                            <strong>Pricing Plan:</strong>{" "}
+                            {carDetails?.limitkm || "N/A"}
+                          </p>
+                        </span>
+                      </div>
+                      <div
+                        className="d-flex align-items-center mt-2"
+                        style={{ columnGap: "2.1rem" }}>
+                        <span className="d-flex align-items-center gap-1 section__description">
+                          <p>
+                            <strong>Pickup Date:</strong>{" "}
+                            {startdate ? startdate.replace("T", " ") : "N/A"}
+                          </p>
+                        </span>
+                        <span className="d-flex align-items-center gap-1 section__description">
+                          <p>
+                            <strong>Drop Date:</strong>{" "}
+                            {enddate ? enddate.replace("T", " ") : "N/A"}
+                          </p>
+                        </span>
+                      </div>
+                    </div>
+                  </Col>
                 </div>
 
-                <div
-                  className=" d-flex align-items-center mt-2"
-                  style={{ columnGap: "2.1rem" }}>
-                  <span className="d-flex align-items-center gap-1 section__description">
-                    <p>
-                      <strong>Total Free Kms:</strong>{" "}
-                      {carDetails?.limitkm || "N/A"}
-                    </p>
-                  </span>
+                {/* Fulfillment Section Below */}
+                <div className="fulfillment-section mt-4">
+                  <h5 className="mb-4 fw-bold">Fulfillment Details</h5>
+                  <Fulfillment />
                 </div>
               </div>
             </Col>
 
-            <Col className="mt-4" lg="4">
-              <div className="booking-info mt-4">
-                <h5 className="mb-4 fw-bold">Fulfillment Details</h5>
-              </div>
-              <Fulfillment imgurl={`${BASE_URL}/` + carDetails?.imgUrl} />
+            {/* Pricing Details */}
+            <Col lg="4">
+              <PriceDetails startdate={startdate} enddate={enddate} />
             </Col>
           </Row>
         </Container>

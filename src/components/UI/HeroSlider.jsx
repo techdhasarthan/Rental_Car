@@ -5,6 +5,7 @@ import { Container } from "reactstrap";
 import { Link } from "react-router-dom";
 
 import "../../styles/hero-slider.css";
+import FindCarForm from "./FindCarForm";
 
 const HeroSlider = () => {
   const settings = {
@@ -29,6 +30,8 @@ const HeroSlider = () => {
             <button className="btn reserve__btn mt-4">
               <Link to="/cars">Book Now</Link>
             </button>
+
+            <FindCarForm />
           </div>
         </Container>
       </div>

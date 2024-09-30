@@ -123,7 +123,7 @@ function UploadConfirm() {
         console.error("Error uploading file:", error);
       }
     } else {
-      message.error("Please fill in all required fields.");
+      setModal(false);
     }
   };
 

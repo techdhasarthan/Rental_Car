@@ -1,10 +1,30 @@
 .search-sort-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+
+
   margin-bottom: 2rem;
 }
+
+.checkbox-group {
+  margin-bottom: 20px;
+  /* Space between checkbox groups */
+  text-align: left;
+  /* Align text to the left */
+}
+
+.checkbox-group label {
+  display: block;
+  /* Each label on a new line */
+  margin-bottom: 5px;
+  /* Space between labels */
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-right: 10px;
+  /* Space between checkbox and label */
+}
+
 
 /* Media query for mobile view */
 @media (max-width: 768px) {
@@ -56,12 +76,23 @@
 
 /* Container for the sort label and icon */
 .sort-label-container {
-  display: flex;
+
   flex-wrap: wrap;
   align-items: center;
-  gap: 1rem;
+
+  border: 1px solid rgba(101, 101, 101, 0.01);
+  border-radius: 10px;
+
 
 }
+
+
+
+
+
+
+
+
 
 /* Icon styling */
 .sort-icon {
@@ -74,6 +105,23 @@
   font-weight: bold;
   color: #333;
 }
+
+.pricing-plan-container {
+  display: flex;
+  /* Use flexbox */
+  align-items: center;
+  /* Center items vertically */
+
+  /* Optional: Space out items */
+}
+
+.apply-filters-btn,
+.apply-refresh-btn {
+  margin-left: 10px;
+  margin-bottom: 20px;
+  /* Add space between buttons and pricing plan */
+}
+
 
 .no-results-message {
   background-color: #ffff;
@@ -100,16 +148,12 @@
 .pricing-plan-container {
   background-color: #ffff;
   /* Example background color, adjust as needed */
-  padding: 20px;
-  /* Adds space inside the container */
-  border-radius: 8px;
-  /* Optional: adds rounded corners */
-  /* Optional: adds a subtle shadow */
-  border: 1px solid #ccc;
-  /* Adds a border with a light gray color */
-  margin: 20px 0;
-  /* Centers the container horizontally */
+
 }
+
+/* Default checkbox style */
+
+
 
 
 
@@ -263,6 +307,28 @@
   /* Adds some space around the container */
 }
 
+
+.search-sort-container {
+  display: flex;
+
+  /* Align children in a column */
+  align-items: flex-start;
+  /* Align to the left */
+  padding: 1rem;
+  /* Optional: Add some padding */
+}
+
+.checkbox-group {
+  margin-bottom: 1rem;
+  /* Space between each checkbox group */
+}
+
+.checkbox-group h6 {
+  margin-bottom: 0.5rem;
+  /* Space between label and checkboxes */
+}
+
+
 @media (max-width: 1024px) {
 
   /* Adjust the max-width as needed for your specific laptop view */
@@ -270,6 +336,10 @@
     flex-direction: column;
     /* Ensures that items are laid out in a row */
     gap: 20px;
+  }
+
+  .apply-refresh-btn {
+    margin-bottom: 60px;
   }
 }
 

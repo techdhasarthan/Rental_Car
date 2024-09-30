@@ -109,7 +109,7 @@ const Header = () => {
                       src={imageUrl || profile}
                       alt="avatar"
                       className="img-fluid rounded-circle me-3 shadow-lg profile"
-                      width="35"
+                      width="25"
                       onClick={toggleDropdown}
                       style={{
                         cursor: "pointer",
@@ -185,7 +185,7 @@ const Header = () => {
                     src={imageUrl || profile}
                     alt="avatar"
                     className="img-fluid rounded-circle me-3 shadow-lg profileimage "
-                    width="35"
+                    width="25"
                     onClick={toggleDropdown}
                     style={{ cursor: "pointer" }}
                   />

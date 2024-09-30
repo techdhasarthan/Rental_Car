@@ -149,6 +149,7 @@ const FileUpload = ({ id, onUploadSuccess }) => {
 
             <Form.Label>Document Number</Form.Label>
             <Form.Control
+              className="custom-placeholder"
               type="text"
               placeholder="Enter Document Number"
               value={documentNumber}
@@ -158,6 +159,7 @@ const FileUpload = ({ id, onUploadSuccess }) => {
 
             <Form.Label>Name On Document</Form.Label>
             <Form.Control
+              className="custom-placeholder text-white"
               type="text"
               placeholder="Enter Name On Document"
               value={nameOnDocument}

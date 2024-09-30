@@ -3,29 +3,31 @@ import { useParams } from "react-router-dom";
 import "../../styles/priceDetails.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { message } from "antd";
+import { message, Spin } from "antd";
 
-const PriceDetails = ({
-  response,
-  startDate,
-  endDate,
-  imgurl,
-  fulfillmentType,
-  deliveryInfo,
-  extraInfo,
-}) => {
+const PriceDetails = () => {
   const { slug } = useParams();
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+  const startdate =
+    localStorage.getItem("fromdate") || localStorage.getItem("startdate");
+  const enddate =
+    localStorage.getItem("todate") || localStorage.getItem("enddate");
+  const carno = localStorage.getItem("carno");
+  const customerId = localStorage.getItem("id");
+  const fulfillmentType = localStorage.getItem("fulfillment");
+  const deliveryInfo = localStorage.getItem("deliveryInfo");
+  const extraInfo = localStorage.getItem("extraInfo");
+  const documentCheckStatus = localStorage.getItem("status");
+
+  const [price, setPrice] = useState({});
   const [profileData, setProfileData] = useState(null);
   const [carData, setCarData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [resData, setResData] = useState(null);
-  const [statues, setStatues] = useState();
-  const customerId = localStorage.getItem("id");
+  const [showContent, setShowContent] = useState(false); // State to control content display
 
-  const pickup = fulfillmentType === "" ? "Delivery" : "Self Pickup";
-  const address = pickup === "Delivery" ? deliveryInfo : fulfillmentType;
+  // Determine pickup method
 
   // Fetch Profile Data
   const fetchProfileData = async () => {
@@ -36,21 +38,10 @@ const PriceDetails = ({
         body: JSON.stringify({ id: customerId }),
       });
 
-      if (res.ok) {
-        const data = await res.json();
-        setProfileData({
-          id: data.data.ID || "",
-          name: data.data.Name || "",
-          phoneNumber: data.data["Phone Number"] || "",
-          password: data.data.Password || "",
-          emailId: data.data["Email ID"] || "",
-          alternativeMobileNo: data.data["Alternative Mobile.NO"] || "",
-          age: data.data.Age || "",
-          signStatus: data.data["Sign Status"] || "active",
-        });
-      } else {
+      if (!res.ok)
         throw new Error(`Failed to fetch profile data. Status: ${res.status}`);
-      }
+      const data = await res.json();
+      setProfileData(data.data);
     } catch (error) {
       setError(error.message);
     }
@@ -72,26 +63,10 @@ const PriceDetails = ({
         }
       );
 
-      if (!res.ok) {
-        throw new Error("Failed to fetch car details");
-      }
+      if (!res.ok) throw new Error("Failed to fetch car details");
 
       const data = await res.json();
-      const carData = {
-        id: data.data?.ID || "",
-        imgUrl: data.data?.["Image URL"] || "",
-        carName: data.data?.["Car Name"] || "",
-        transmission_type: data.data?.["Transmission Type"] || "",
-        fuelType: data.data?.["Fuel Type"] || "",
-        no_seat: data.data?.["No.Of.Seats"] || "",
-        car_no: data.data?.["Car Number"] || "",
-        category: data.data?.["Category"] || "",
-        limitkm: data.data?.["Limit Km"] || "",
-        approveStatus: "New Booking",
-        // carImageName: data.data?.["Car Image Name"] || "",
-      };
-
-      setCarData(carData);
+      setCarData(data.data);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -105,135 +80,159 @@ const PriceDetails = ({
       console.error("Profile or car data is missing");
       return;
     }
+    if (documentCheckStatus == "true") {
+      const now = new Date();
+      const currentDateTime = now.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM
 
-    // Define the variable imageName
-    let imageName = "";
+      const combinedRequestBody = {
+        ID: customerId,
+        "Created Date": currentDateTime,
+        "Customer Name": profileData.Name,
+        "Mobile Number": profileData["Phone Number"],
+        "Email ID": profileData["Email ID"],
+        "Car Number": carData["Car Number"],
+        "Car Name": carData["Car Name"],
 
-    // Ensure imgurl is defined and is a valid URL
-    if (imgurl) {
-      try {
-        const url = new URL(imgurl); // Create a URL object
-        const pathSegments = url.pathname.split("/"); // Split the path into segments
-        imageName = pathSegments[pathSegments.length - 1]; // Get the last segment
-      } catch (error) {
-        console.error("Invalid URL:", error);
-      }
-    }
-    const now = new Date();
-    const date = now.toISOString().split("T")[0]; // Get the date part (YYYY-MM-DD)
-    const time = now.toTimeString().split(" ")[0].slice(0, 5); // Get time without seconds (HH:MM)
-    const currentDateTime = `${date}T${time}`;
+        Pickup: fulfillmentType || "",
+        "Delivery / pickup Charges": price.carRentCharges,
+        "Car Rent Charges": price.deliveryCharges,
+        "Total Payable": price.totalPayable,
+        "Approve Status": "New Booking",
+        "Car Image Name": "", // Populate if needed
+        Address: deliveryInfo || "",
+        "Extra Info": extraInfo,
+        "Pickup Date": startdate,
+        "Return Date": enddate,
+      };
 
-    // Output: YYYY-MM-DD HH:MM
-
-    const combinedRequestBody = {
-      ID: "",
-      "Created Date": currentDateTime,
-      "Customer Name": profileData.name,
-      "Mobile Number": profileData.phoneNumber,
-      "Email ID": profileData.emailId,
-      "Car Number": carData.car_no,
-      "Car Name": carData.carName,
-      "From Date": startDate,
-      "To Date": endDate,
-      "Pickup Type": pickup,
-      "Delivery / pickup Charges": response.deliveryCharges,
-      "Car Rent Charges": response.carRentCharges,
-      "Total Payable": response.totalPayable,
-      "Approve Status": carData.approveStatus,
-      "Car Image Name": imageName,
-      Address: address,
-
-      "Extra Info": extraInfo,
-    };
-
-    localStorage.setItem(
-      "combinedRequestBody",
-      JSON.stringify(combinedRequestBody)
-    );
-
-    try {
-      const apiResponse = await fetch(
-        `${BASE_URL}/updateAdminViewCustomerCarRentBookingDetails`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(combinedRequestBody),
-        }
+      localStorage.setItem(
+        "combinedRequestBody",
+        JSON.stringify(combinedRequestBody)
       );
 
-      const responseData = await apiResponse.json();
-      console.log("mmmmmmm::" + JSON.stringify(responseData["status"]));
-      setStatues(responseData["status"]);
-
-      if (responseData["status"] == "true") {
-        // Corrected from 'statues' to 'status'
-        console.log(
-          "The response data received: " + JSON.stringify(responseData.status)
+      try {
+        const apiResponse = await fetch(
+          `${BASE_URL}/updateAdminViewCustomerCarRentBookingDetails`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(combinedRequestBody),
+          }
         );
+
+        const responseData = await apiResponse.json();
         setResData(responseData.data);
 
-        console.log(
-          "Reservation successful! " + JSON.stringify(combinedRequestBody)
-        );
-
-        message.success({
-          content: "Car reservation successful!",
-          duration: 3, // Auto-close after 3 seconds
-          style: {
-            fontSize: "16px", // Larger font size
-            padding: "20px", // Increase padding for larger look
-            width: "300px",
-            marginLeft: "75vw",
-          },
-        });
-      } else if (responseData["status"] == "false") {
-        message.error({
-          content:
-            "Car is not available, please schedule for another time period.",
-          duration: 3, // Auto-close after 3 seconds
-          style: {
-            fontSize: "16px", // Larger font size
-            padding: "20px", // Increase padding for larger look
-
-            marginLeft: "60vw",
-          },
-        });
-        throw new Error(`Failed to reserve. Status: ${statues}`);
+        if (responseData.status === "true") {
+          message.success("Car reservation successful!", { duration: 3 });
+          console.log("Reservation successful!", combinedRequestBody);
+          localStorage.removeItem("fulfillment");
+          localStorage.removeItem("deliveryInfo");
+          localStorage.removeItem("extraInfo");
+        } else {
+          message.error(
+            "Car is not available, please schedule for another time period."
+          );
+          throw new Error("Failed to reserve. Status: false");
+        }
+      } catch (error) {
+        console.error("Error occurred during reservation:", error);
       }
-    } catch (error) {
-      console.error("Error occurred during reservation:", error);
+    } else {
+      message.error("please upload Document file!");
     }
   };
 
   useEffect(() => {
-    if (customerId) {
-      fetchProfileData();
-    }
-    if (slug) {
-      fetchCarDetails();
-    }
-  }, [customerId]);
+    if (customerId) fetchProfileData();
+    if (slug) fetchCarDetails();
+  }, [customerId, slug]);
+
+  useEffect(() => {
+    // Fetch price details with a delay
+    const fetchPriceDetails = async () => {
+      try {
+        const priceRequestBody = {
+          id: customerId,
+          carNumber: carno,
+          fromDate: startdate || "",
+          toDate: enddate || "",
+        };
+
+        console.log(priceRequestBody);
+        const priceResponse = await fetch(
+          `${BASE_URL}/getCustomerRentalCarsPriceDetails`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(priceRequestBody),
+          }
+        );
+
+        if (!priceResponse.ok) {
+          throw new Error("Failed to fetch price details");
+        }
+
+        const priceData = await priceResponse.json();
+        setPrice(priceData.data);
+
+        // Set a timeout to show the content after the delay (e.g., 2 seconds)
+        setTimeout(() => setShowContent(true), 2000);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
+    fetchPriceDetails();
+  }, []);
+
+  if (loading || !showContent) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "50vh",
+        }}>
+        <Spin size="large" />
+      </div>
+    );
+  }
 
   if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="price-details-container">
       <div className="price-item">
+        <span className="price-label">Weekend Charges:</span>
+        <span className="price-value">₹ {price.totalPayable || 0.0}</span>
+      </div>
+      <div className="price-item">
+        <span className="price-label">Base Fare:</span>
+        <span className="price-value">₹ {price.totalPayable || 0.0}</span>
+      </div>
+      <div className="price-item">
+        <span className="price-label">Security Deposit:</span>
+        <span className="price-value">₹ {price.totalPayable || 0.0}</span>
+      </div>
+      <div className="price-item">
         <span className="price-label">Booking Charges:</span>
-        <span className="price-value">₹ {response.carRentCharges || 0.0} </span>
+        <span className="price-value">₹ {price.carRentCharges || 0.0}</span>
       </div>
       <div className="price-item">
         <span className="price-label">Delivery Charges:</span>
-        <span className="price-value">₹ {response.deliveryCharges || 0.0}</span>
+        <span className="price-value">₹ {price.deliveryCharges || 0.0}</span>
       </div>
       <div className="price-item">
         <span className="price-label">Payable Amount:</span>
-        <span className="price-value">₹ {response.totalPayable || 0.0}</span>
+        <span className="price-value">₹ {price.totalPayable || 0.0}</span>
       </div>
-      <div className="payment text-end mt-3">
+      <div className="payment  mt-3">
         <button
-          className="warning-btn rounded p-2 me-2"
+          className="warning-btn rounded p-2 me-2 w-100 text-black fw-bolder"
           onClick={handleReserveClick}>
           Reserve Now
         </button>

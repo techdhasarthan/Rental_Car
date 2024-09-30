@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "aos/dist/aos.css"; // Import AOS styles
 import AOS from "aos";
 import { useEffect } from "react";
+import "./CarItem.css";
 
 const CarItem = (props) => {
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
@@ -27,14 +28,14 @@ const CarItem = (props) => {
 
   return (
     <Link to={`/cars/${id}`} className="text-decoration-none text-reset">
-      <Col lg="4" md="4" sm="6" className="mb-5" data-aos="flip-left">
+      <Col lg="12" md="12" sm="6" className="mb-5" data-aos="flip-left">
         <div className="car__item">
           <div className="car__img">
             <img
               src={`${BASE_URL}/RetrieveFile/` + imgUrl}
               alt=""
-              className="w-100 text-decoration-none text-reset "
-              style={{ height: "180px", border: "none" }}
+              className="w-100 text-decoration-none text-reset"
+              style={{ height: "120px", border: "none", objectFit: "cover" }}
             />
           </div>
 
