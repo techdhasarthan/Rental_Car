@@ -150,9 +150,23 @@
 
 }
 
-.custom-placeholder::placeholder {
-    color: black;
+
+
+.custom-placeholder {
+    color: white;
+    /* Default text color for the placeholder */
 }
+
+.custom-placeholder::placeholder {
+    color: white;
+    /* Placeholder text color */
+}
+
+.custom-placeholder.input-filled {
+    color: black;
+    /* Text color when input is filled */
+}
+
 
 /* Media query for small screens (mobile-first approach) */
 @media (max-width: 768px) {

@@ -17,7 +17,6 @@ const PriceDetails = () => {
   const fulfillmentType = localStorage.getItem("fulfillment");
   const deliveryInfo = localStorage.getItem("deliveryInfo");
   const extraInfo = localStorage.getItem("extraInfo");
-  const documentCheckStatus = localStorage.getItem("status");
 
   const [price, setPrice] = useState({});
   const [profileData, setProfileData] = useState(null);
@@ -76,6 +75,8 @@ const PriceDetails = () => {
 
   // Handle Reservation Click
   const handleReserveClick = async () => {
+    const documentCheckStatus = localStorage.getItem("status");
+
     if (!profileData || !carData) {
       console.error("Profile or car data is missing");
       return;
@@ -85,7 +86,7 @@ const PriceDetails = () => {
       const currentDateTime = now.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM
 
       const combinedRequestBody = {
-        ID: customerId,
+        ID: "",
         "Created Date": currentDateTime,
         "Customer Name": profileData.Name,
         "Mobile Number": profileData["Phone Number"],
@@ -93,14 +94,14 @@ const PriceDetails = () => {
         "Car Number": carData["Car Number"],
         "Car Name": carData["Car Name"],
 
-        Pickup: fulfillmentType || "",
+        "Pickup Type": fulfillmentType || "",
         "Delivery / pickup Charges": price.carRentCharges,
         "Car Rent Charges": price.deliveryCharges,
         "Total Payable": price.totalPayable,
         "Approve Status": "New Booking",
         "Car Image Name": "", // Populate if needed
         Address: deliveryInfo || "",
-        "Extra Info": extraInfo,
+        "Extra Info": extraInfo || "",
         "Pickup Date": startdate,
         "Return Date": enddate,
       };
@@ -124,7 +125,7 @@ const PriceDetails = () => {
         setResData(responseData.data);
 
         if (responseData.status === "true") {
-          message.success("Car reservation successful!", { duration: 3 });
+          message.success("Car reservation successful!");
           console.log("Reservation successful!", combinedRequestBody);
           localStorage.removeItem("fulfillment");
           localStorage.removeItem("deliveryInfo");

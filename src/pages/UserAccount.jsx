@@ -160,7 +160,7 @@ const UserProfile = () => {
       emailId: userInfo.emailId,
       alternativeMobileNo: userInfo.alternativeMobileNo,
       age: userInfo.age,
-      password: userInfo.password,
+
       signStatus: userInfo.signStatus,
       profileImage: userInfo.profileImage, // Ensure profileImage includes the uploaded one
     };

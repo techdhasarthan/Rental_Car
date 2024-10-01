@@ -1,0 +1,48 @@
+/* General form styles */
+.otp-wrap {
+    margin: 20px 0;
+}
+
+.otp-fields {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    /* Space between each input */
+}
+
+.otp-field {
+    width: 40px;
+    /* Make the input box small */
+    height: 40px;
+    /* Keep the height consistent */
+    text-align: center;
+    /* Center the text inside the box */
+    font-size: 24px;
+    /* Increase font size for better readability */
+    border: 2px solid #7f7e7e;
+    /* Add a border to the input box */
+    border-radius: 8px;
+    /* Slight rounding of the corners */
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.otp-field:focus {
+    border-color: #f9a826;
+    /* Blue border when the field is focused */
+}
+
+.label-otp {
+    font-size: 16px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .otp-field {
+        width: 40px;
+        height: 40px;
+    }
+}

@@ -27,13 +27,12 @@ const HeroSlider = () => {
               Reserve your ideal ride anytime !
             </h1>
 
-            <button className="btn reserve__btn mt-4">
+            <button className="btn reserve__btn mt-4 hide-on-mobile">
               <Link to="/cars">Book Now</Link>
             </button>
-
-            <FindCarForm />
           </div>
         </Container>
+        <FindCarForm />
       </div>
     </Slider>
   );

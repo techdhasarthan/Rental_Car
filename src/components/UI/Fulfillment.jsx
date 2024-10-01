@@ -15,6 +15,8 @@ const Fulfillment = () => {
   const [pickupLocation, setPickupLocation] = useState("");
   const location = useLocation();
   const { slug } = useParams(); // Extract car name (slug) from the URL
+  const [map, setMap] = useState(null);
+  const [searchBox, setSearchBox] = useState(null);
 
   useEffect(() => {
     AOS.init({
@@ -82,6 +84,55 @@ const Fulfillment = () => {
     handleFulfillmentRequest();
   }, [selectedOption, pickupLocation, deliveryInfo, extraInfo]);
 
+  useEffect(() => {
+    // Load Google Maps API
+    const loadScript = (src) => {
+      return new Promise((resolve) => {
+        const script = document.createElement("script");
+        script.src = src;
+        script.onload = () => resolve();
+        document.body.appendChild(script);
+      });
+    };
+
+    const initMap = async () => {
+      await loadScript(
+        `https://maps.googleapis.com/maps/api/js?key=AIzaSyDbf4ctII0wFHbVwnFy19k_2BsHWhPjFN8&libraries=places`
+      );
+      const mapInstance = new window.google.maps.Map(
+        document.createElement("div")
+      );
+      const input = document.getElementById("search-box");
+      const searchBoxInstance = new window.google.maps.places.SearchBox(input);
+
+      setMap(mapInstance);
+      setSearchBox(searchBoxInstance);
+
+      // Bias the SearchBox results towards the current map's viewport
+      mapInstance.addListener("bounds_changed", () => {
+        searchBoxInstance.setBounds(mapInstance.getBounds());
+      });
+
+      // Listen for the event when the user selects a prediction from the pick list
+      searchBoxInstance.addListener("places_changed", () => {
+        const places = searchBoxInstance.getPlaces();
+        if (places.length > 0) {
+          const location = places[0].geometry.location;
+          setDeliveryInfo(places[0].formatted_address); // Set the formatted address
+          updateLatLngFields(location); // Update latitude and longitude
+        }
+      });
+    };
+
+    initMap();
+  }, []);
+
+  const updateLatLngFields = (location) => {
+    // Update your latitude and longitude fields here
+    const lat = location.lat();
+    const lng = location.lng();
+    console.log("Latitude:", lat, "Longitude:", lng); // You can store these in state or update input fields
+  };
   return (
     <Container>
       <Col>
@@ -133,6 +184,7 @@ const Fulfillment = () => {
               {selectedOption === "delivery" && (
                 <div className="delivery-info-container">
                   <input
+                    id="search-box" // Make sure to set the ID for the input
                     required
                     type="text"
                     className="input-fieldss"

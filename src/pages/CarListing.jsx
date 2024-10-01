@@ -16,6 +16,7 @@ const CarListing = () => {
     localStorage.removeItem("todate");
   }, []);
 
+  const [count, setCount] = useState(0);
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
   const [sortByPrice, setSortOrder] = useState("");
   const [sortCategory, setSortCategory] = useState("");
@@ -35,7 +36,7 @@ const CarListing = () => {
   const [transmissionOptions, setTransmissionOptions] = useState([]);
   const [distancePlans, setDistancePlans] = useState([]);
   const [locationOptions, setLocationOptions] = useState([]);
-
+  const [color, setColor] = useState(true);
   // States for selected filters
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedFuelTypes, setSelectedFuelTypes] = useState([]);
@@ -52,9 +53,11 @@ const CarListing = () => {
   const handleSortTypeChange = (e) => setSortType(e.target.value);
   const handlePlanChange = (e) => setSelectedPlan(e.target.value);
   const handleLocationChange = (e) => setSelectedLocation(e.target.value);
+
   const handleApplyFilters = () => {
     localStorage.setItem("fromdate", startdate);
     localStorage.setItem("todate", enddate);
+
     setFilterApplied((prev) => !prev);
   };
 
@@ -181,28 +184,61 @@ const CarListing = () => {
     setSelectedLocations([]);
   };
 
+  const handleRadioChange = (setter, value, plan) => {
+    setter([value]); // Wrap the selected radio value in an array
+    setSelectedPlan(plan);
+  };
+
   return (
     <Helmet title="Cars">
       <section className="car">
         <Container>
           <Row>
             <Col lg="12">
-              <div className="pricing-plan-container">
-                <PricingPlan
-                  setStartDateProp={setStartDate}
-                  setEndDateProp={setEndDate}
-                />
+              <div className="d-flex justify-content-between align-items-center pricing-plan-container">
+                {/* Left side: PricingPlan and buttons */}
+                <div className="d-flex align-items-center gap-2">
+                  <PricingPlan
+                    setStartDateProp={setStartDate}
+                    setEndDateProp={setEndDate}
+                  />
+                  <button
+                    className="apply-filters-btn"
+                    onClick={handleApplyFilters}>
+                    Apply Filters
+                  </button>
+                  <button className="apply-refresh-btn" onClick={applyRefresh}>
+                    Refresh
+                  </button>
+                </div>
 
-                <button
-                  className="apply-filters-btn"
-                  onClick={handleApplyFilters}>
-                  Apply Filters
-                </button>
-                <button className="apply-refresh-btn" onClick={applyRefresh}>
-                  Refresh
-                </button>
+                {/* Right side: Radio Buttons for Distance Plans */}
+                <div className="radio-group d-flex flex-column ">
+                  <h6 className="fw-bolder">Select Pricing Plan</h6>
+                  <div className="plan-options d-flex">
+                    {distancePlans.map((plan, index) => (
+                      <label
+                        key={index}
+                        className={`radio-label ${
+                          selectedPlan === plan ? "selected" : ""
+                        }`}>
+                        <input
+                          type="radio"
+                          value={plan}
+                          checked={selectedPlan === plan} // Checks if the plan is selected
+                          onChange={() => {
+                            handleRadioChange(setSelectedPlans, plan, plan); // Use handleRadioChange to update the state
+                            handleApplyFilters(); // Apply filters when radio button changes
+                          }}
+                        />
+                        {plan}
+                      </label>
+                    ))}
+                  </div>
+                </div>
               </div>
             </Col>
+
             <Col lg="12" className="border-black border-1">
               <div className="search-sort-container ">
                 <div
@@ -222,9 +258,13 @@ const CarListing = () => {
                           type="checkbox"
                           value={location}
                           checked={selectedLocations.includes(location)}
-                          onChange={() =>
-                            handleCheckboxChange(setSelectedLocations, location)
-                          }
+                          onChange={() => {
+                            handleCheckboxChange(
+                              setSelectedLocations,
+                              location
+                            );
+                            handleApplyFilters();
+                          }}
                         />
                         {location}
                       </label>
@@ -240,12 +280,13 @@ const CarListing = () => {
                           type="checkbox"
                           value={category}
                           checked={selectedCategories.includes(category)}
-                          onChange={() =>
+                          onChange={() => {
                             handleCheckboxChange(
                               setSelectedCategories,
                               category
-                            )
-                          }
+                            );
+                            handleApplyFilters();
+                          }}
                         />
                         {category}
                       </label>
@@ -261,9 +302,13 @@ const CarListing = () => {
                           type="checkbox"
                           value={fuelType}
                           checked={selectedFuelTypes.includes(fuelType)}
-                          onChange={() =>
-                            handleCheckboxChange(setSelectedFuelTypes, fuelType)
-                          }
+                          onChange={() => {
+                            handleCheckboxChange(
+                              setSelectedFuelTypes,
+                              fuelType
+                            );
+                            handleApplyFilters();
+                          }}
                         />
                         {fuelType}
                       </label>
@@ -281,32 +326,15 @@ const CarListing = () => {
                           checked={selectedTransmissionTypes.includes(
                             transmissionType
                           )}
-                          onChange={() =>
+                          onChange={() => {
                             handleCheckboxChange(
                               setSelectedTransmissionTypes,
                               transmissionType
-                            )
-                          }
+                            );
+                            handleApplyFilters();
+                          }}
                         />
                         {transmissionType}
-                      </label>
-                    ))}
-                  </div>
-
-                  {/* Checkboxes for Distance Plans */}
-                  <div className="checkbox-group  pb-1">
-                    <h6 className="fw-bolder">Choose Distance</h6>
-                    {distancePlans.map((plan, index) => (
-                      <label key={index}>
-                        <input
-                          type="checkbox"
-                          value={plan}
-                          checked={selectedPlans.includes(plan)}
-                          onChange={() =>
-                            handleCheckboxChange(setSelectedPlans, plan)
-                          }
-                        />
-                        {plan}
                       </label>
                     ))}
                   </div>

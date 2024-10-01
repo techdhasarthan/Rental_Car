@@ -43,33 +43,33 @@ const DateTimeInput = () => {
 
   return (
     <Container>
-      <Row className="pt-5">
+      <Row className="">
         <div className="form-container justify-content-center">
           <form onSubmit={handleSubmit}>
             <div className="button-group pe-5">
               <div className="input-form-feild">
-                <div className="form-groups">
+                <div className="form-groups  ">
                   <label htmlFor="startDate" className="text-white text-center">
                     Pick Up
                   </label>
                   <input
                     type="datetime-local"
                     id="startDate"
-                    className="form-control"
+                    className="form-control .shadow-white"
                     value={startdate}
                     onChange={handleStartDateChange}
                     required
                   />
                 </div>
 
-                <div className="form-groups">
+                <div className="form-groups ">
                   <label htmlFor="endDate" className="text-white text-center">
                     Drop
                   </label>
                   <input
                     type="datetime-local"
                     id="endDate"
-                    className="form-control2"
+                    className="form-control2 .shadow-white"
                     value={enddate}
                     onChange={handleEndDateChange}
                     required

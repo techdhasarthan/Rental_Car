@@ -109,12 +109,17 @@ const Header = () => {
                       src={imageUrl || profile}
                       alt="avatar"
                       className="img-fluid rounded-circle me-3 shadow-lg profile"
-                      width="25"
+                      width="55"
+                      height="55"
                       onClick={toggleDropdown}
                       style={{
                         cursor: "pointer",
                         border: "1px solid black",
                         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)",
+                        borderRadius: "50%", // Ensures the image is a perfect circle
+                        objectFit: "cover", // Ensures the image fits properly inside the circle
+                        width: "55px", // Maintain a square container
+                        height: "55px", // Maintain a square container
                       }}
                     />
                     <span className="profileMobileName text-black text-decoration-none">
@@ -184,10 +189,19 @@ const Header = () => {
                   <img
                     src={imageUrl || profile}
                     alt="avatar"
-                    className="img-fluid rounded-circle me-3 shadow-lg profileimage "
-                    width="25"
+                    className="img-fluid rounded-circle me-3 shadow-lg profile"
+                    width="55"
+                    height="55"
                     onClick={toggleDropdown}
-                    style={{ cursor: "pointer" }}
+                    style={{
+                      cursor: "pointer",
+                      border: "1px solid black",
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)",
+                      borderRadius: "50%", // Ensures the image is a perfect circle
+                      objectFit: "cover", // Ensures the image fits properly inside the circle
+                      width: "35px", // Maintain a square container
+                      height: "35px", // Maintain a square container
+                    }}
                   />
                   <span className="profileName text-white">
                     {user?.name || "Guest"}

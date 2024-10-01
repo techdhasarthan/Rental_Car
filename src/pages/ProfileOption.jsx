@@ -165,7 +165,7 @@ const ProfileOptions = () => {
               </DropdownMenu>
             </Dropdown>
           </NavItem>
-
+          {/* 
           <NavItem
             className={classnames("pt-2", "px-1", {
               "nav-active": activeTab === "3",
@@ -176,7 +176,7 @@ const ProfileOptions = () => {
             <Button color={activeTab === "3" ? "primary" : "warning"}>
               <i className="fas fa-key"></i> Change Password
             </Button>
-          </NavItem>
+          </NavItem> */}
         </Nav>
 
         {/* Tab Content with Smooth Transition */}
@@ -234,9 +234,9 @@ const ProfileOptions = () => {
                 </div>
               )}
             </TabPane>
-            <TabPane tabId="3">
+            {/* <TabPane tabId="3">
               {activeTab === "3" && <ChangePassword />}
-            </TabPane>
+            </TabPane> */}
           </Fade>
         </TabContent>
       </Container>

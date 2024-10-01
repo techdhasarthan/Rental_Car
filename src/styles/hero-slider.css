@@ -106,3 +106,42 @@
   }
 
 }
+
+@media only screen and (max-width: 425px) {
+
+  .slider__item-01 {
+    padding-top: 50px;
+    text-align: center;
+    /* Center content on small screens */
+  }
+
+  .slider__content h1 {
+    font-size: 1.5rem;
+    /* Adjust heading size */
+
+  }
+
+  .slider__content {
+    margin: 0;
+    padding: 0;
+  }
+
+  .slider__content .reserve__btn {
+    display: none;
+  }
+
+  .findcarform {
+    display: flex;
+    flex-direction: column;
+    /* Stack form elements vertically */
+    position: absolute;
+    top: 0;
+    width: 100%;
+    padding: 10px;
+  }
+
+  .hide-on-mobile {
+    display: none;
+  }
+
+}

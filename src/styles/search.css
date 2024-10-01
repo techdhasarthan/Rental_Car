@@ -118,7 +118,7 @@
 .apply-filters-btn,
 .apply-refresh-btn {
   margin-left: 10px;
-  margin-bottom: 20px;
+  margin-top: 27px;
   /* Add space between buttons and pricing plan */
 }
 
@@ -265,6 +265,55 @@
   box-shadow: 2px 3px 0px rgba(36, 36, 36, 0.5);
 }
 
+.plan-options {
+  display: flex;
+  gap: 20px;
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 30px;
+  justify-content: center;
+}
+
+.plan-label {
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-weight: bold;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+}
+
+.plan-label.active {
+  background-color: #ff8c00;
+  color: white;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"]:checked+label {
+  background-color: #ff8c00;
+}
+
+/* Add these styles in your CSS file */
+.radio-label {
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-weight: bold;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.radio-label.selected {
+  background-color: #f9a826;
+  /* Change color when selected */
+  color: black;
+  /* Optional: Change text color */
+}
+
+
+
 
 
 @media (max-width: 668px) {
@@ -338,8 +387,12 @@
     gap: 20px;
   }
 
-  .apply-refresh-btn {
-    margin-bottom: 60px;
+
+
+  .pricing-plan-container {
+    display: flex;
+    flex-wrap: wrap;
+
   }
 }
 
@@ -376,4 +429,31 @@
 .form-groups .form-control-button:hover {
   background-color: #000d6b;
   /* Darker shade on hover */
+}
+
+.checkbox-group {
+  display: block;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    justify-content: space-around;
+  }
+
+  .checkbox-group label {
+    flex: 1 1 45%;
+    /* Adjusts each checkbox to take up about 45% of the container */
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .sort-label-container {
+    flex-direction: column;
+    /* Ensures vertical stacking */
+  }
 }

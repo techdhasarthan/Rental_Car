@@ -1,11 +1,23 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/signup.css";
+import LoadingSpinner from "./LoadingSpinner";
+import signupLogo from "../assets/all-images/cars-img/signup.jpg";
+import AOS from "aos";
+import "aos/dist/aos.css"; // Import AOS styles
 
 const SignUp = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // Animation duration (in milliseconds)
+      once: false, // Whether animation should happen only once
+      mirror: false, // Whether elements should animate out while scrolling past them
+    });
+    window.scrollTo(0, 0);
+  }, []);
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const [loading, setLoading] = useState(false);
@@ -73,15 +85,15 @@ const SignUp = () => {
     }
 
     // Password validation (must be exactly 4 digits)
-    const passwordRegex = /^[0-9]{4}$/;
-    if (!passwordRegex.test(password)) {
-      toast.error("Password must be exactly 4 digits.", {
-        autoClose: 3000,
-        position: "top-right",
-        className: "custom-toast-error",
-      });
-      return false;
-    }
+    // const passwordRegex = /^[0-9]{4}$/;
+    // if (!passwordRegex.test(password)) {
+    //   toast.error("Password must be exactly 4 digits.", {
+    //     autoClose: 3000,
+    //     position: "top-right",
+    //     className: "custom-toast-error",
+    //   });
+    //   return false;
+    // }
 
     return true;
   };
@@ -224,7 +236,7 @@ const SignUp = () => {
                     Age
                   </label>
                 </div>
-                <div className="input-wrap">
+                {/* <div className="input-wrap">
                   <input
                     type="password"
                     minLength="4"
@@ -239,11 +251,9 @@ const SignUp = () => {
                   <label className="label" htmlFor="password">
                     Password
                   </label>
-                </div>
+                </div> */}
                 <input type="submit" value="Sign Up" className="sign-btn" />
-                {loading && (
-                  <div className="loading">Signing up, please wait...</div>
-                )}
+                {loading && <LoadingSpinner />}
                 {error && <div className="error">{error}</div>}
                 <p className="text">
                   By signing up, I agree to the{" "}
@@ -255,8 +265,16 @@ const SignUp = () => {
           </div>
         </div>
         <div className="car-rental-info">
-          <h3 className="mb-4">Car Rental Specials</h3>
-          <p className="mt-4">Check out our latest deals on car rentals!</p>
+          <img
+            className="w-100"
+            src={signupLogo}
+            alt="car logo"
+            data-aos="fade-left"
+          />
+
+          <p className="mt-4 ps-5 ms-5">
+            Check out our latest deals on car rentals!
+          </p>
         </div>
       </div>
       <ToastContainer />

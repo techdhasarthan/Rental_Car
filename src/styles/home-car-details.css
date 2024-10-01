@@ -46,3 +46,7 @@
     background-color: #fff;
     color: #000d6b;
 }
+
+.car__img {
+    width: 100%;
+}

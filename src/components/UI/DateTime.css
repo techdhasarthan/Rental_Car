@@ -58,6 +58,9 @@
 
 }
 
+.shadow-white {
+    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8) !important;
+}
 
 .label {
     color: white;
@@ -67,4 +70,13 @@
 
 .text-center {
     text-align: center;
+}
+
+@media only screen and (max-width: 425px) {
+
+    .form-container {
+        margin: 0;
+        padding: 0;
+
+    }
 }
