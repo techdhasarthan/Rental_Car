@@ -20,8 +20,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import ProfileOption from "./ProfileOption";
 import user from "../assets/all-images/slider-img/profile.jpg"; // default profile image
+import { encrypt, decrypt } from "../components/utils/cryptoUtils";
 
 const UserProfile = () => {
+  const secretKey = process.env.REACT_APP_SECRET_KEY;
+
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const customerId = localStorage.getItem("id");
   const navigate = useNavigate();
@@ -73,7 +76,19 @@ const UserProfile = () => {
           };
 
           localStorage.setItem("name", profileData.name);
+
           localStorage.setItem("phone number", profileData.phoneNumber);
+
+          // ---------------------------------------------------------------------------------------------------------
+
+          const encryptedAge = encrypt(profileData.age);
+
+          localStorage.setItem("userAge", encryptedAge);
+
+          const userAge = localStorage.getItem("userAge");
+
+          const decryptedAge = decrypt(userAge);
+          console.log(decryptedAge, "age is printed");
 
           setUserInfo(profileData);
           setOriginalUserInfo(profileData);

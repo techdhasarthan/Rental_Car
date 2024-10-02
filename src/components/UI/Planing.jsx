@@ -61,7 +61,7 @@ const PricingPlan = ({ setStartDateProp, setEndDateProp }) => {
   return (
     <div className="button-group ">
       <div className="input-form-feild">
-        <div className="form-groups ">
+        <div className="form-groups p-0">
           <label htmlFor="startDate" className="text-white">
             Start Date{" "}
           </label>
@@ -75,7 +75,7 @@ const PricingPlan = ({ setStartDateProp, setEndDateProp }) => {
           />
         </div>
 
-        <div className="form-groups">
+        <div className="form-groups p-0">
           <label htmlFor="endDate" className="text-white">
             End Date{" "}
           </label>

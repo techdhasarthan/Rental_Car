@@ -195,19 +195,20 @@ const CarListing = () => {
         <Container>
           <Row>
             <Col lg="12">
-              <div className="d-flex justify-content-between align-items-center pricing-plan-container">
+              <div className="d-flex justify-content-between  align-items-center pricing-plan-container">
                 {/* Left side: PricingPlan and buttons */}
-                <div className="d-flex align-items-center gap-2">
+                <div className="d-flex align-items-center flex-wrap mb-3 gap-2">
                   <PricingPlan
                     setStartDateProp={setStartDate}
                     setEndDateProp={setEndDate}
                   />
+
                   <button
-                    className="apply-filters-btn"
+                    className="apply-filters-btn "
                     onClick={handleApplyFilters}>
                     Apply Filters
                   </button>
-                  <button className="apply-refresh-btn" onClick={applyRefresh}>
+                  <button className="apply-refresh-btn " onClick={applyRefresh}>
                     Refresh
                   </button>
                 </div>
@@ -240,119 +241,126 @@ const CarListing = () => {
             </Col>
 
             <Col lg="12" className="border-black border-1">
-              <div className="search-sort-container ">
-                <div
-                  className="sort-label-container border-1 shadow  pe-5 ps-5 pt-2 pb-2 me-5"
-                  style={{ borderColor: "gray" }}>
-                  {/* Checkboxes for Location */}
-                  <div className="checkbox-group ">
-                    <h6
-                      className="fw-bolder text-start pb-1"
-                      style={{ textAlign: "left" }}>
-                      Choose Location
-                    </h6>
+              <div className="search-sort-container">
+                <div className="container-fluid vh-100 d-flex">
+                  <div className="row w-100">
+                    {/* Filter Options Column */}
+                    <div className="col-md-4 col-lg-3 pb-3">
+                      <div className="border rounded-2 p-3 w-100">
+                        <h6 className="fw-bolder">Choose Location</h6>
+                        <div className="checkbox-group">
+                          {locationOptions.map((location, index) => (
+                            <label key={index} className="d-block">
+                              <input
+                                type="checkbox"
+                                value={location}
+                                checked={selectedLocations.includes(location)}
+                                onChange={() => {
+                                  handleCheckboxChange(
+                                    setSelectedLocations,
+                                    location
+                                  );
+                                  handleApplyFilters();
+                                }}
+                              />
+                              {location}
+                            </label>
+                          ))}
+                        </div>
+                      </div>
 
-                    {locationOptions.map((location, index) => (
-                      <label key={index}>
-                        <input
-                          type="checkbox"
-                          value={location}
-                          checked={selectedLocations.includes(location)}
-                          onChange={() => {
-                            handleCheckboxChange(
-                              setSelectedLocations,
-                              location
-                            );
-                            handleApplyFilters();
-                          }}
-                        />
-                        {location}
-                      </label>
-                    ))}
-                  </div>
+                      <div className="border rounded-2 p-3 w-100 mt-3">
+                        <h6 className="fw-bolder">Choose Category</h6>
+                        <div className="checkbox-group">
+                          {categoryOptions.map((category, index) => (
+                            <label key={index} className="d-block">
+                              <input
+                                type="checkbox"
+                                value={category}
+                                checked={selectedCategories.includes(category)}
+                                onChange={() => {
+                                  handleCheckboxChange(
+                                    setSelectedCategories,
+                                    category
+                                  );
+                                  handleApplyFilters();
+                                }}
+                              />
+                              {category}
+                            </label>
+                          ))}
+                        </div>
+                      </div>
 
-                  {/* Checkboxes for Category */}
-                  <div className="checkbox-group  pb-1">
-                    <h6 className="fw-bolder">Choose Category</h6>
-                    {categoryOptions.map((category, index) => (
-                      <label key={index}>
-                        <input
-                          type="checkbox"
-                          value={category}
-                          checked={selectedCategories.includes(category)}
-                          onChange={() => {
-                            handleCheckboxChange(
-                              setSelectedCategories,
-                              category
-                            );
-                            handleApplyFilters();
-                          }}
-                        />
-                        {category}
-                      </label>
-                    ))}
-                  </div>
-
-                  {/* Checkboxes for Fuel Type */}
-                  <div className="checkbox-group  pb-1">
-                    <h6 className="fw-bolder">Fuel Type</h6>
-                    {["Petrol", "Diesel", "Electric"].map((fuelType, index) => (
-                      <label key={index}>
-                        <input
-                          type="checkbox"
-                          value={fuelType}
-                          checked={selectedFuelTypes.includes(fuelType)}
-                          onChange={() => {
-                            handleCheckboxChange(
-                              setSelectedFuelTypes,
-                              fuelType
-                            );
-                            handleApplyFilters();
-                          }}
-                        />
-                        {fuelType}
-                      </label>
-                    ))}
-                  </div>
-
-                  {/* Checkboxes for Transmission Type */}
-                  <div className="checkbox-group  pb-1">
-                    <h6 className="fw-bolder">Transmission Type</h6>
-                    {["Manual", "Automatic"].map((transmissionType, index) => (
-                      <label key={index}>
-                        <input
-                          type="checkbox"
-                          value={transmissionType}
-                          checked={selectedTransmissionTypes.includes(
-                            transmissionType
+                      <div className="border rounded-2 p-3 w-100 mt-3">
+                        <h6 className="fw-bolder">Fuel Type</h6>
+                        <div className="checkbox-group">
+                          {["Petrol", "Diesel", "Electric"].map(
+                            (fuelType, index) => (
+                              <label key={index} className="d-block">
+                                <input
+                                  type="checkbox"
+                                  value={fuelType}
+                                  checked={selectedFuelTypes.includes(fuelType)}
+                                  onChange={() => {
+                                    handleCheckboxChange(
+                                      setSelectedFuelTypes,
+                                      fuelType
+                                    );
+                                    handleApplyFilters();
+                                  }}
+                                />
+                                {fuelType}
+                              </label>
+                            )
                           )}
-                          onChange={() => {
-                            handleCheckboxChange(
-                              setSelectedTransmissionTypes,
-                              transmissionType
-                            );
-                            handleApplyFilters();
-                          }}
-                        />
-                        {transmissionType}
-                      </label>
-                    ))}
+                        </div>
+                      </div>
+
+                      <div className="border rounded-2 p-3 w-100 mt-3">
+                        <h6 className="fw-bolder">Transmission Type</h6>
+                        <div className="checkbox-group">
+                          {["Manual", "Automatic"].map(
+                            (transmissionType, index) => (
+                              <label key={index} className="d-block">
+                                <input
+                                  type="checkbox"
+                                  value={transmissionType}
+                                  checked={selectedTransmissionTypes.includes(
+                                    transmissionType
+                                  )}
+                                  onChange={() => {
+                                    handleCheckboxChange(
+                                      setSelectedTransmissionTypes,
+                                      transmissionType
+                                    );
+                                    handleApplyFilters();
+                                  }}
+                                />
+                                {transmissionType}
+                              </label>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Cars Display Column */}
+                    <div className="col-md-8 col-lg-9">
+                      <Row>
+                        {filteredData.length === 0 ? (
+                          <h4 className="text-center">No cars found</h4>
+                        ) : (
+                          filteredData.map((item) => (
+                            <Col lg="4" md="6" sm="12" key={item.id}>
+                              <CarItem item={item} />
+                            </Col>
+                          ))
+                        )}
+                      </Row>
+                    </div>
                   </div>
                 </div>
-
-                <Col lg="9">
-                  <Row>
-                    {filteredData.length === 0 ? (
-                      <h4 className="text-center">No cars found</h4>
-                    ) : (
-                      filteredData.map((item) => (
-                        <Col lg="4" md="6" sm="12" key={item.id}>
-                          <CarItem item={item} />
-                        </Col>
-                      ))
-                    )}
-                  </Row>
-                </Col>
               </div>
             </Col>
           </Row>

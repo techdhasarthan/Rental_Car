@@ -19,8 +19,8 @@ const HeroSlider = () => {
     pauseOnHover: false,
   };
   return (
-    <Slider {...settings} className="hero__slider">
-      <div className="slider__item slider__item-01 mt0">
+    <div className="slider">
+      <div className="slider__item slider__item-01 ">
         <Container>
           <div className="slider__content ">
             <h1 className="text-light mb-4">
@@ -34,7 +34,7 @@ const HeroSlider = () => {
         </Container>
         <FindCarForm />
       </div>
-    </Slider>
+    </div>
   );
 };
 

@@ -378,6 +378,7 @@ input[type="radio"]:checked+label {
 }
 
 
+
 @media (max-width: 1024px) {
 
   /* Adjust the max-width as needed for your specific laptop view */
@@ -455,5 +456,9 @@ input[type="radio"]:checked+label {
   .sort-label-container {
     flex-direction: column;
     /* Ensures vertical stacking */
+  }
+
+  .btnContainer {
+    margin-bottom: 30px;
   }
 }

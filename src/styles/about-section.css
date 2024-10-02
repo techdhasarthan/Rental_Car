@@ -2,6 +2,7 @@
   column-gap: 3rem;
 }
 
+
 .about__section-item p i {
   color: #f9a826;
   font-size: 1.1rem;
@@ -11,9 +12,11 @@
   .about__section-content h2 {
     font-size: 1.5rem;
   }
+
   .about__section-item {
     column-gap: 3rem;
   }
+
   .about__section-item p {
     font-size: 0.9rem;
     margin-bottom: 0;
@@ -21,7 +24,7 @@
 
   .section__description i {
     font-size: 0.9rem !important;
-   
+
   }
 }
 
@@ -46,6 +49,7 @@
   padding: 0;
 
 }
+
 .step-card {
   background: #fff;
   border-radius: 12px;
@@ -53,11 +57,12 @@
   transition: transform 0.3s, box-shadow 0.3s;
   width: 220px;
   text-align: center;
-  padding:15px 20px ;
+  padding: 15px 20px;
   cursor: pointer;
   font-size: 0.95rem;
   line-height: 30px;
 }
+
 .step-card:hover {
   transform: scale(1.1);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
@@ -71,13 +76,15 @@
 
 
 }
+
 .step-title {
   font-size: 20px;
   margin-bottom: 10px;
   font-weight: bold;
- 
+
   color: #000d6b;
 }
+
 .step-card p {
   font-size: 16px;
   color: #666;
@@ -90,7 +97,7 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  
+
 }
 
 .faq-item {
@@ -99,22 +106,30 @@
 
 
 .form__label {
-  display: block; /* Ensures labels are on their own line */
- /* Adds space between the label and input */
-  font-weight: 500; /* Makes the label text bold */
-  font-size: 1rem; /* Sets the font size */
-  color: #7c8a97; /* Sets the color of the label text */
+  display: block;
+  /* Ensures labels are on their own line */
+  /* Adds space between the label and input */
+  font-weight: 500;
+  /* Makes the label text bold */
+  font-size: 1rem;
+  /* Sets the font size */
+  color: #7c8a97;
+  /* Sets the color of the label text */
 }
 
 /* Optional: Style for the inputs if needed */
 
 input[type="datetime-local"] {
-  width: 100%; /* Makes the input take up full width of the container */
-  padding: 0.5rem; /* Adds padding inside the input */
-  border: 1px solid #ccc; /* Sets a border for the input */
-  border-radius: 4px; /* Rounds the corners of the input */
+  width: 100%;
+  /* Makes the input take up full width of the container */
+  padding: 0.5rem;
+  /* Adds padding inside the input */
+  border: 1px solid #ccc;
+  /* Sets a border for the input */
+  border-radius: 4px;
+  /* Rounds the corners of the input */
   font-size: 1rem;
-   
+
 }
 
 .faq-header {
@@ -151,7 +166,8 @@ input[type="datetime-local"] {
 .faq-answer.open {
   padding: 15px;
   /* background-color: #f1f1f1; */
-  max-height: 500px; /* Adjust to fit the maximum height you expect */
+  max-height: 500px;
+  /* Adjust to fit the maximum height you expect */
   font-size: 0.95rem;
   line-height: 30px;
 }

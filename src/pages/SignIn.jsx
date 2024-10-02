@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,6 +16,7 @@ const SignIn = () => {
       mirror: false, // Whether elements should animate out while scrolling past them
     });
   }, []);
+
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
   const [loading, setLoading] = useState(false);
@@ -32,6 +33,12 @@ const SignIn = () => {
   });
 
   const navigate = useNavigate();
+
+  // Define refs for each OTP input field
+  const otp1Ref = useRef(null);
+  const otp2Ref = useRef(null);
+  const otp3Ref = useRef(null);
+  const otp4Ref = useRef(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -54,6 +61,26 @@ const SignIn = () => {
           [name]: value,
         },
       }));
+
+      // Automatically move to the next input
+      switch (name) {
+        case "otp1":
+          if (value) otp2Ref.current.focus();
+          break;
+        case "otp2":
+          if (value) otp3Ref.current.focus();
+          else otp1Ref.current.focus();
+          break;
+        case "otp3":
+          if (value) otp4Ref.current.focus();
+          else otp2Ref.current.focus();
+          break;
+        case "otp4":
+          if (!value) otp3Ref.current.focus();
+          break;
+        default:
+          break;
+      }
     }
   };
 
@@ -190,6 +217,7 @@ const SignIn = () => {
                     </label>
                     <div className="otp-fields">
                       <input
+                        ref={otp1Ref} // Add ref to each input field
                         type="text"
                         name="otp1"
                         className="otp-field"
@@ -200,6 +228,7 @@ const SignIn = () => {
                         onChange={handleInputChange}
                       />
                       <input
+                        ref={otp2Ref}
                         type="text"
                         name="otp2"
                         className="otp-field"
@@ -210,6 +239,7 @@ const SignIn = () => {
                         onChange={handleInputChange}
                       />
                       <input
+                        ref={otp3Ref}
                         type="text"
                         name="otp3"
                         className="otp-field"
@@ -220,6 +250,7 @@ const SignIn = () => {
                         onChange={handleInputChange}
                       />
                       <input
+                        ref={otp4Ref}
                         type="text"
                         name="otp4"
                         className="otp-field"
@@ -258,7 +289,6 @@ const SignIn = () => {
             alt="signin logo"
             data-aos="fade-left"
           />
-
           <p className="mt-4 ps-5 ms-5">
             Check out our latest deals on car rentals!
           </p>

@@ -3,11 +3,11 @@ import "../styles/home-car-details.css";
 import HeroSlider from "../components/UI/HeroSlider";
 import Helmet from "../components/Helmet/Helmet";
 import { Container, Row, Col } from "reactstrap";
-import FindCarForm from "../components/UI/FindCarForm";
+
 import AboutSection from "../components/UI/AboutSection";
 import ServicesList from "../components/UI/ServicesList";
 import carData from "../assets/data/carData"; // Ensure carData is correctly imported
-import CarItem from "../components/UI/CarItem";
+
 import BecomeDriverSection from "../components/UI/BecomeDriverSection";
 import Testimonial from "../components/UI/Testimonial";
 import { Link } from "react-router-dom";
@@ -166,22 +166,35 @@ const Home = () => {
             {/*----------------------------------------------Filter Ends-------------------------------------------*/}
             {filteredCars.length > 0 ? (
               filteredCars.map((item) => (
-                <Col lg="4" md="4" sm="6" className="mb-5" data-aos="flip-left">
+                <Col
+                  lg="4"
+                  md="6"
+                  sm="12"
+                  className="mb-4"
+                  data-aos="flip-left">
                   <Link to="/cars" className="text-decoration-none text-reset">
-                    <div className="car__item">
-                      <div className="car__img">
-                        <img src={item.imgUrl} alt="" className="w-100" />
-                      </div>
+                    {/* Card with shadow */}
+                    <div className="rounded-2 h-100 shadow">
+                      <div className=" p-3 text-center">
+                        {/* Centered Image */}
+                        <div className="d-flex justify-content-center mb-3">
+                          <img
+                            src={item.imgUrl}
+                            alt=""
+                            className="img-fluid rounded"
+                            style={{
+                              height: "130px",
+                              objectFit: "cover",
+                            }}
+                          />
+                        </div>
 
-                      <div className="car__item-content mt-4">
-                        <h4 className="section__title text-center">
-                          {item.carName}
-                        </h4>
-                        {/* <h6 className="rent__price text-center mt-2">
-                        Rs. {item.price}.00 <span>/ Day</span>
-                      </h6> */}
+                        {/* Yellow Text */}
+                        <h5 className=" fw-bold  h6">{item.carName}</h5>
 
-                        <div className="car__item-info d-flex align-items-center justify-content-between mt-3 mb-4">
+                        <div
+                          className="d-flex justify-content-evenly mt-2 mb-3 "
+                          style={{ color: "#f9a826" }}>
                           <span className="d-flex align-items-center gap-1">
                             <i className="ri-wheelchair-line"></i>{" "}
                             {item.no_seat} Seats
@@ -194,13 +207,6 @@ const Home = () => {
                             <i className="ri-drop-line"></i> {item.oil}
                           </span>
                         </div>
-
-                        {/* Button to navigate to car page */}
-                        {/* <Link to="/cars">
-                        <button className="w-100 car__item-btn car__btn-details text-white">
-                          Enquiry Now
-                        </button>
-                      </Link> */}
                       </div>
                     </div>
                   </Link>

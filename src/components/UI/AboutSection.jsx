@@ -21,7 +21,7 @@ const AboutSection = ({ aboutClass }) => {
       }>
       <Container>
         <Row>
-          <Col lg="6" md="6" data-aos="fade-right">
+          <Col lg="6" md="6" data-aos="fade-right" className="about">
             <div className="about__section-content">
               <h4 className="section__subtitle">About Us</h4>
               <h2 className="section__title">Welcome to car rent service</h2>
