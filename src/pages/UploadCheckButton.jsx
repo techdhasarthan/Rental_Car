@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import UploadConfirm from "./UploadConfirm"; // Adjust the import path as necessary
 import FileUpload from "./FileUpload"; // Adjust the import path as necessary
 import "bootstrap/dist/css/bootstrap.min.css"; // Ensure you import Bootstrap CSS
+import { decrypt, encrypt } from "../components/utils/cryptoUtils";
 
 const UploadCheckButton = () => {
   const [hasUploadedData, setHasUploadedData] = useState(null); // State to determine if data is uploaded
   const [loading, setLoading] = useState(true); // Loading state
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
-  const customerId = localStorage.getItem("id");
+  const decryptedUserID = decrypt(localStorage.getItem("id"));
+  const customerId = decryptedUserID;
 
   const checkUploadStatus = async () => {
     try {
@@ -24,7 +26,9 @@ const UploadCheckButton = () => {
       // Convert response to JSON
       const Resdata = await response.json();
 
-      localStorage.setItem("status", Resdata["status"]);
+      const encryptedStatus = encrypt(Resdata["status"]);
+
+      localStorage.setItem("status", encryptedStatus);
 
       // Assuming the response JSON structure is { status: boolean }
       setHasUploadedData(Resdata["status"]); // Ensure data.status is a boolean

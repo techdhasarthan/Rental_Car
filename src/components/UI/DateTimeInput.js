@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row } from "react-bootstrap";
 import "./DateTime.css";
+import { encrypt, decrypt } from "../utils/cryptoUtils";
 
 const DateTimeInput = () => {
   const navigate = useNavigate();
@@ -33,8 +34,12 @@ const DateTimeInput = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    localStorage.setItem("startdate", startdate);
-    localStorage.setItem("enddate", enddate);
+
+    const encryptedStartDate = encrypt(startdate);
+    const encryptedEndDate = encrypt(enddate);
+
+    localStorage.setItem("startdate", encryptedStartDate);
+    localStorage.setItem("enddate", encryptedEndDate);
 
     navigate("/cars", {
       state: { startdate, enddate },

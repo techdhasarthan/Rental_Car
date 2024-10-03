@@ -7,6 +7,7 @@ import "../styles/search.css";
 import { useState, useEffect } from "react";
 import PricingPlan from "../components/UI/Planing";
 import DateTimeInput from "../components/UI/DateTimeInput";
+import { encrypt, decrypt } from "../components/utils/cryptoUtils";
 
 const CarListing = () => {
   useEffect(() => {
@@ -55,8 +56,11 @@ const CarListing = () => {
   const handleLocationChange = (e) => setSelectedLocation(e.target.value);
 
   const handleApplyFilters = () => {
-    localStorage.setItem("fromdate", startdate);
-    localStorage.setItem("todate", enddate);
+    const encryptedStartdate = encrypt(startdate);
+    const encrypedEnddate = encrypt(enddate);
+
+    localStorage.setItem("fromdate", encryptedStartdate);
+    localStorage.setItem("todate", encrypedEnddate);
 
     setFilterApplied((prev) => !prev);
   };
@@ -206,7 +210,7 @@ const CarListing = () => {
                   <button
                     className="apply-filters-btn "
                     onClick={handleApplyFilters}>
-                    Apply Filters
+                    Modify Date
                   </button>
                   <button className="apply-refresh-btn " onClick={applyRefresh}>
                     Refresh

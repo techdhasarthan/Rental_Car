@@ -3,6 +3,7 @@ import { Button, Form, FormGroup, Label, Input, Alert } from "reactstrap";
 import axios from "axios";
 import "./Document.css";
 import { message } from "antd";
+import { decrypt } from "../components/utils/cryptoUtils";
 
 const ChangePassword = () => {
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
@@ -20,7 +21,7 @@ const ChangePassword = () => {
 
   // Fetch user ID from localStorage when component mounts
   useEffect(() => {
-    const userId = localStorage.getItem("id");
+    const userId = decrypt(localStorage.getItem("id"));
     setId(userId);
   }, []); // Empty array means this effect runs only once after the component mounts
   const handlePasswordChange = async (e) => {

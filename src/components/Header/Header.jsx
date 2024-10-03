@@ -5,6 +5,7 @@ import "../../SCSS/headerScss.scss";
 import profile from "../../assets/all-images/slider-img/profile.jpg";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { encrypt, decrypt } from "../utils/cryptoUtils";
 
 const Header = () => {
   const [user, setUserName] = useState({ name: "Guest" });
@@ -15,8 +16,11 @@ const Header = () => {
   const navigate = useNavigate();
 
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
-  const customerId = localStorage.getItem("id");
-  const imageUrl = localStorage.getItem("UserImage");
+  const decryptedUserID = localStorage.getItem("id");
+  const customerId = decrypt(decryptedUserID);
+
+  const decryptedUserImage = localStorage.getItem("UserImage");
+  const imageUrl = decrypt(decryptedUserImage);
 
   const toggleMenu = () => menuRef.current.classList.toggle("menu__active");
 
@@ -118,11 +122,11 @@ const Header = () => {
                         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)",
                         borderRadius: "50%", // Ensures the image is a perfect circle
                         objectFit: "cover", // Ensures the image fits properly inside the circle
-                        width: "55px", // Maintain a square container
-                        height: "55px", // Maintain a square container
+                        width: "35px", // Maintain a square container
+                        height: "35px", // Maintain a square container
                       }}
                     />
-                    <span className="profileMobileName text-black text-decoration-none">
+                    <span className="profileName text-white">
                       {user?.name || "Guest"}
                     </span>
                   </div>
@@ -183,31 +187,52 @@ const Header = () => {
               {!isLoggedIn ? (
                 <Link
                   to="/sign-in"
-                  className="d-flex text-white no-underline custom-hover"></Link>
+                  className="d-flex text-white no-underline custom-hover">
+                  Sign In
+                </Link>
               ) : (
-                <div className="dropdown" ref={dropdownRef}>
-                  <img
-                    src={imageUrl || profile}
-                    alt="avatar"
-                    className="img-fluid rounded-circle me-3 shadow-lg profile"
-                    width="55"
-                    height="55"
-                    onClick={toggleDropdown}
-                    style={{
-                      cursor: "pointer",
-                      border: "1px solid black",
-                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)",
-                      borderRadius: "50%", // Ensures the image is a perfect circle
-                      objectFit: "cover", // Ensures the image fits properly inside the circle
-                      width: "35px", // Maintain a square container
-                      height: "35px", // Maintain a square container
-                    }}
-                  />
-                  <span className="profileName text-white">
-                    {user?.name || "Guest"}
-                  </span>
+                <div
+                  className="dropdown"
+                  ref={dropdownRef}
+                  style={{ position: "relative" }}>
                   <div
-                    className={`dropdown-menu ${showDropdown ? "show" : ""}`}>
+                    className="d-flex align-items-center"
+                    onClick={toggleDropdown}
+                    style={{ cursor: "pointer" }}>
+                    <img
+                      src={imageUrl || profile}
+                      alt="avatar"
+                      className="img-fluid rounded-circle me-3 shadow-lg profile"
+                      width="35"
+                      height="35"
+                      style={{
+                        border: "1px solid black",
+                        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)",
+                        borderRadius: "50%", // Ensures the image is a perfect circle
+                        objectFit: "cover", // Ensures the image fits properly inside the circle
+                      }}
+                    />
+                    <div
+                      className="profileName text-white text-truncate"
+                      style={{
+                        maxWidth: "80px", // Adjust the width as necessary
+                        whiteSpace: "nowrap", // Ensures the text stays on a single line
+                        overflow: "hidden", // Hides overflow text
+                        textOverflow: "ellipsis", // Adds "..." for longer text
+                      }}>
+                      {user?.name || "Guest"}
+                    </div>
+                  </div>
+
+                  <div
+                    className={`dropdown-menu ${showDropdown ? "show" : ""}`}
+                    style={{
+                      position: "absolute",
+                      top: "100%", // Position dropdown below the image/name container
+                      left: 0,
+                      minWidth: "140px",
+                      zIndex: 1000,
+                    }}>
                     <Link
                       to="/user-account"
                       className="dropdown-item"

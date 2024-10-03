@@ -8,6 +8,7 @@ import LoadingSpinner from "./LoadingSpinner";
 import signupLogo from "../assets/all-images/cars-img/signup.jpg";
 import AOS from "aos";
 import "aos/dist/aos.css"; // Import AOS styles
+import { encrypt, decrypt } from "../components/utils/cryptoUtils";
 
 const SignUp = () => {
   useEffect(() => {
@@ -114,7 +115,8 @@ const SignUp = () => {
       );
 
       if (response.data.status === "true") {
-        localStorage.setItem("userid", response.data.data.ID);
+        const encryptedUserID = encrypt(response.data.data.ID);
+        localStorage.setItem("userid", encryptedUserID);
         toast.success("Registered Successfully.", {
           autoClose: 3000,
           position: "top-right",

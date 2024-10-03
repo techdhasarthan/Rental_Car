@@ -7,6 +7,7 @@ import "./signin.css";
 import signin from "../assets/all-images/cars-img/signin.jpg";
 import AOS from "aos";
 import "aos/dist/aos.css"; // Import AOS styles
+import { encrypt, decrypt } from "../components/utils/cryptoUtils";
 
 const SignIn = () => {
   useEffect(() => {
@@ -159,7 +160,8 @@ const SignIn = () => {
       if (response.data.status === "true") {
         toast.success("OTP verified successfully.");
         navigate("/home", { state: { user: response.data.id } });
-        localStorage.setItem("id", response.data.id); // Store user data
+        const encrypedUserID = encrypt(response.data.id);
+        localStorage.setItem("id", encrypedUserID); // Store user data
       } else {
         toast.error("Invalid OTP. Please try again.");
         setShowOtpField(false); // Hide OTP field and reset state
@@ -220,7 +222,7 @@ const SignIn = () => {
                         ref={otp1Ref} // Add ref to each input field
                         type="text"
                         name="otp1"
-                        className="otp-field"
+                        className="otp-field fs-6 fw-bold"
                         maxLength="1" // Limit to 1 digit per field
                         autoComplete="off"
                         required
@@ -231,7 +233,7 @@ const SignIn = () => {
                         ref={otp2Ref}
                         type="text"
                         name="otp2"
-                        className="otp-field"
+                        className="otp-field fs-6 fw-bold"
                         maxLength="1"
                         autoComplete="off"
                         required
@@ -242,7 +244,7 @@ const SignIn = () => {
                         ref={otp3Ref}
                         type="text"
                         name="otp3"
-                        className="otp-field"
+                        className="otp-field fs-6 fw-bold"
                         maxLength="1"
                         autoComplete="off"
                         required
@@ -253,7 +255,7 @@ const SignIn = () => {
                         ref={otp4Ref}
                         type="text"
                         name="otp4"
-                        className="otp-field"
+                        className="otp-field fs-6 fw-bold"
                         maxLength="1"
                         autoComplete="off"
                         required

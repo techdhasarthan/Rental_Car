@@ -15,18 +15,20 @@ import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/CommonSection";
 import "remixicon/fonts/remixicon.css";
 import "./UserProfile.css";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import ProfileOption from "./ProfileOption";
 import user from "../assets/all-images/slider-img/profile.jpg"; // default profile image
 import { encrypt, decrypt } from "../components/utils/cryptoUtils";
+import { message } from "antd";
 
 const UserProfile = () => {
   const secretKey = process.env.REACT_APP_SECRET_KEY;
 
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
-  const customerId = localStorage.getItem("id");
+  const decryptedUserID = decrypt(localStorage.getItem("id"));
+  const customerId = decryptedUserID;
+
   const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -75,31 +77,26 @@ const UserProfile = () => {
               : user, // Default or fetched image
           };
 
-          localStorage.setItem("name", profileData.name);
+          const encryptedUserName = encrypt(profileData.name);
 
-          localStorage.setItem("phone number", profileData.phoneNumber);
+          localStorage.setItem("name", encryptedUserName);
+
+          const encryptedPhoneNumber = encrypt(profileData.phoneNumber);
+
+          localStorage.setItem("phone number", encryptedPhoneNumber);
 
           // ---------------------------------------------------------------------------------------------------------
-
-          const encryptedAge = encrypt(profileData.age);
-
-          localStorage.setItem("userAge", encryptedAge);
-
-          const userAge = localStorage.getItem("userAge");
-
-          const decryptedAge = decrypt(userAge);
-          console.log(decryptedAge, "age is printed");
 
           setUserInfo(profileData);
           setOriginalUserInfo(profileData);
           setProfileImagePreview(profileData.profileImage); // Set preview to fetched image
         } else {
-          toast.error(
+          message.error(
             `Failed to fetch profile data. Status: ${response.status}`
           );
         }
       } catch (error) {
-        toast.error(`An error occurred: ${error.message}`);
+        message.error(`An error occurred: ${error.message}`);
         console.error("Error fetching profile data:", error);
       }
     };
@@ -148,7 +145,8 @@ const UserProfile = () => {
 
       if (response.data.status === "true") {
         const imageUrl = `${backendUrl}/RetrieveFile/${response.data.fileName}`;
-        localStorage.setItem("UserImage", imageUrl);
+        const encryptedImageUrl = encrypt(imageUrl);
+        localStorage.setItem("UserImage", encryptedImageUrl);
 
         setUserInfo((prevInfo) => ({
           ...prevInfo,
@@ -157,12 +155,12 @@ const UserProfile = () => {
 
         setProfileImagePreview(imageUrl); // Set the preview to the uploaded image
 
-        toast.success("Profile image uploaded successfully!");
+        message.success("Profile image uploaded successfully!");
       } else {
-        toast.error("Failed to upload profile image.");
+        message.error("Failed to upload profile image.");
       }
     } catch (error) {
-      toast.error(`Error uploading profile image: ${error.message}`);
+      message.error(`Error uploading profile image: ${error.message}`);
     }
   };
 
@@ -187,14 +185,17 @@ const UserProfile = () => {
       );
 
       if (response.status === 200) {
-        toast.success("Profile updated successfully!");
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000); // 2000 milliseconds = 2 seconds
+        message.success("Profile updated successfully!");
         setOriginalUserInfo(userInfo); // Update original info with new profile image
         setIsEditing(false); // Exit editing mode
       } else {
-        toast.error("Failed to update profile.");
+        message.error("Failed to update profile.");
       }
     } catch (error) {
-      toast.error(`Error updating profile: ${error.message}`);
+      message.error(`Error updating profile: ${error.message}`);
     }
   };
 
@@ -292,6 +293,7 @@ const UserProfile = () => {
                           name="name"
                           value={userInfo.name}
                           onChange={handleInputChange}
+                          style={{ color: "black" }}
                         />
                       </FormGroup>
                       <FormGroup className="mb-2">
@@ -304,6 +306,7 @@ const UserProfile = () => {
                           name="age"
                           value={userInfo.age}
                           onChange={handleInputChange}
+                          style={{ color: "black" }}
                         />
                       </FormGroup>
                       <FormGroup className="mb-2">
@@ -316,6 +319,7 @@ const UserProfile = () => {
                           name="phoneNumber"
                           value={userInfo.phoneNumber}
                           disabled
+                          style={{ color: "black" }}
                         />
                       </FormGroup>
                       <FormGroup className="mb-2">
@@ -328,6 +332,7 @@ const UserProfile = () => {
                           name="alternativeMobileNo"
                           value={userInfo.alternativeMobileNo}
                           onChange={handleInputChange}
+                          style={{ color: "black" }}
                         />
                       </FormGroup>
                       <FormGroup className="mb-2">
@@ -340,6 +345,7 @@ const UserProfile = () => {
                           name="emailId"
                           value={userInfo.emailId}
                           onChange={handleInputChange}
+                          style={{ color: "black" }}
                         />
                       </FormGroup>
                       <Button color="primary" onClick={handleSave}>
@@ -390,7 +396,6 @@ const UserProfile = () => {
         </Container>
         <ProfileOption />
       </section>
-      <ToastContainer />
     </Helmet>
   );
 };

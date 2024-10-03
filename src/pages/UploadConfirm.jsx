@@ -14,6 +14,7 @@ import invaild from "../../src/assets/all-images/slider-img/invaild.jpg";
 import validImage from "../../src/assets/all-images/slider-img/vaild.jpg"; // Path to the valid image
 import "aos/dist/aos.css"; // Import AOS styles
 import AOS from "aos";
+import { decrypt } from "../components/utils/cryptoUtils";
 
 function UploadConfirm() {
   const [modal, setModal] = useState(false);
@@ -30,7 +31,8 @@ function UploadConfirm() {
   const [errors, setErrors] = useState({}); // Validation errors
 
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
-  const id = localStorage.getItem("id");
+  const decryptedUserID = decrypt(localStorage.getItem("id"));
+  const id = decryptedUserID;
 
   useEffect(() => {
     AOS.init({
@@ -127,7 +129,8 @@ function UploadConfirm() {
     }
   };
 
-  const documentStatus = localStorage.getItem("status");
+  const decryptedDocumentCheckStatus = decrypt(localStorage.getItem("status"));
+  const documentStatus = decryptedDocumentCheckStatus;
 
   const handleOldFileClick = async () => {
     setIsOldFile(true);

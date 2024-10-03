@@ -12,10 +12,15 @@ import "remixicon/fonts/remixicon.css";
 import "./Document.css"; // Import the CSS file for styles
 import documentType from "../assets/all-images/document-img/document.png";
 import documentNo from "../assets/all-images/document-img/documentNo.png";
+import { decrypt } from "../components/utils/cryptoUtils";
 
 const Document = () => {
-  const username = localStorage.getItem("name");
-  const userPhoneNumber = localStorage.getItem("phone number");
+  const decryptedUserName = decrypt(localStorage.getItem("name"));
+  const username = decryptedUserName;
+  const decryptedUserPhoneNumber = decrypt(
+    localStorage.getItem("phone number")
+  );
+  const userPhoneNumber = decryptedUserPhoneNumber;
 
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 

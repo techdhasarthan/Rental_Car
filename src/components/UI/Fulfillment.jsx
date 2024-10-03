@@ -7,6 +7,7 @@ import "aos/dist/aos.css"; // Import AOS styles
 import AOS from "aos";
 import { message } from "antd";
 import { Container, Col } from "reactstrap";
+import { encrypt, decrypt } from "../utils/cryptoUtils";
 
 const Fulfillment = () => {
   const [selectedOption, setSelectedOption] = useState("delivery"); // Default active option
@@ -62,19 +63,25 @@ const Fulfillment = () => {
     localStorage.removeItem("extraInfo");
 
     // Save selected fulfillment option
-    localStorage.setItem("fulfillment", selectedOption);
+
+    const encryptedFulfillment = encrypt(selectedOption);
+
+    localStorage.setItem("fulfillment", encryptedFulfillment);
 
     // Save relevant details based on the selected option
     if (selectedOption === "selfPickup") {
       if (pickupLocation) {
-        localStorage.setItem("deliveryInfo", pickupLocation);
+        const encryptedPickupLocation = encrypt(pickupLocation);
+        localStorage.setItem("deliveryInfo", encryptedPickupLocation);
       }
     } else if (selectedOption === "delivery") {
       if (deliveryInfo) {
-        localStorage.setItem("deliveryInfo", deliveryInfo);
+        const encryptedDeliveryInfo = encrypt(deliveryInfo);
+        localStorage.setItem("deliveryInfo", encryptedDeliveryInfo);
       }
       if (extraInfo) {
-        localStorage.setItem("extraInfo", extraInfo);
+        const encryptedExtraInfo = encrypt(extraInfo);
+        localStorage.setItem("extraInfo", encryptedExtraInfo);
       }
     }
   };

@@ -19,10 +19,12 @@ import ChangePassword from "./ChangePassword"; // Component for Change Password
 import { useState, useEffect } from "react";
 import "./UserProfile.css"; // Import your custom CSS
 import HorizontalCard from "../components/UI/Card";
+import { decrypt } from "../components/utils/cryptoUtils";
 
 const ProfileOptions = () => {
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
-  const ID = localStorage.getItem("id");
+  const decryptedUserID = decrypt(localStorage.getItem("id"));
+  const ID = decryptedUserID;
   const [activeTab, setActiveTab] = useState("1");
   const [fadeIn, setFadeIn] = useState(true);
   const [bookingOption, setBookingOption] = useState("Upcoming Booking"); // Default content option

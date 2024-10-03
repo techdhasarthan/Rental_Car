@@ -7,7 +7,7 @@ import Fulfillment from "../components/UI/Fulfillment";
 import AOS from "aos";
 import "aos/dist/aos.css"; // Import AOS styles
 import PriceDetails from "../components/UI/PriceDetails";
-import carData from "../assets/data/carData";
+import { encrypt, decrypt } from "../components/utils/cryptoUtils";
 
 const CarDetails = () => {
   useEffect(() => {
@@ -29,10 +29,14 @@ const CarDetails = () => {
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
   // Fetch start and end dates from local storage
-  const startdate =
-    localStorage.getItem("fromdate") || localStorage.getItem("startdate");
-  const enddate =
-    localStorage.getItem("todate") || localStorage.getItem("enddate");
+  const decryptedFromDate = decrypt(localStorage.getItem("fromdate"));
+  const decryptedStartDate = decrypt(localStorage.getItem("startdate"));
+  const startdate = decryptedFromDate || decryptedStartDate;
+
+  const decryptedTodate = decrypt(localStorage.getItem("todate"));
+  const decryptedEnddate = decrypt(localStorage.getItem("enddate"));
+
+  const enddate = decryptedTodate || decryptedEnddate;
 
   // Fetch car details from the API
   useEffect(() => {
@@ -69,8 +73,12 @@ const CarDetails = () => {
         };
 
         setCarDetails(carData); // Update state with car details
-        localStorage.setItem("carname", carData.carName);
-        localStorage.setItem("carno", carData.car_no);
+
+        const encryptedCarName = encrypt(carData.carName);
+        const encryptedCarNo = encrypt(carData.car_no);
+
+        localStorage.setItem("carname", encryptedCarName);
+        localStorage.setItem("carno", encryptedCarNo);
       } catch (err) {
         setError(err.message);
       } finally {

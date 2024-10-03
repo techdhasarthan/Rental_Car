@@ -4,19 +4,38 @@ import "../../styles/priceDetails.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { message, Spin } from "antd";
+import { encrypt, decrypt } from "../utils/cryptoUtils";
 
 const PriceDetails = () => {
   const { slug } = useParams();
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
-  const startdate =
-    localStorage.getItem("fromdate") || localStorage.getItem("startdate");
-  const enddate =
-    localStorage.getItem("todate") || localStorage.getItem("enddate");
-  const carno = localStorage.getItem("carno");
-  const customerId = localStorage.getItem("id");
-  const fulfillmentType = localStorage.getItem("fulfillment");
-  const deliveryInfo = localStorage.getItem("deliveryInfo");
-  const extraInfo = localStorage.getItem("extraInfo");
+  const fromdate = localStorage.getItem("fromdate");
+
+  const decryptedFromdate = decrypt(fromdate);
+
+  const startDate = localStorage.getItem("startdate");
+  const decryptedStartdate = decrypt(startDate);
+
+  const startdate = decryptedFromdate || decryptedStartdate;
+
+  const todate = localStorage.getItem("todate");
+  const decryptedTodate = decrypt(todate);
+
+  const endDate = localStorage.getItem("enddate");
+  const decryptedEnddate = decrypt(endDate);
+  const enddate = decryptedTodate || decryptedEnddate;
+
+  const decryptedCarNo = decrypt(localStorage.getItem("carno"));
+  const carno = decryptedCarNo;
+  const decryptedUserID = decrypt(localStorage.getItem("id"));
+  const customerId = decryptedUserID;
+  const decryptedFulfillmentType = decrypt(localStorage.getItem("fulfillment"));
+  const fulfillmentType = decryptedFulfillmentType;
+  const decryptedDeliveryInfo = decrypt(localStorage.getItem("deliveryInfo"));
+  const deliveryInfo = decryptedDeliveryInfo;
+
+  const decryptedExtraInfo = decrypt(localStorage.getItem("extraInfo"));
+  const extraInfo = decryptedExtraInfo;
 
   const [price, setPrice] = useState({});
   const [profileData, setProfileData] = useState(null);
@@ -75,7 +94,11 @@ const PriceDetails = () => {
 
   // Handle Reservation Click
   const handleReserveClick = async () => {
-    const documentCheckStatus = localStorage.getItem("status");
+    const decryptedDocumentCheckStatus = decrypt(
+      localStorage.getItem("status")
+    );
+
+    const documentCheckStatus = decryptedDocumentCheckStatus;
 
     if (!profileData || !carData) {
       console.error("Profile or car data is missing");
@@ -106,10 +129,11 @@ const PriceDetails = () => {
         "Return Date": enddate,
       };
 
-      localStorage.setItem(
-        "combinedRequestBody",
+      const encryptedCombinedRequestBody = encrypt(
         JSON.stringify(combinedRequestBody)
       );
+
+      localStorage.setItem("combinedRequestBody", encryptedCombinedRequestBody);
 
       try {
         const apiResponse = await fetch(

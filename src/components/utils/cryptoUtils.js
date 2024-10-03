@@ -8,6 +8,11 @@ export const encrypt = (text) => {
 
 export const decrypt = (cipherText) => {
   const secretKey = process.env.REACT_APP_SECRET_KEY; // Use the same key for decryption
-  const bytes = CryptoJS.AES.decrypt(cipherText, secretKey);
-  return bytes.toString(CryptoJS.enc.Utf8);
+  try {
+    const bytes = CryptoJS.AES.decrypt(cipherText, secretKey);
+    return bytes.toString(CryptoJS.enc.Utf8) || null; // Return null if decryption results in an empty string
+  } catch (error) {
+    console.error("Decryption failed:", error);
+    return null; // Return null in case of an error
+  }
 };
