@@ -56,12 +56,6 @@ const CarListing = () => {
   const handleLocationChange = (e) => setSelectedLocation(e.target.value);
 
   const handleApplyFilters = () => {
-    const encryptedStartdate = encrypt(startdate);
-    const encrypedEnddate = encrypt(enddate);
-
-    localStorage.setItem("fromdate", encryptedStartdate);
-    localStorage.setItem("todate", encrypedEnddate);
-
     setFilterApplied((prev) => !prev);
   };
 
@@ -134,6 +128,31 @@ const CarListing = () => {
 
   // Apply Filters
   useEffect(() => {
+    // Function to format date as 'YYYY-MM-DD HH:MM'
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+      const day = String(d.getDate()).padStart(2, "0");
+      const hours = String(d.getHours()).padStart(2, "0");
+      const minutes = String(d.getMinutes()).padStart(2, "0");
+
+      return `${year}-${month}-${day} ${hours}:${minutes}`;
+    };
+
+    const encryptedStartdate = encrypt(formatDate(startdate));
+    const encryptedEnddate = encrypt(formatDate(enddate));
+
+    localStorage.setItem("fromdate", encryptedStartdate);
+    localStorage.setItem("todate", encryptedEnddate);
+
+    const fromdate =
+      decrypt(encryptedStartdate) ||
+      decrypt(localStorage.getItem("fromdate" || ""));
+    const todate =
+      decrypt(encryptedEnddate) ||
+      decrypt(localStorage.getItem("todate" || ""));
+
     const applyFilters = async () => {
       const filterData = {
         categoryArgs: selectedCategories.join(","),
@@ -141,9 +160,9 @@ const CarListing = () => {
         transmissionType: selectedTransmissionTypes.join(","),
         kmLimit: selectedPlans.join(","),
         location: selectedLocations.join(","),
-        sortByPrice,
-        startdate,
-        enddate,
+        sortByPrice: sortByPrice,
+        fromDate: fromdate,
+        toDate: todate,
       };
 
       try {
@@ -199,7 +218,7 @@ const CarListing = () => {
         <Container>
           <Row>
             <Col lg="12">
-              <div className="d-flex justify-content-between  align-items-center pricing-plan-container">
+              <div className="d-flex justify-content-between align-items-center pricing-plan-container">
                 {/* Left side: PricingPlan and buttons */}
                 <div className="d-flex align-items-center flex-wrap mb-3 gap-2">
                   <PricingPlan
@@ -208,17 +227,17 @@ const CarListing = () => {
                   />
 
                   <button
-                    className="apply-filters-btn "
+                    className="apply-filters-btn"
                     onClick={handleApplyFilters}>
                     Modify Date
                   </button>
-                  <button className="apply-refresh-btn " onClick={applyRefresh}>
+                  <button className="apply-refresh-btn" onClick={applyRefresh}>
                     Refresh
                   </button>
                 </div>
 
                 {/* Right side: Radio Buttons for Distance Plans */}
-                <div className="radio-group d-flex flex-column ">
+                <div className="radio-group d-flex flex-column">
                   <h6 className="fw-bolder">Select Pricing Plan</h6>
                   <div className="plan-options d-flex">
                     {distancePlans.map((plan, index) => (
