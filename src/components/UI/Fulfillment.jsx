@@ -43,6 +43,7 @@ const Fulfillment = () => {
       setExtraInfo("");
     } else if (selectedValue === "delivery") {
       setPickupLocation("");
+      initMap(); // Re-initialize the map when 'Delivery' is selected
     }
   };
 
@@ -63,9 +64,7 @@ const Fulfillment = () => {
     localStorage.removeItem("extraInfo");
 
     // Save selected fulfillment option
-
     const encryptedFulfillment = encrypt(selectedOption);
-
     localStorage.setItem("fulfillment", encryptedFulfillment);
 
     // Save relevant details based on the selected option
@@ -91,48 +90,44 @@ const Fulfillment = () => {
     handleFulfillmentRequest();
   }, [selectedOption, pickupLocation, deliveryInfo, extraInfo]);
 
-  useEffect(() => {
-    // Load Google Maps API
-    const loadScript = (src) => {
-      return new Promise((resolve) => {
-        const script = document.createElement("script");
-        script.src = src;
-        script.onload = () => resolve();
-        document.body.appendChild(script);
-      });
-    };
+  const loadScript = (src) => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => resolve();
+      document.body.appendChild(script);
+    });
+  };
 
-    const initMap = async () => {
-      await loadScript(
-        `https://maps.googleapis.com/maps/api/js?key=AIzaSyDbf4ctII0wFHbVwnFy19k_2BsHWhPjFN8&libraries=places`
-      );
-      const mapInstance = new window.google.maps.Map(
-        document.createElement("div")
-      );
-      const input = document.getElementById("search-box");
-      const searchBoxInstance = new window.google.maps.places.SearchBox(input);
+  const initMap = async () => {
+    await loadScript(
+      `https://maps.googleapis.com/maps/api/js?key=AIzaSyDbf4ctII0wFHbVwnFy19k_2BsHWhPjFN8&libraries=places`
+    );
 
-      setMap(mapInstance);
-      setSearchBox(searchBoxInstance);
+    const mapInstance = new window.google.maps.Map(
+      document.createElement("div")
+    );
+    const input = document.getElementById("search-box");
+    const searchBoxInstance = new window.google.maps.places.SearchBox(input);
 
-      // Bias the SearchBox results towards the current map's viewport
-      mapInstance.addListener("bounds_changed", () => {
-        searchBoxInstance.setBounds(mapInstance.getBounds());
-      });
+    setMap(mapInstance);
+    setSearchBox(searchBoxInstance);
 
-      // Listen for the event when the user selects a prediction from the pick list
-      searchBoxInstance.addListener("places_changed", () => {
-        const places = searchBoxInstance.getPlaces();
-        if (places.length > 0) {
-          const location = places[0].geometry.location;
-          setDeliveryInfo(places[0].formatted_address); // Set the formatted address
-          updateLatLngFields(location); // Update latitude and longitude
-        }
-      });
-    };
+    // Bias the SearchBox results towards the current map's viewport
+    mapInstance.addListener("bounds_changed", () => {
+      searchBoxInstance.setBounds(mapInstance.getBounds());
+    });
 
-    initMap();
-  }, []);
+    // Listen for the event when the user selects a prediction from the pick list
+    searchBoxInstance.addListener("places_changed", () => {
+      const places = searchBoxInstance.getPlaces();
+      if (places.length > 0) {
+        const location = places[0].geometry.location;
+        setDeliveryInfo(places[0].formatted_address); // Set the formatted address
+        updateLatLngFields(location); // Update latitude and longitude
+      }
+    });
+  };
 
   const updateLatLngFields = (location) => {
     // Update your latitude and longitude fields here
@@ -140,6 +135,7 @@ const Fulfillment = () => {
     const lng = location.lng();
     console.log("Latitude:", lat, "Longitude:", lng); // You can store these in state or update input fields
   };
+
   return (
     <Container>
       <Col>
@@ -147,7 +143,7 @@ const Fulfillment = () => {
           <div className="pb-2">
             <div className="fulfillment-container">
               <div className="radio-buttons">
-                <label>
+                <label style={{ cursor: "pointer" }}>
                   <input
                     required
                     type="radio"
@@ -158,7 +154,7 @@ const Fulfillment = () => {
                   />
                   Self-Pickup
                 </label>
-                <label>
+                <label style={{ cursor: "pointer" }}>
                   <input
                     required
                     type="radio"

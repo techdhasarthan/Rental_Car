@@ -12,24 +12,20 @@ import { encrypt, decrypt } from "../components/utils/cryptoUtils";
 const CarListing = () => {
   useEffect(() => {
     window.scrollTo(0, 0); // Scrolls to the top when component mounts
-
-    localStorage.removeItem("fromdate");
-    localStorage.removeItem("todate");
   }, []);
 
-  const [count, setCount] = useState(0);
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+
   const [sortByPrice, setSortOrder] = useState("");
   const [sortCategory, setSortCategory] = useState("");
   const [sortFuel, setSortFuel] = useState("");
   const [sortType, setSortType] = useState("");
-  const [selectedPlan, setSelectedPlan] = useState("");
-  const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedPlan, setSelectedPlan] = useState(""); // Keep track of selected plan
   const [startdate, setStartDate] = useState("");
   const [enddate, setEndDate] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [filterApplied, setFilterApplied] = useState(false);
-  const [refresh, setRefresh] = useState("");
+  const [refresh, setRefresh] = useState(0);
 
   // States for dynamic filter options
   const [categoryOptions, setCategoryOptions] = useState([]);
@@ -37,8 +33,7 @@ const CarListing = () => {
   const [transmissionOptions, setTransmissionOptions] = useState([]);
   const [distancePlans, setDistancePlans] = useState([]);
   const [locationOptions, setLocationOptions] = useState([]);
-  const [color, setColor] = useState(true);
-  // States for selected filters
+
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedFuelTypes, setSelectedFuelTypes] = useState([]);
   const [selectedTransmissionTypes, setSelectedTransmissionTypes] = useState(
@@ -53,10 +48,20 @@ const CarListing = () => {
   const handleSortFuelChange = (e) => setSortFuel(e.target.value);
   const handleSortTypeChange = (e) => setSortType(e.target.value);
   const handlePlanChange = (e) => setSelectedPlan(e.target.value);
-  const handleLocationChange = (e) => setSelectedLocation(e.target.value);
 
   const handleApplyFilters = () => {
     setFilterApplied((prev) => !prev);
+
+    const formattedStartdate = startdate.replace("T", " ");
+    const formattedEnddate = enddate.replace("T", " ");
+
+    // Encrypt the formatted dates
+    const encryptedStartdate = encrypt(formattedStartdate);
+    const encryptedEnddate = encrypt(formattedEnddate);
+
+    // Store the encrypted dates in localStorage
+    localStorage.setItem("startdate", encryptedStartdate);
+    localStorage.setItem("enddate", encryptedEnddate);
   };
 
   const handleCheckboxChange = (setter, value) => {
@@ -88,20 +93,25 @@ const CarListing = () => {
         );
 
         const distanceResponse = await fetch(
-          `${BASE_URL}/getDefaultPropertyValuesByName`,
+          `${BASE_URL}/getPricePlanRuleList`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ "Property Name": "Km Limit" }),
+            body: JSON.stringify({}),
           }
         );
 
         if (!distanceResponse.ok)
           throw new Error("Failed to fetch distance options");
         const distanceResult = await distanceResponse.json();
-        setDistancePlans(
-          (distanceResult.data["Property Value"] || "").split(",")
+
+        // Extract Limit Km values from the data array
+        const limitKmPlans = distanceResult.data.map(
+          (plan) => plan["Limit Km"]
         );
+
+        // Set the distance plans state with the Limit Km values
+        setDistancePlans(limitKmPlans);
 
         const locationResponse = await fetch(
           `${BASE_URL}/getDefaultPropertyValuesByName`,
@@ -128,30 +138,8 @@ const CarListing = () => {
 
   // Apply Filters
   useEffect(() => {
-    // Function to format date as 'YYYY-MM-DD HH:MM'
-    const formatDate = (date) => {
-      const d = new Date(date);
-      const year = d.getFullYear();
-      const month = String(d.getMonth() + 1).padStart(2, "0"); // Months are zero-based
-      const day = String(d.getDate()).padStart(2, "0");
-      const hours = String(d.getHours()).padStart(2, "0");
-      const minutes = String(d.getMinutes()).padStart(2, "0");
-
-      return `${year}-${month}-${day} ${hours}:${minutes}`;
-    };
-
-    const encryptedStartdate = encrypt(formatDate(startdate));
-    const encryptedEnddate = encrypt(formatDate(enddate));
-
-    localStorage.setItem("fromdate", encryptedStartdate);
-    localStorage.setItem("todate", encryptedEnddate);
-
-    const fromdate =
-      decrypt(encryptedStartdate) ||
-      decrypt(localStorage.getItem("fromdate" || ""));
-    const todate =
-      decrypt(encryptedEnddate) ||
-      decrypt(localStorage.getItem("todate" || ""));
+    const fromdate = decrypt(localStorage.getItem("startdate"));
+    const todate = decrypt(localStorage.getItem("enddate"));
 
     const applyFilters = async () => {
       const filterData = {
@@ -161,8 +149,8 @@ const CarListing = () => {
         kmLimit: selectedPlans.join(","),
         location: selectedLocations.join(","),
         sortByPrice: sortByPrice,
-        fromDate: fromdate,
-        toDate: todate,
+        fromDate: startdate ? startdate : fromdate,
+        toDate: enddate ? enddate : todate,
       };
 
       try {
@@ -195,9 +183,8 @@ const CarListing = () => {
     setSortFuel("");
     setSortType("");
     setSelectedPlan("");
-    setSelectedLocation("");
-    setStartDate("");
-    setEndDate("");
+    setSelectedLocations("");
+
     setFilterApplied(false);
     setFilteredData([]);
     setSelectedCategories([]);
@@ -206,6 +193,12 @@ const CarListing = () => {
     setSelectedPlans([]);
     setSelectedLocations([]);
   };
+
+  useEffect(() => {
+    if (distancePlans.length > 0) {
+      setSelectedPlan(distancePlans[0]); // Default plan to the first one
+    }
+  }, [distancePlans]); // Runs when distancePlans are provided
 
   const handleRadioChange = (setter, value, plan) => {
     setter([value]); // Wrap the selected radio value in an array
@@ -255,7 +248,7 @@ const CarListing = () => {
                             handleApplyFilters(); // Apply filters when radio button changes
                           }}
                         />
-                        {plan}
+                        {plan + " Km"}
                       </label>
                     ))}
                   </div>

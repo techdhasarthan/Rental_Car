@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { encrypt, decrypt } from "../utils/cryptoUtils";
 
 const PricingPlan = ({ setStartDateProp, setEndDateProp }) => {
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  // Retrieve encrypted dates from localStorage and decrypt them
+  const fromdate = decrypt(localStorage.getItem("startdate"));
+  const todate = decrypt(localStorage.getItem("enddate"));
 
+  // Use the localStorage values as initial values for state
+  const [startDate, setStartDate] = useState(fromdate);
+  const [endDate, setEndDate] = useState(todate);
+  setEndDateProp(endDate);
+  setStartDateProp(startDate);
   const location = useLocation();
   const { startdate, enddate } = location.state || {}; // Retrieve date from state
 
@@ -15,13 +22,18 @@ const PricingPlan = ({ setStartDateProp, setEndDateProp }) => {
     return now.toISOString().slice(0, 16); // Format to YYYY-MM-DDTHH:MM
   };
 
+  // Load default values for start and end dates when the component mounts
   useEffect(() => {
     if (startdate && enddate) {
-      // Use dates passed via location state if available
+      // If dates are passed via location state, use them
       setStartDate(startdate);
       setEndDate(enddate);
+    } else if (fromdate && todate) {
+      // If localStorage has the dates, use those
+      setStartDate(fromdate);
+      setEndDate(todate);
     } else {
-      // Default start and end date logic
+      // Default to a start time of 10 AM today and 10 AM next day for the end time
       const now = new Date();
       const start = new Date(now.setHours(10, 0, 0, 0)); // Today at 10 AM
       const end = new Date(start);
@@ -31,60 +43,46 @@ const PricingPlan = ({ setStartDateProp, setEndDateProp }) => {
       setStartDate(start.toISOString().slice(0, 16)); // Format to YYYY-MM-DDTHH:MM
       setEndDate(end.toISOString().slice(0, 16)); // Format to YYYY-MM-DDTHH:MM
     }
-  }, [startdate, enddate]);
+  }, [startdate, enddate, fromdate, todate]);
 
-  // Handle startDate change
+  // Update localStorage and state when startDate changes
   const handleStartDateChange = (e) => {
     const selectedStartDate = e.target.value;
     setStartDate(selectedStartDate);
-
-    // Automatically adjust endDate if it's before startDate
-    if (new Date(selectedStartDate) >= new Date(endDate)) {
-      const newEndDate = new Date(selectedStartDate);
-      newEndDate.setDate(newEndDate.getDate() + 1); // Next day
-      setEndDate(newEndDate.toISOString().slice(0, 16));
-    }
-
-    // Update parent component with new start date
-    setStartDateProp(selectedStartDate);
   };
 
-  // Handle endDate change
+  // Update localStorage and state when endDate changes
   const handleEndDateChange = (e) => {
     const selectedEndDate = e.target.value;
-    if (new Date(selectedEndDate) >= new Date(startDate)) {
-      setEndDate(selectedEndDate);
-      setEndDateProp(selectedEndDate); // Update parent component with new end date
-    }
+
+    setEndDate(selectedEndDate);
+
+    // Save the new endDate to localStorage immediately
   };
 
   return (
     <div className="button-group ">
       <div className="input-form-feild">
         <div className="form-groups p-0">
-          <label htmlFor="startDate" className="text-white">
-            Start Date{" "}
-          </label>
+          <label htmlFor="startDate">Start Date </label>
           <input
             type="datetime-local"
             id="startDate"
             className="form-control3"
             value={startDate}
-            min={getMinDateTime()} // Set min to current date/time
+            // Set min to current date/time
             onChange={handleStartDateChange} // Handle start date change
           />
         </div>
 
         <div className="form-groups p-0">
-          <label htmlFor="endDate" className="text-white">
-            End Date{" "}
-          </label>
+          <label htmlFor="endDate">End Date </label>
           <input
             type="datetime-local"
             id="endDate"
             className="form-control4"
             value={endDate}
-            min={startDate || getMinDateTime()} // Set min to startDate or current date/time
+            // Set min to startDate or current date/time
             onChange={handleEndDateChange} // Handle end date change
           />
         </div>

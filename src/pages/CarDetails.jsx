@@ -24,19 +24,33 @@ const CarDetails = () => {
   const [loading, setLoading] = useState(true); // State for loading status
   const [error, setError] = useState(""); // State for error handling
   const [responseData, setResponseData] = useState(null); // State for price details
+  const [differenceInHours, setDifferenceInHours] = useState(0); // State for difference in hours
   const { slug } = useParams(); // Extract car name (slug) from the URL
 
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
   // Fetch start and end dates from local storage
-  const decryptedFromDate = decrypt(localStorage.getItem("fromdate"));
+
   const decryptedStartDate = decrypt(localStorage.getItem("startdate"));
-  const startdate = decryptedFromDate || decryptedStartDate;
+  const startdate = decryptedStartDate;
 
-  const decryptedTodate = decrypt(localStorage.getItem("todate"));
   const decryptedEnddate = decrypt(localStorage.getItem("enddate"));
+  const enddate = decryptedEnddate;
 
-  const enddate = decryptedTodate || decryptedEnddate;
+  // Calculate difference in hours
+  useEffect(() => {
+    if (startdate && enddate) {
+      const startDateObj = new Date(startdate);
+      const endDateObj = new Date(enddate);
+
+      // Calculate the difference in milliseconds
+      const diffInMilliseconds = endDateObj - startDateObj;
+
+      // Convert milliseconds to hours
+      const hours = diffInMilliseconds / (1000 * 60 * 60);
+      setDifferenceInHours(hours);
+    }
+  }, [startdate, enddate]);
 
   // Fetch car details from the API
   useEffect(() => {
@@ -69,7 +83,8 @@ const CarDetails = () => {
           no_seat: data.data?.["No.Of.Seats"] || "",
           car_no: data.data?.["Car Number"] || "",
           category: data.data?.["Category"] || "",
-          limitkm: data.data?.["Limit Km"] || "",
+          limitkm: data.data?.["Price Per Day"] || "",
+          priceplan: data.data?.["Price Per Day"] || "",
         };
 
         setCarDetails(carData); // Update state with car details
@@ -110,8 +125,9 @@ const CarDetails = () => {
       <section>
         <h2 className="section__title text-center my-3">ENQUIRY BREAKDOWN</h2>
         <Container>
-          <Row className="justify-content-start">
-            <Col lg="8">
+          <Row className="justify-content-between">
+            {/* Car Details Section */}
+            <Col lg="8" md="12" className="mb-4">
               {/* Main Wrapper */}
               <div className="car-details-container">
                 {/* Car Image and Details Side by Side */}
@@ -122,7 +138,11 @@ const CarDetails = () => {
                     borderRadius: "8px",
                   }}>
                   {/* Car Image */}
-                  <Col lg="5" className="mb-4 ps-5 pt-4" data-aos="fade-right">
+                  <Col
+                    lg="5"
+                    md="6"
+                    className="mb-4 ps-5 pt-4"
+                    data-aos="fade-right">
                     <img
                       src={`${BASE_URL}/RetrieveFile/${carDetails?.imgUrl}`}
                       alt={carDetails?.carName}
@@ -131,7 +151,11 @@ const CarDetails = () => {
                   </Col>
 
                   {/* Car Details */}
-                  <Col lg="7" className="car_details" data-aos="fade-left">
+                  <Col
+                    lg="7"
+                    md="6"
+                    className="car_details"
+                    data-aos="fade-left">
                     <div className="">
                       {/* Car Name */}
                       <div className="car_name mt-1">
@@ -143,7 +167,7 @@ const CarDetails = () => {
                       {/* Car Number */}
                       <div className="d-flex align-items-center gap-5 mb-2 mt-2">
                         <span className="d-flex align-items-center gap-2 fst-italic bold fs-5 fw-bold">
-                          Car Number: {carDetails?.car_no}
+                          Car Number : {carDetails?.car_no}
                         </span>
                       </div>
 
@@ -151,21 +175,27 @@ const CarDetails = () => {
                       <div
                         className="d-flex align-items-center"
                         style={{ columnGap: "1rem" }}>
-                        <span className="d-flex align-items-center gap-1 section__description">
+                        <span
+                          className="d-flex align-items-center gap-1 section__description"
+                          style={{ fontWeight: "bold", color: "black" }}>
                           <i
                             className="ri-roadster-line"
                             style={{ color: "#f9a826" }}></i>
                           {carDetails?.category}
                         </span>
 
-                        <span className="d-flex align-items-center gap-1 section__description">
+                        <span
+                          className="d-flex align-items-center gap-1 section__description"
+                          style={{ fontWeight: "bold", color: "black" }}>
                           <i
                             className="ri-settings-2-line"
                             style={{ color: "#f9a826" }}></i>
                           {carDetails?.transmission_type}
                         </span>
 
-                        <span className="d-flex align-items-center gap-1 section__description">
+                        <span
+                          className="d-flex align-items-center gap-1 section__description"
+                          style={{ fontWeight: "bold", color: "black" }}>
                           <i
                             className="ri-wheelchair-line"
                             style={{ color: "#f9a826" }}></i>
@@ -178,35 +208,43 @@ const CarDetails = () => {
                         className="d-flex align-items-center mt-2"
                         style={{ columnGap: "2.1rem" }}>
                         <span className="d-flex align-items-center gap-1 section__description">
-                          <p>
-                            <strong>Total Free Kms:</strong>{" "}
+                          <p style={{ fontWeight: "bold", color: "black" }}>
+                            <strong>Total Free Kms :</strong>{" "}
                             {carDetails?.limitkm || "N/A"}
                           </p>
                         </span>
 
                         <span className="d-flex align-items-center gap-1 section__description">
-                          <p>
-                            <strong>Pricing Plan:</strong>{" "}
-                            {carDetails?.limitkm || "N/A"}
+                          <p style={{ fontWeight: "bold", color: "black" }}>
+                            <strong>Pricing Plan :</strong>{" "}
+                            {carDetails?.priceplan || "N/A"}
                           </p>
                         </span>
                       </div>
                       <div
-                        className="d-flex align-items-center mt-2"
+                        className="d-flex align-items-center "
                         style={{ columnGap: "2.1rem" }}>
                         <span className="d-flex align-items-center gap-1 section__description">
-                          <p>
-                            <strong>Pickup Date:</strong>{" "}
+                          <p style={{ fontWeight: "bold", color: "black" }}>
+                            <strong>Pickup Date : </strong>{" "}
                             {startdate ? startdate.replace("T", " ") : "N/A"}
                           </p>
                         </span>
                         <span className="d-flex align-items-center gap-1 section__description">
-                          <p>
-                            <strong>Drop Date:</strong>{" "}
+                          <p style={{ fontWeight: "bold", color: "black" }}>
+                            <strong>Drop Date :</strong>{" "}
                             {enddate ? enddate.replace("T", " ") : "N/A"}
                           </p>
                         </span>
                       </div>
+                      <span className="d-flex align-items-center gap-1 section__description">
+                        <p style={{ fontWeight: "bold", color: "black" }}>
+                          <strong>Duration(Hours) :</strong>{" "}
+                          {differenceInHours
+                            ? differenceInHours.toFixed(2)
+                            : "N/A"}
+                        </p>
+                      </span>
                     </div>
                   </Col>
                 </div>
@@ -219,8 +257,8 @@ const CarDetails = () => {
               </div>
             </Col>
 
-            {/* Pricing Details */}
-            <Col lg="4">
+            {/* Pricing Details Section */}
+            <Col lg="4" md="12">
               <PriceDetails startdate={startdate} enddate={enddate} />
             </Col>
           </Row>

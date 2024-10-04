@@ -17,7 +17,7 @@ const DateTimeInput = () => {
     const formattedNow = now.toISOString().slice(0, 16); // Format to "YYYY-MM-DDTHH:mm"
 
     setStartDate(formattedNow);
-    // Set end date to one hour later (you can adjust this logic as needed)
+    // Set end date to one hour later
     const later = new Date(now.getTime() + 60 * 60 * 1000); // Add one hour
     const formattedLater = later.toISOString().slice(0, 16); // Format to "YYYY-MM-DDTHH:mm"
 
@@ -35,8 +35,14 @@ const DateTimeInput = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const encryptedStartDate = encrypt(startdate);
-    const encryptedEndDate = encrypt(enddate);
+    const formattedStartdate = startdate.replace("T", " ");
+    const formattedEnddate = enddate.replace("T", " ");
+
+    const encryptedStartDate = encrypt(formattedStartdate);
+    const encryptedEndDate = encrypt(formattedEnddate);
+
+    console.log("Submitting startdate:", formattedStartdate);
+    console.log("Submitting enddate:", formattedEnddate);
 
     localStorage.setItem("startdate", encryptedStartDate);
     localStorage.setItem("enddate", encryptedEndDate);

@@ -9,21 +9,15 @@ import { encrypt, decrypt } from "../utils/cryptoUtils";
 const PriceDetails = () => {
   const { slug } = useParams();
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
-  const fromdate = localStorage.getItem("fromdate");
-
-  const decryptedFromdate = decrypt(fromdate);
 
   const startDate = localStorage.getItem("startdate");
   const decryptedStartdate = decrypt(startDate);
 
-  const startdate = decryptedFromdate || decryptedStartdate;
-
-  const todate = localStorage.getItem("todate");
-  const decryptedTodate = decrypt(todate);
+  const startdate = decryptedStartdate;
 
   const endDate = localStorage.getItem("enddate");
   const decryptedEnddate = decrypt(endDate);
-  const enddate = decryptedTodate || decryptedEnddate;
+  const enddate = decryptedEnddate;
 
   const decryptedCarNo = decrypt(localStorage.getItem("carno"));
   const carno = decryptedCarNo;

@@ -12,7 +12,7 @@ const CarItem = (props) => {
     "Car Name": carName,
     "Transmission Type": transmissionType,
     "Fuel Type": oil,
-
+    "Price Per Day": priceperday,
     "No.Of.Seats": noSeat,
     "Car Number": car_no,
     ID: id,
