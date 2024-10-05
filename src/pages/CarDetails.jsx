@@ -258,18 +258,21 @@ const CarDetails = () => {
                           </p>
                         </span>
                       </div>
-                      <span className="d-flex align-items-center gap-1 section__description">
-                        <p style={{ fontWeight: "bold", color: "black" }}>
-                          <strong>Duration :</strong>{" "}
-                          {differenceInHours ? differenceInHours : "N/A"} Hrs
-                        </p>
-                      </span>
-
-                      <span className="d-flex align-items-center gap-1 section__description">
-                        <p style={{ fontWeight: "bold", color: "black" }}>
-                          <strong> Free Km : </strong> {freeKm} Km
-                        </p>
-                      </span>
+                      <div className="d-flex align-items-center section__description">
+                        <span className="me-3">
+                          {" "}
+                          {/* Adds margin to the end (right side) of this span */}
+                          <p style={{ fontWeight: "bold", color: "black" }}>
+                            <strong>Duration :</strong>{" "}
+                            {differenceInHours ? differenceInHours : "N/A"} Hrs
+                          </p>
+                        </span>
+                        <span>
+                          <p style={{ fontWeight: "bold", color: "black" }}>
+                            <strong>Free Km :</strong> {freeKm} Km
+                          </p>
+                        </span>
+                      </div>
                     </div>
                   </Col>
                 </div>

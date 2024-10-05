@@ -192,7 +192,8 @@ function UploadConfirm() {
                     <Form.Control
                       as="select"
                       value={selectedDocumentType}
-                      onChange={handleDocumentTypeChange}>
+                      onChange={handleDocumentTypeChange}
+                      style={{ color: "black" }}>
                       <option value="">Select Document Type</option>
                       <option value="Driving License">Driving License</option>
                       <option value="Aadhar Card">Aadhar Card</option>
@@ -208,6 +209,7 @@ function UploadConfirm() {
                       type="text"
                       value={documentNumber}
                       onChange={(e) => setDocumentNumber(e.target.value)}
+                      style={{ color: "black" }}
                     />
                     {errors.documentNumber && (
                       <p className="error">{errors.documentNumber}</p>
@@ -218,7 +220,9 @@ function UploadConfirm() {
                       type="text"
                       value={nameOnDocument}
                       onChange={(e) => setNameOnDocument(e.target.value)}
+                      style={{ color: "black" }} // Set the text color to black
                     />
+
                     {errors.nameOnDocument && (
                       <p className="error">{errors.nameOnDocument}</p>
                     )}
@@ -230,6 +234,7 @@ function UploadConfirm() {
                           type="date"
                           value={issueDate}
                           onChange={(e) => setIssueDate(e.target.value)}
+                          style={{ color: "black" }}
                         />
                         {errors.issueDate && (
                           <p className="error">{errors.issueDate}</p>
@@ -240,6 +245,7 @@ function UploadConfirm() {
                           type="date"
                           value={expiryDate}
                           onChange={(e) => setExpiryDate(e.target.value)}
+                          style={{ color: "black" }}
                         />
                         {errors.expiryDate && (
                           <p className="error">{errors.expiryDate}</p>
@@ -253,6 +259,7 @@ function UploadConfirm() {
                       accept="image/*"
                       multiple
                       onChange={handleFileChange}
+                      style={{ color: "black" }}
                     />
                     {errors.files && <p className="error">{errors.files}</p>}
                   </Form.Group>

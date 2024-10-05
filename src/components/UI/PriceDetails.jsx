@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { message, Spin } from "antd";
 import { encrypt, decrypt } from "../utils/cryptoUtils";
 import axios from "axios";
+import PacmanLoader from "react-spinners/PacmanLoader";
 
 const PriceDetails = ({
   totalPayable,
@@ -73,6 +74,20 @@ const PriceDetails = ({
   const [resData, setResData] = useState(null);
   const [showContent, setShowContent] = useState(false); // State to control content display
   const [isReserving, setIsReserving] = useState(false); // State for reservation loading
+  const [reservationLoading, setReservationLoading] = useState(false);
+
+  const overlayStyle = {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.7)", // Semi-transparent black
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1000, // Ensure it is on top of other content
+  };
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -178,7 +193,7 @@ const PriceDetails = ({
   if (error) return <div>Error: {error}</div>;
 
   const handleReserveClick = async () => {
-    setIsReserving(true); // Start the reservation loading state
+    setReservationLoading(true); // Start the reservation loading overlay
     const decryptedDocumentCheckStatus = decrypt(
       localStorage.getItem("status")
     );
@@ -242,14 +257,28 @@ const PriceDetails = ({
         console.error("Error occurred during reservation:", error);
       } finally {
         setIsReserving(false); // End the reservation loading state
+        setReservationLoading(false); // Hide the reservation overlay
       }
     } else {
       message.error("Please upload Document file!");
+      setReservationLoading(false); // Hide the reservation overlay
     }
   };
 
   return (
     <div className="price-details-container">
+      {reservationLoading && (
+        <div style={overlayStyle}>
+          <PacmanLoader
+            color="#f9a826"
+            loading={reservationLoading}
+            size={40}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+            //HashLoader
+          />
+        </div>
+      )}
       {loading ? (
         <div
           style={{
@@ -258,10 +287,7 @@ const PriceDetails = ({
             justifyContent: "space-evenly",
             marginRight: "30px",
           }}>
-          {" "}
-          {/* Flexbox for horizontal alignment */}
-          <Spin size="large" />{" "}
-          {/* Add some margin to the right of the spinner */}
+          <Spin size="large" />
           <h5>Please wait ....</h5>
         </div>
       ) : (

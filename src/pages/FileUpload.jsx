@@ -154,6 +154,7 @@ const FileUpload = ({ id, onUploadSuccess }) => {
               placeholder="Enter Document Number"
               value={documentNumber}
               onChange={(e) => setDocumentNumber(e.target.value)}
+              style={{ color: "black" }}
             />
             <br />
 
@@ -164,6 +165,7 @@ const FileUpload = ({ id, onUploadSuccess }) => {
               placeholder="Enter Name On Document"
               value={nameOnDocument}
               onChange={(e) => setNameOnDocument(e.target.value)}
+              style={{ color: "black" }}
             />
 
             {selectedDocumentType === "Driving License" && (
@@ -174,6 +176,7 @@ const FileUpload = ({ id, onUploadSuccess }) => {
                     type="date"
                     value={issueDate}
                     onChange={(e) => setIssueDate(e.target.value)}
+                    style={{ color: "black" }}
                   />
                 </div>
                 <div className="col-md-6">
@@ -182,6 +185,7 @@ const FileUpload = ({ id, onUploadSuccess }) => {
                     type="date"
                     value={expiryDate}
                     onChange={(e) => setExpiryDate(e.target.value)}
+                    style={{ color: "black" }}
                   />
                 </div>
               </div>
@@ -190,7 +194,12 @@ const FileUpload = ({ id, onUploadSuccess }) => {
             <br />
 
             <Form.Label>File Upload</Form.Label>
-            <Form.Control type="file" multiple onChange={handleFileChange} />
+            <Form.Control
+              type="file"
+              multiple
+              onChange={handleFileChange}
+              style={{ color: "black" }}
+            />
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>

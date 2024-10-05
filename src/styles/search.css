@@ -3,7 +3,7 @@
   align-items: center;
 
 
-
+  margin-bottom: 2rem;
 }
 
 .checkbox-group {
@@ -287,9 +287,9 @@
   color: white;
 }
 
-input[type="radio"] {
+/* input[type="radio"] {
   display: none;
-}
+} */
 
 input[type="radio"]:checked+label {
   background-color: #ff8c00;
