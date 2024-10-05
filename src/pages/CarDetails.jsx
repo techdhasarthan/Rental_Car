@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "reactstrap";
 import Helmet from "../components/Helmet/Helmet";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import "../styles/car-item.css";
 import Fulfillment from "../components/UI/Fulfillment";
 import AOS from "aos";
@@ -10,6 +10,14 @@ import PriceDetails from "../components/UI/PriceDetails";
 import { encrypt, decrypt } from "../components/utils/cryptoUtils";
 
 const CarDetails = () => {
+  const { id } = useParams();
+  const location = useLocation();
+
+  const searchParams = new URLSearchParams(location.search);
+  const price = searchParams.get("price");
+  const freeKm = searchParams.get("freeKm");
+  const extraKm = searchParams.get("extraKm");
+
   useEffect(() => {
     AOS.init({
       duration: 1000, // Animation duration (in milliseconds)
@@ -26,6 +34,9 @@ const CarDetails = () => {
   const [responseData, setResponseData] = useState(null); // State for price details
   const [differenceInHours, setDifferenceInHours] = useState(0); // State for difference in hours
   const { slug } = useParams(); // Extract car name (slug) from the URL
+  const [deliverstate, setDeliveryState] = useState();
+  const [address, setAddress] = useState();
+  const [extrainfo, setExtraInfo] = useState();
 
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -83,9 +94,9 @@ const CarDetails = () => {
           no_seat: data.data?.["No.Of.Seats"] || "",
           car_no: data.data?.["Car Number"] || "",
           category: data.data?.["Category"] || "",
-          limitkm: data.data?.["Price Per Day"] || "",
-          priceplan: data.data?.["Price Per Day"] || "",
         };
+
+        alert(JSON.stringify(carData));
 
         setCarDetails(carData); // Update state with car details
 
@@ -102,7 +113,7 @@ const CarDetails = () => {
     };
 
     fetchCarDetails();
-  }, [slug, BASE_URL]);
+  }, [slug, BASE_URL, deliverstate]);
 
   // If the data is still loading
   if (loading) {
@@ -119,7 +130,20 @@ const CarDetails = () => {
     return <p>No car details available</p>;
   }
 
+  console.log("zero ", deliverstate);
   // If the data was successfully fetched
+  const handlezero = (data) => {
+    setDeliveryState(data);
+  };
+
+  const handleAddress = (datas) => {
+    setAddress(datas);
+  };
+
+  const handleExtraInfo = (data) => {
+    setExtraInfo(data);
+  };
+
   return (
     <Helmet title={carDetails?.carName}>
       <section>
@@ -209,15 +233,14 @@ const CarDetails = () => {
                         style={{ columnGap: "2.1rem" }}>
                         <span className="d-flex align-items-center gap-1 section__description">
                           <p style={{ fontWeight: "bold", color: "black" }}>
-                            <strong>Total Free Kms :</strong>{" "}
-                            {carDetails?.limitkm || "N/A"}
+                            <strong>Extra Kms : $ </strong> {extraKm || "N/A"}{" "}
+                            Per Km
                           </p>
                         </span>
 
                         <span className="d-flex align-items-center gap-1 section__description">
                           <p style={{ fontWeight: "bold", color: "black" }}>
-                            <strong>Pricing Plan :</strong>{" "}
-                            {carDetails?.priceplan || "N/A"}
+                            <strong>Pricing Plan :</strong> {price || "N/A"}
                           </p>
                         </span>
                       </div>
@@ -239,10 +262,14 @@ const CarDetails = () => {
                       </div>
                       <span className="d-flex align-items-center gap-1 section__description">
                         <p style={{ fontWeight: "bold", color: "black" }}>
-                          <strong>Duration(Hours) :</strong>{" "}
-                          {differenceInHours
-                            ? differenceInHours.toFixed(2)
-                            : "N/A"}
+                          <strong>Duration :</strong>{" "}
+                          {differenceInHours ? differenceInHours : "N/A"} Hrs
+                        </p>
+                      </span>
+
+                      <span className="d-flex align-items-center gap-1 section__description">
+                        <p style={{ fontWeight: "bold", color: "black" }}>
+                          <strong> Free Km : </strong> {freeKm} Km
                         </p>
                       </span>
                     </div>
@@ -252,14 +279,26 @@ const CarDetails = () => {
                 {/* Fulfillment Section Below */}
                 <div className="fulfillment-section mt-4">
                   <h5 className="mb-4 fw-bold">Fulfillment Details</h5>
-                  <Fulfillment />
+                  <Fulfillment
+                    setDeliveryState={handlezero}
+                    handleAddress={handleAddress}
+                    handleExtraInfo={handleExtraInfo}
+                  />
                 </div>
               </div>
             </Col>
 
             {/* Pricing Details Section */}
             <Col lg="4" md="12">
-              <PriceDetails startdate={startdate} enddate={enddate} />
+              <PriceDetails
+                startdate={startdate}
+                enddate={enddate}
+                totalPayable={price}
+                deliverstate={deliverstate}
+                carDetails={carDetails}
+                differenceInHours={differenceInHours + "Hrs"}
+                address={address}
+              />
             </Col>
           </Row>
         </Container>

@@ -85,6 +85,10 @@ const UserProfile = () => {
 
           localStorage.setItem("phone number", encryptedPhoneNumber);
 
+          const email = encrypt(
+            localStorage.setItem("email", profileData.emailId)
+          );
+
           // ---------------------------------------------------------------------------------------------------------
 
           setUserInfo(profileData);

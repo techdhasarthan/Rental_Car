@@ -9,7 +9,12 @@ import { message } from "antd";
 import { Container, Col } from "reactstrap";
 import { encrypt, decrypt } from "../utils/cryptoUtils";
 
-const Fulfillment = () => {
+const Fulfillment = ({
+  setDeliveryState,
+  handleAddress,
+  handleExtraInfo,
+  onSubmitAddress,
+}) => {
   const [selectedOption, setSelectedOption] = useState("delivery"); // Default active option
   const [deliveryInfo, setDeliveryInfo] = useState("");
   const [extraInfo, setExtraInfo] = useState("");
@@ -28,7 +33,11 @@ const Fulfillment = () => {
   }, []);
 
   const handleSelectChange = (event) => {
+    const addresses = event.target.value;
+
+    handleAddress(addresses);
     setPickupLocation(event.target.value);
+
     setDeliveryInfo(""); // Clear delivery info when a pickup location is selected
     setExtraInfo("");
   };
@@ -41,21 +50,47 @@ const Fulfillment = () => {
     if (selectedValue === "selfPickup") {
       setDeliveryInfo("");
       setExtraInfo("");
+      setDeliveryState(1);
     } else if (selectedValue === "delivery") {
       setPickupLocation("");
       initMap(); // Re-initialize the map when 'Delivery' is selected
+      setDeliveryState(0);
     }
   };
 
+  // Update deliveryInfo when the user types manually
   const handleDeliveryInfoChange = (event) => {
-    setDeliveryInfo(event.target.value);
+    const addresses = event.target.value; // Get the value from the input field
+    setDeliveryInfo(addresses); // Update the deliveryInfo state
+    handleAddress(addresses); // Pass the updated address to the parent component
+
     setPickupLocation(""); // Clear pickup location when delivery info is entered
   };
 
   const handleExtraInfoChange = (event) => {
+    const extraInfo = event.target.value;
+    handleExtraInfo(extraInfo);
     setExtraInfo(event.target.value);
     setPickupLocation(""); // Clear pickup location when extra info is entered
   };
+
+  // Automatically submit the address data whenever it changes
+  const autoSubmitAddress = () => {
+    const selectedAddress =
+      selectedOption === "selfPickup" ? pickupLocation : deliveryInfo;
+
+    if (selectedAddress) {
+      // Automatically submit address
+      onSubmitAddress(selectedAddress);
+      message.success("Address submitted automatically!");
+    }
+  };
+
+  // Trigger whenever the selected option, pickup location, delivery info, or extra info changes
+  useEffect(() => {
+    autoSubmitAddress(); // Automatically submit address when fields change
+    handleFulfillmentRequest(); // Optionally store in localStorage
+  }, [selectedOption, pickupLocation, deliveryInfo, extraInfo]);
 
   const handleFulfillmentRequest = () => {
     // Clear previous fulfillment-related data first
@@ -85,11 +120,6 @@ const Fulfillment = () => {
     }
   };
 
-  // Use useEffect to automatically trigger fulfillment request when relevant fields change
-  useEffect(() => {
-    handleFulfillmentRequest();
-  }, [selectedOption, pickupLocation, deliveryInfo, extraInfo]);
-
   const loadScript = (src) => {
     return new Promise((resolve) => {
       const script = document.createElement("script");
@@ -105,13 +135,14 @@ const Fulfillment = () => {
     );
 
     const mapInstance = new window.google.maps.Map(
-      document.createElement("div")
+      document.createElement("div") // Placeholder div for the map
     );
-    const input = document.getElementById("search-box");
+
+    const input = document.getElementById("search-box"); // Your input for searching places
     const searchBoxInstance = new window.google.maps.places.SearchBox(input);
 
-    setMap(mapInstance);
-    setSearchBox(searchBoxInstance);
+    setMap(mapInstance); // Store map instance in state
+    setSearchBox(searchBoxInstance); // Store SearchBox instance in state
 
     // Bias the SearchBox results towards the current map's viewport
     mapInstance.addListener("bounds_changed", () => {
@@ -121,10 +152,17 @@ const Fulfillment = () => {
     // Listen for the event when the user selects a prediction from the pick list
     searchBoxInstance.addListener("places_changed", () => {
       const places = searchBoxInstance.getPlaces();
-      if (places.length > 0) {
-        const location = places[0].geometry.location;
-        setDeliveryInfo(places[0].formatted_address); // Set the formatted address
-        updateLatLngFields(location); // Update latitude and longitude
+
+      if (places && places.length > 0) {
+        const selectedPlace = places[0];
+        const formattedAddress = selectedPlace.formatted_address; // Get the formatted address of the selected place
+        const location = selectedPlace.geometry.location;
+
+        // Set the delivery info to the formatted address
+        setDeliveryInfo(formattedAddress);
+
+        // Optional: Update any other fields with latitude and longitude
+        updateLatLngFields(location);
       }
     });
   };
