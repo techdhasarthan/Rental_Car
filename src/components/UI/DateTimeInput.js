@@ -35,8 +35,8 @@ const DateTimeInput = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const formattedStartdate = startdate.replace("T", " ");
-    const formattedEnddate = enddate.replace("T", " ");
+    const formattedStartdate = startdate;
+    const formattedEnddate = enddate;
 
     const encryptedStartDate = encrypt(formattedStartdate);
     const encryptedEndDate = encrypt(formattedEnddate);

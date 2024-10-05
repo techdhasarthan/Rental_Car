@@ -18,6 +18,7 @@ const CarItem = (props) => {
     "No Of Free Km Per Given Date": freeKm,
     "Price Based On Date": price,
     "Extra Travel Km Per Price": extraKm,
+    "Car Available Status": carAvailability,
     ID: id,
   } = props.item;
 
@@ -46,14 +47,12 @@ const CarItem = (props) => {
 
           <div className="car__item-content mt-4">
             <h4 className="section__title text-center">{carName}</h4>
-            <h6 className="section__title text-center">Price : {price}</h6>
-            <h6 className="section__title text-center">Free Km : {freeKm}</h6>
-            <h6 className="section__title text-center">Extra Km : {extraKm}</h6>
-            <h className="rent__price text-center">
-              <i className="ri-caravan-fill"></i> {car_no}
-            </h>
 
-            <div className="car__item-info d-flex align-items-center justify-content-between mt-3 mb-4">
+            <h6 className="rent__price text-center">
+              <i className="ri-caravan-fill"></i> {car_no}
+            </h6>
+
+            <div className="car__item-info d-flex align-items-center justify-content-between mt-3 mb-3">
               <span className=" d-flex align-items-center gap-1">
                 <i className="ri-wheelchair-line"></i> {noSeat} Seats
               </span>
@@ -65,11 +64,24 @@ const CarItem = (props) => {
               </span>
             </div>
 
-            <Link to={`/cars/${id}`}>
-              <button className=" w-100 car__item-btn car__btn-details  text-white">
-                BOOK NOW
-              </button>
-            </Link>
+            <div className="d-flex justify-content-between align-items-center pb-2">
+              <div className="text-center fs-7">
+                <div className="section__title text-center fs-6">Price</div>
+                <div>{price}</div>
+              </div>
+              <div className="text-center fs-6">
+                <div className="section__title text-center fs-6">Free Km</div>
+                <div>{freeKm}</div>
+              </div>
+              <div className="text-center fs-7">
+                <div className="section__title text-center fs-6">Extra Km</div>
+                <div>{extraKm}</div>
+              </div>
+            </div>
+
+            <button className=" w-100 car__item-btn car__btn-details  text-white">
+              {carAvailability}
+            </button>
           </div>
         </div>
       </Col>

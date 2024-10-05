@@ -190,8 +190,8 @@ const CarListing = () => {
       setFilteredData([]); // If there's an error, clear the filtered data
     }
 
-    const formattedStartdate = startdate.replace("T", " ");
-    const formattedEnddate = enddate.replace("T", " ");
+    const formattedStartdate = startdate;
+    const formattedEnddate = enddate;
 
     const encryptedStartdate = encrypt(formattedStartdate);
     const encryptedEnddate = encrypt(formattedEnddate);
@@ -256,7 +256,7 @@ const CarListing = () => {
 
             <Col lg="12" className="border-black border-1">
               <div className="search-sort-container">
-                <div className="container-fluid vh-100 d-flex">
+                <div className="container-fluid  d-flex">
                   <div className="row w-100">
                     {/* Filter Options Column */}
                     <div className="col-md-4 col-lg-3 pb-3">

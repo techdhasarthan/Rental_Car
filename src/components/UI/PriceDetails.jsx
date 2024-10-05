@@ -72,6 +72,7 @@ const PriceDetails = ({
   const [loading, setLoading] = useState(true);
   const [resData, setResData] = useState(null);
   const [showContent, setShowContent] = useState(false); // State to control content display
+  const [isReserving, setIsReserving] = useState(false); // State for reservation loading
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -105,6 +106,8 @@ const PriceDetails = ({
   useEffect(() => {
     // Fetch price details with a delay
     const fetchPriceDetails = async () => {
+      setLoading(true); // Start loading
+
       try {
         const priceRequestBody = {
           id: customerId,
@@ -136,6 +139,8 @@ const PriceDetails = ({
         setTimeout(() => setShowContent(true), 1000);
       } catch (err) {
         setError(err.message);
+      } finally {
+        setLoading(false); // End loading after data is received
       }
     };
 
@@ -170,23 +175,10 @@ const PriceDetails = ({
     calculateTotalPayable();
   }, [price]); // Recalculate whenever price changes
 
-  // if (loading) {
-  //   return (
-  //     <div
-  //       style={{
-  //         display: "flex",
-  //         justifyContent: "center",
-  //         alignItems: "center",
-  //         height: "50vh",
-  //       }}>
-  //       <Spin size="large" />
-  //     </div>
-  //   );
-  // }
-
   if (error) return <div>Error: {error}</div>;
 
   const handleReserveClick = async () => {
+    setIsReserving(true); // Start the reservation loading state
     const decryptedDocumentCheckStatus = decrypt(
       localStorage.getItem("status")
     );
@@ -194,7 +186,7 @@ const PriceDetails = ({
 
     if ("true" === documentCheckStatus) {
       const now = new Date();
-      const currentDateTime = now.toISOString().slice(0, 16).replace("T", " ");
+      const currentDateTime = now.toISOString().slice(0, 16);
 
       const combinedRequestBody = {
         ID: "",
@@ -223,7 +215,6 @@ const PriceDetails = ({
         "Total Payable": TotalPayable,
       };
 
-      alert(JSON.stringify(combinedRequestBody));
       try {
         const apiResponse = await fetch(
           `${BASE_URL}/updateAdminViewCustomerCarRentBookingDetails`,
@@ -249,6 +240,8 @@ const PriceDetails = ({
         }
       } catch (error) {
         console.error("Error occurred during reservation:", error);
+      } finally {
+        setIsReserving(false); // End the reservation loading state
       }
     } else {
       message.error("Please upload Document file!");
@@ -257,54 +250,69 @@ const PriceDetails = ({
 
   return (
     <div className="price-details-container">
-      <div className="price-item">
-        <span className="price-label">Base Fare :</span>
-        <span className="price-value">₹ {price["Base Fare"] || 0.0}</span>
-      </div>
-      <div className="price-item">
-        <span className="price-label">Booking Charges:</span>
-        <span className="price-value">
-          ₹ {price["Plan Based Payable Charges"] || 0.0}
-        </span>
-      </div>
-
-      <div className="price-item">
-        <span className="price-label">Delivery Charges:</span>
-        <span className="price-value">
-          ₹ {deliverstate ? 0 : price["Delivery Charges"] || 0.0}
-        </span>
-      </div>
-      <div className="price-item">
-        <span className="price-label">Secuirty Deposite Charges:</span>
-        <span className="price-value">
-          ₹ {price["Secuirty Deposite Charges"] || 0.0}
-        </span>
-      </div>
-
-      <div className="price-item">
-        <span className="price-label">No Of Leave Day Charges:</span>
-        <span className="price-value">
-          ₹ {price["No Of Leave Day Charges"] || 0.0}
-        </span>
-      </div>
-
-      <div className="price-item">
-        <span className="price-label">{price["Additional Charges"]}</span>
-        <span className="price-value">
-          ₹ {price["Charge Type Based Amount"] || 0.0}
-        </span>
-      </div>
-
-      <div className="price-item total-payable">
-        <span className="price-label">Total Payable:</span>
-        <span className="price-value">₹ {TotalPayable}</span>
-      </div>
-
-      <button
-        className="warning-btn rounded p-2 me-2 w-100 text-black fw-bolder"
-        onClick={handleReserveClick}>
-        Reserve Now
-      </button>
+      {loading ? (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-evenly",
+            marginRight: "30px",
+          }}>
+          {" "}
+          {/* Flexbox for horizontal alignment */}
+          <Spin size="large" />{" "}
+          {/* Add some margin to the right of the spinner */}
+          <h5>Please wait ....</h5>
+        </div>
+      ) : (
+        <>
+          <div className="price-item">
+            <span className="price-label">Base Fare :</span>
+            <span className="price-value">₹ {price["Base Fare"] || 0.0}</span>
+          </div>
+          <div className="price-item">
+            <span className="price-label">Booking Charges:</span>
+            <span className="price-value">
+              ₹ {price["Plan Based Payable Charges"] || 0.0}
+            </span>
+          </div>
+          <div className="price-item">
+            <span className="price-label">Delivery Charges:</span>
+            <span className="price-value">
+              ₹ {deliverstate ? 0 : price["Delivery Charges"] || 0.0}
+            </span>
+          </div>
+          <div className="price-item">
+            <span className="price-label">Secuirty Deposite :</span>
+            <span className="price-value">
+              ₹ {price["Secuirty Deposite Charges"] || 0.0}
+            </span>
+          </div>
+          <div className="price-item">
+            <span className="price-label">Leave Day Charges:</span>
+            <span className="price-value">
+              ₹ {price["No Of Leave Day Charges"] || 0.0}
+            </span>
+          </div>
+          <div className="price-item">
+            <span className="price-label">{price["Charges Type"]} :</span>
+            <span className="price-value">
+              ₹ {price["Charge Type Based Amount"] || 0.0}
+            </span>
+          </div>
+          <div className="price-item total-payable">
+            <span className="price-label">Total Payable:</span>
+            <span className="price-value">₹ {TotalPayable}</span>
+          </div>
+          <button
+            className="warning-btn rounded p-2 me-2 w-100 text-black fw-bolder"
+            onClick={handleReserveClick}
+            disabled={isReserving} // Disable button while reserving
+          >
+            {isReserving ? <Spin size="small" /> : "Reserve Now"}
+          </button>
+        </>
+      )}
       <ToastContainer />
     </div>
   );

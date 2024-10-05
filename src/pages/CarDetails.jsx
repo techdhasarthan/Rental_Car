@@ -96,8 +96,6 @@ const CarDetails = () => {
           category: data.data?.["Category"] || "",
         };
 
-        alert(JSON.stringify(carData));
-
         setCarDetails(carData); // Update state with car details
 
         const encryptedCarName = encrypt(carData.carName);
