@@ -291,6 +291,21 @@
   display: none;
 } */
 
+.plans {
+  display: none;
+}
+
+.radio-label {
+  cursor: pointer;
+  padding: 5px;
+
+
+  transition: background-color 0.3s ease;
+}
+
+
+
+
 input[type="radio"]:checked+label {
   background-color: #ff8c00;
 }

@@ -170,8 +170,8 @@ const CarListing = () => {
       kmLimit: selectedKmPlan || "", // Selected plan or empty
       location: selectedLocations.length > 0 ? selectedLocations.join(",") : "",
       sortByPrice: sortByPrice,
-      fromDate: startdate ? startdate : fromdate,
-      toDate: enddate ? enddate : todate,
+      fromDate: startdate ? startdate : Fromdate,
+      toDate: enddate ? enddate : Todate,
     };
 
     try {
@@ -241,6 +241,7 @@ const CarListing = () => {
                           selectedPlan === plan ? "selected" : ""
                         }`}>
                         <input
+                          className="plans"
                           type="radio"
                           value={plan}
                           checked={selectedPlan === plan}
@@ -372,7 +373,7 @@ const CarListing = () => {
                           <h4 className="text-center">No cars found</h4>
                         ) : (
                           filteredData.map((item) => (
-                            <Col lg="4" md="6" sm="12" key={item.id}>
+                            <Col lg="6" key={item.id}>
                               <CarItem item={item} />
                             </Col>
                           ))

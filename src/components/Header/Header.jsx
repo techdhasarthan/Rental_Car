@@ -145,12 +145,12 @@ const Header = () => {
                   </div>
                   <div className="pt-1">About</div>
                 </NavLink>
-                <NavLink to="/cars" className="nav__item_cars">
+                {/* <NavLink to="/cars" className="nav__item_cars">
                   <div className="MobileViewIcon_cars">
                     <i className="ri-car-fill"></i>
                   </div>
                   <div className="pt-1 ">Cars</div>
-                </NavLink>
+                </NavLink> */}
                 <NavLink to="/blogs" className="nav__item_blog">
                   <div className="MobileViewIcon_blog ">
                     <i className="ri-article-fill"></i>

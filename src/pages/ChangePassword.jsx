@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Button, Form, FormGroup, Label, Input, Alert } from "reactstrap";
-import axios from "axios";
+import { Button, Form, FormGroup, Label, Input } from "reactstrap";
+
 import "./Document.css";
 import { message } from "antd";
 import { decrypt } from "../components/utils/cryptoUtils";

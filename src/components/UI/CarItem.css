@@ -1,6 +1,7 @@
 .car__item {
     height: 400px;
     /* Reduce the overall card height */
+    width: 350px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -11,6 +12,7 @@
     /* Add a background for better visibility */
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    margin-left: 80px;
 }
 
 .car__img img {
@@ -21,17 +23,21 @@
 }
 
 /* For medium-sized screens (tablets, small laptops) */
-@media (max-width: 992px) {
-    .car__item {
-        height: 250px;
-        /* Adjust height for medium screens */
-    }
+@media only screen and (max-width: 1024px) {
+
 
     .car__img img {
         height: 100px;
         /* Adjust image height on smaller screens */
     }
+
+    .car__item {
+        width: 300px;
+        margin-left: 30px;
+    }
 }
+
+
 
 /* For small screens (mobile phones) */
 @media (max-width: 576px) {
@@ -39,10 +45,11 @@
         height: auto;
         /* Let the height adjust dynamically on small screens */
         min-height: 200px;
+        margin: 0;
     }
 
     .car__img img {
-        height: 80px;
+        height: 120px;
     }
 
     .car__item-content h4 {

@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { message, Spin } from "antd";
 import { encrypt, decrypt } from "../utils/cryptoUtils";
 import axios from "axios";
-import PacmanLoader from "react-spinners/PacmanLoader";
+import HashLoader from "react-spinners/HashLoader";
 
 const PriceDetails = ({
   totalPayable,
@@ -165,8 +165,6 @@ const PriceDetails = ({
   useEffect(() => {
     // Function to calculate the total payable amount
     const calculateTotalPayable = () => {
-      const baseFare = price["Base Fare"] || 0.0;
-
       const planBasedCharges = price["Plan Based Payable Charges"] || 0.0;
       const deliveryCharges = deliverstate
         ? 0
@@ -175,15 +173,17 @@ const PriceDetails = ({
       const leaveDayCharges = price["No Of Leave Day Charges"] || 0.0;
       const chargeTypeAmount = price["Charge Type Based Amount"] || 0.0;
 
-      // Calculate the total sum of all the charges
+      // Determine whether to add or subtract chargeTypeAmount
       const total =
-        baseFare +
         planBasedCharges +
         deliveryCharges +
         securityDepositeCharges +
         leaveDayCharges +
-        chargeTypeAmount;
+        (price["Charges Type"] === "Additional charges"
+          ? chargeTypeAmount
+          : -chargeTypeAmount);
 
+      // Update the state with the calculated total
       setTotalPayable(total);
     };
 
@@ -269,13 +269,12 @@ const PriceDetails = ({
     <div className="price-details-container">
       {reservationLoading && (
         <div style={overlayStyle}>
-          <PacmanLoader
+          <HashLoader
             color="#f9a826"
             loading={reservationLoading}
             size={40}
             aria-label="Loading Spinner"
             data-testid="loader"
-            //HashLoader
           />
         </div>
       )}

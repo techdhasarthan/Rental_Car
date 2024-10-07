@@ -172,106 +172,93 @@ const CarDetails = () => {
                     />
                   </Col>
 
-                  {/* Car Details */}
                   <Col
                     lg="7"
                     md="6"
                     className="car_details"
                     data-aos="fade-left">
-                    <div className="">
-                      {/* Car Name */}
-                      <div className="car_name mt-1">
-                        <h2 className="section__title">
-                          {carDetails?.carName}
-                        </h2>
-                      </div>
+                    <div className="car_name mt-1">
+                      <h2 className="section__title">{carDetails?.carName}</h2>
+                    </div>
 
-                      {/* Car Number */}
-                      <div className="d-flex align-items-center gap-5 mb-2 mt-2">
-                        <span className="d-flex align-items-center gap-2 fst-italic bold fs-5 fw-bold">
-                          Car Number : {carDetails?.car_no}
-                        </span>
-                      </div>
+                    {/* Car Number */}
+                    <div className="d-flex align-items-center gap-5 mb-2 mt-2">
+                      <span className="d-flex align-items-center gap-2 fst-italic bold fs-5 fw-bold">
+                        Car Number : {carDetails?.car_no}
+                      </span>
+                    </div>
 
-                      {/* Car Details */}
-                      <div
-                        className="d-flex align-items-center"
-                        style={{ columnGap: "1rem" }}>
-                        <span
-                          className="d-flex align-items-center gap-1 section__description"
-                          style={{ fontWeight: "bold", color: "black" }}>
-                          <i
-                            className="ri-roadster-line"
-                            style={{ color: "#f9a826" }}></i>
+                    {/* Car Details */}
+                    <div className="row">
+                      <div className="col-12 col-md-4 mb-2 d-flex align-items-center gap-1">
+                        <i
+                          className="ri-roadster-line"
+                          style={{ color: "#f9a826" }}></i>
+                        <span style={{ fontWeight: "bold", color: "black" }}>
                           {carDetails?.category}
                         </span>
-
-                        <span
-                          className="d-flex align-items-center gap-1 section__description"
-                          style={{ fontWeight: "bold", color: "black" }}>
-                          <i
-                            className="ri-settings-2-line"
-                            style={{ color: "#f9a826" }}></i>
+                      </div>
+                      <div className="col-12 col-md-4 mb-2 d-flex align-items-center gap-1">
+                        <i
+                          className="ri-settings-2-line"
+                          style={{ color: "#f9a826" }}></i>
+                        <span style={{ fontWeight: "bold", color: "black" }}>
                           {carDetails?.transmission_type}
                         </span>
-
-                        <span
-                          className="d-flex align-items-center gap-1 section__description"
-                          style={{ fontWeight: "bold", color: "black" }}>
-                          <i
-                            className="ri-wheelchair-line"
-                            style={{ color: "#f9a826" }}></i>
+                      </div>
+                      <div className="col-12 col-md-4 mb-2 d-flex align-items-center gap-1">
+                        <i
+                          className="ri-wheelchair-line"
+                          style={{ color: "#f9a826" }}></i>
+                        <span style={{ fontWeight: "bold", color: "black" }}>
                           {carDetails?.no_seat} Seats
                         </span>
                       </div>
+                    </div>
 
-                      {/* Free Kilometers */}
-                      <div
-                        className="d-flex align-items-center mt-2"
-                        style={{ columnGap: "2.1rem" }}>
-                        <span className="d-flex align-items-center gap-1 section__description">
-                          <p style={{ fontWeight: "bold", color: "black" }}>
-                            <strong>Extra Kms : $ </strong> {extraKm || "N/A"}{" "}
-                            Per Km
-                          </p>
-                        </span>
+                    {/* Extra Kms and Pricing Plan */}
+                    <div className="row mt-2">
+                      <div className="col-12 col-md-6 mb-2">
+                        <p style={{ fontWeight: "bold", color: "black" }}>
+                          <strong>Extra Kms : $ </strong> {extraKm || "N/A"} Per
+                          Km
+                        </p>
+                      </div>
+                      <div className="col-12 col-md-6 mb-2">
+                        <p style={{ fontWeight: "bold", color: "black" }}>
+                          <strong>Pricing Plan :</strong> {price || "N/A"}
+                        </p>
+                      </div>
+                    </div>
 
-                        <span className="d-flex align-items-center gap-1 section__description">
-                          <p style={{ fontWeight: "bold", color: "black" }}>
-                            <strong>Pricing Plan :</strong> {price || "N/A"}
-                          </p>
-                        </span>
+                    {/* Pickup and Drop Date */}
+                    <div className="row">
+                      <div className="col-12 col-md-6 mb-2">
+                        <p style={{ fontWeight: "bold", color: "black" }}>
+                          <strong>Pickup Date :</strong>{" "}
+                          {startdate ? startdate.replace("T", " ") : "N/A"}
+                        </p>
                       </div>
-                      <div
-                        className="d-flex align-items-center "
-                        style={{ columnGap: "2.1rem" }}>
-                        <span className="d-flex align-items-center gap-1 section__description">
-                          <p style={{ fontWeight: "bold", color: "black" }}>
-                            <strong>Pickup Date : </strong>{" "}
-                            {startdate ? startdate.replace("T", " ") : "N/A"}
-                          </p>
-                        </span>
-                        <span className="d-flex align-items-center gap-1 section__description">
-                          <p style={{ fontWeight: "bold", color: "black" }}>
-                            <strong>Drop Date :</strong>{" "}
-                            {enddate ? enddate.replace("T", " ") : "N/A"}
-                          </p>
-                        </span>
+                      <div className="col-12 col-md-6 mb-2">
+                        <p style={{ fontWeight: "bold", color: "black" }}>
+                          <strong>Drop Date :</strong>{" "}
+                          {enddate ? enddate.replace("T", " ") : "N/A"}
+                        </p>
                       </div>
-                      <div className="d-flex align-items-center section__description">
-                        <span className="me-3">
-                          {" "}
-                          {/* Adds margin to the end (right side) of this span */}
-                          <p style={{ fontWeight: "bold", color: "black" }}>
-                            <strong>Duration :</strong>{" "}
-                            {differenceInHours ? differenceInHours : "N/A"} Hrs
-                          </p>
-                        </span>
-                        <span>
-                          <p style={{ fontWeight: "bold", color: "black" }}>
-                            <strong>Free Km :</strong> {freeKm} Km
-                          </p>
-                        </span>
+                    </div>
+
+                    {/* Duration and Free Km */}
+                    <div className="row">
+                      <div className="col-12 col-md-6 mb-2">
+                        <p style={{ fontWeight: "bold", color: "black" }}>
+                          <strong>Duration :</strong>{" "}
+                          {differenceInHours ? differenceInHours : "N/A"} Hrs
+                        </p>
+                      </div>
+                      <div className="col-12 col-md-6 mb-2">
+                        <p style={{ fontWeight: "bold", color: "black" }}>
+                          <strong>Free Km :</strong> {freeKm} Km
+                        </p>
                       </div>
                     </div>
                   </Col>

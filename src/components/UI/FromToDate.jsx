@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import { message } from "antd";
 const FromToDate = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -70,7 +70,7 @@ const FromToDate = () => {
     // Prevent selecting past times if today is the selected start date
     if (isSameDay(selectedStartDateTime, currentDateTime)) {
       if (selectedStartDateTime < currentDateTime) {
-        alert("You cannot select a past time.");
+        message.error("You cannot select a past time.");
         return;
       }
     }
@@ -92,7 +92,9 @@ const FromToDate = () => {
     // Ensure endDate is valid and not in the past if it's on the same day as startDate
     if (isSameDay(selectedStartDateTime, selectedEndDateTime)) {
       if (selectedEndDateTime < selectedStartDateTime) {
-        alert("End date and time must be after the start date and time.");
+        message.error(
+          "End date and time must be after the start date and time."
+        );
         return;
       }
     }
@@ -100,7 +102,7 @@ const FromToDate = () => {
     // Ensure future times for the current day
     if (isSameDay(selectedEndDateTime, currentDateTime)) {
       if (selectedEndDateTime < currentDateTime) {
-        alert("You cannot select a past time for today.");
+        message.error("You cannot select a past time for today.");
         return;
       }
     }

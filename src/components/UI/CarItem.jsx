@@ -34,7 +34,7 @@ const CarItem = (props) => {
     <Link
       to={`/cars/${id}?freeKm=${freeKm}&price=${price}&extraKm=${extraKm}`}
       className="text-decoration-none text-reset">
-      <Col lg="12" md="12" sm="6" className="mb-5" data-aos="flip-left">
+      <Col lg="12" md="6" className="mb-5" data-aos="flip-left">
         <div className="car__item">
           <div className="car__img">
             <img
