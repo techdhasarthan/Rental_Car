@@ -252,7 +252,10 @@ const CarDetails = () => {
                       <div className="col-12 col-md-6 mb-2">
                         <p style={{ fontWeight: "bold", color: "black" }}>
                           <strong>Duration :</strong>{" "}
-                          {differenceInHours ? differenceInHours : "N/A"} Hrs
+                          {differenceInHours
+                            ? Math.round(differenceInHours)
+                            : "N/A"}{" "}
+                          Hrs
                         </p>
                       </div>
                       <div className="col-12 col-md-6 mb-2">
