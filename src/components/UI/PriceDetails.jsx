@@ -205,6 +205,7 @@ const PriceDetails = ({
 
       const combinedRequestBody = {
         ID: "",
+        "Ticket ID": "",
         "Created Date": currentDateTime,
         "Customer Name": name,
         "Mobile Number": phoneNo,
