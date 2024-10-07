@@ -41,12 +41,18 @@
     }
 }
 
+@media (max-width: 768px) {
+    .car__item {
+        height: 380px;
+
+    }
+}
 
 
 /* For small screens (mobile phones) */
 @media (max-width: 576px) {
     .car__item {
-        height: auto;
+
         /* Let the height adjust dynamically on small screens */
         min-height: 200px;
         margin: 0;
