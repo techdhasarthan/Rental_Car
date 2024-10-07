@@ -6,6 +6,7 @@ import profile from "../../assets/all-images/slider-img/profile.jpg";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { encrypt, decrypt } from "../utils/cryptoUtils";
+import logo from "../../assets/all-images/logo/RentARide.png";
 
 const Header = () => {
   const [user, setUserName] = useState({ name: "Guest" });
@@ -105,6 +106,12 @@ const Header = () => {
 
             <div className="navigation" ref={menuRef} onClick={toggleMenu}>
               <div className="menu">
+                <div className="mobile_logo">
+                  <NavLink to="/home" className="nav_logo_mobile ">
+                    <img src={logo} style={{ width: "100px" }} alt="Logo" />
+                  </NavLink>
+                </div>
+
                 <Link to="/user-account">
                   <div
                     className="dropdownMobileView text-decoration-none"
@@ -133,24 +140,26 @@ const Header = () => {
                 </Link>
 
                 {/* Manually coded menu items */}
-                <NavLink to="/home" className="nav__item">
-                  <div className="MobileViewIcon">
-                    <i className="ri-home-4-fill"></i>
-                  </div>
-                  <div className="pt-1">Home</div>
+                <NavLink to="/home" className="nav_logo">
+                  <img src={logo} alt="Logo" />
                 </NavLink>
+
+                <NavLink
+                  to="/home"
+                  className="nav__item nav_home d-flex align-items-center gap-2 text-white">
+                  <div className="MobileViewIcon d-flex align-items-center gap-2">
+                    <i className="ri-home-4-fill"></i>
+                    <span className="pt-1">Home</span>
+                  </div>
+                </NavLink>
+
                 <NavLink to="/about" className="nav__item">
                   <div className="MobileViewIcon">
                     <i className="ri-error-warning-fill"></i>
                   </div>
                   <div className="pt-1">About</div>
                 </NavLink>
-                {/* <NavLink to="/cars" className="nav__item_cars">
-                  <div className="MobileViewIcon_cars">
-                    <i className="ri-car-fill"></i>
-                  </div>
-                  <div className="pt-1 ">Cars</div>
-                </NavLink> */}
+
                 <NavLink to="/blogs" className="nav__item_blog">
                   <div className="MobileViewIcon_blog ">
                     <i className="ri-article-fill"></i>
@@ -225,7 +234,7 @@ const Header = () => {
                   </div>
 
                   <div
-                    className={`dropdown-menu ${showDropdown ? "show" : ""}`}
+                    className={`dropdown-menu `}
                     style={{
                       position: "absolute",
                       top: "100%", // Position dropdown below the image/name container
@@ -239,9 +248,6 @@ const Header = () => {
                       onClick={() => setShowDropdown(false)}>
                       <i className="ri-user-line"></i> My Profile
                     </Link>
-                    <span className="dropdown-item" onClick={handleSignOut}>
-                      <i className="ri-logout-box-line"></i> Logout
-                    </span>
                   </div>
                 </div>
               )}

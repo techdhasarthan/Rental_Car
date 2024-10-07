@@ -201,7 +201,14 @@ const PriceDetails = ({
 
     if ("true" === documentCheckStatus) {
       const now = new Date();
-      const currentDateTime = now.toISOString().slice(0, 16);
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+
+      const currentDateTime = `${year}-${month}-${day} ${hours}:${minutes}`;
+      console.log(currentDateTime); // Output: YYYY-MM-DD HH:MM
 
       const combinedRequestBody = {
         ID: "",

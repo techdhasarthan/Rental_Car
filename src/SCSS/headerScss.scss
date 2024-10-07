@@ -1,4 +1,7 @@
 $primary-color: #000d6b;
+.nav_logo_mobile {
+  display: none;
+}
 
 .header {
   &__top {
@@ -197,14 +200,23 @@ $primary-color: #000d6b;
 .menu {
   display: flex;
   align-items: center;
-  column-gap: 2.7rem;
+  // column-gap: 2.7rem;
 
   i {
     margin-right: 5px;
     font-size: 1.2rem;
   }
 }
+.nav_home {
+  margin-left: 300px;
+}
+.nav__item {
+  padding-left: 30px;
+}
 
+.nav__item_blog {
+  padding-left: 30px;
+}
 .nav__item,
 .nav__item_cars,
 .nav__item_blog {
@@ -214,11 +226,6 @@ $primary-color: #000d6b;
   gap: 4px;
   display: flex;
   border-bottom: 2px solid transparent;
-
-  &:hover {
-    color: #f9a826;
-    border-bottom: 2px solid #ff9800; // Example border color
-  }
 }
 
 .search__box {
@@ -333,6 +340,41 @@ $primary-color: #000d6b;
   color: #f9a826;
 }
 
+.nav_logo {
+  width: 130px;
+}
+.nav_logo img {
+  width: 120px;
+  height: 80px;
+}
+
+@media only screen and (max-width: 768px) {
+  .nav_home {
+    color: #020a4de9; // Changes the color to red in mobile view
+
+    .MobileViewIcon i {
+      color: #020a4de9; // Ensures the icon is red in mobile view
+    }
+
+    .MobileViewIcon span {
+      color: #020a4de9; // Ensures the text is red in mobile view
+    }
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .nav_home {
+    margin-left: 130px;
+  }
+  .nav__item {
+    padding-left: 30px;
+  }
+
+  .nav__item_blog {
+    padding-left: 30px;
+  }
+}
+
 /* Media Queries */
 @media only screen and (max-width: 768px) {
   .dropdownMobileView {
@@ -342,6 +384,22 @@ $primary-color: #000d6b;
     align-items: end;
     display: flex;
     padding-left: 150px;
+  }
+
+  .nav_logo_mobile {
+    display: block;
+  }
+
+  .mobile_logo {
+    width: 120px;
+  }
+  .nav_logo_mobile img {
+    width: 150px;
+    height: 80px;
+  }
+
+  .nav_logo {
+    display: none;
   }
 
   .profileMobileName {
@@ -412,6 +470,9 @@ $primary-color: #000d6b;
 
   .MobileViewIcon_cars {
     margin-left: -11px;
+  }
+  .nav_home {
+    margin-left: 1px;
   }
 }
 
