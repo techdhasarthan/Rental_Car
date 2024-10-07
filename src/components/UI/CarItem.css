@@ -1,5 +1,5 @@
 .car__item {
-    height: 400px;
+    height: 410px;
     /* Reduce the overall card height */
     width: 350px;
     display: flex;
@@ -13,14 +13,17 @@
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     margin-left: 80px;
+
 }
 
 .car__img img {
-    height: 120px;
+    height: 180px;
     /* Reduce image height */
     object-fit: cover;
     border-radius: 8px;
 }
+
+
 
 /* For medium-sized screens (tablets, small laptops) */
 @media only screen and (max-width: 1024px) {
@@ -29,6 +32,7 @@
     .car__img img {
         height: 100px;
         /* Adjust image height on smaller screens */
+        width: 100px;
     }
 
     .car__item {

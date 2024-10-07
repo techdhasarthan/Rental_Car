@@ -41,7 +41,7 @@ const CarItem = (props) => {
               src={`${BASE_URL}/RetrieveFile/` + imgUrl}
               alt=""
               className="w-100 text-decoration-none text-reset"
-              style={{ height: "120px", border: "none", objectFit: "cover" }}
+              style={{ height: "130px", border: "none", objectFit: "cover" }}
             />
           </div>
 
@@ -79,7 +79,7 @@ const CarItem = (props) => {
               </div>
             </div>
 
-            <button className=" w-100 car__item-btn car__btn-details  text-white">
+            <button className=" w-100 car__item-btn car__btn-details mb-5  text-white">
               {carAvailability}
             </button>
           </div>
