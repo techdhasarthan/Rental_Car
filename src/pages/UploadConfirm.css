@@ -27,6 +27,12 @@
     /* Slight upward movement */
 }
 
+.error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
 .Documentupload {
     justify-content: end;
     align-items: end;

@@ -41,7 +41,7 @@ const HorizontalCard = ({ userdata }) => {
               </p>
               <p className="card-text">
                 <strong>Total Amount</strong>
-                <br />${totalAmount}
+                <br />₹{totalAmount}
               </p>
               <p className="card-text">
                 <strong>Car Number</strong>

@@ -70,18 +70,34 @@ const Document = () => {
     const extension = fileName.split(".").pop().toLowerCase();
     switch (extension) {
       case "pdf":
-        return <FaFilePdf size={50} color="red" />;
+        return (
+          <FaFilePdf size={100} color="red" style={{ paddingTop: "20px" }} />
+        );
       case "xlsx":
       case "xls":
-        return <FaFileExcel size={50} color="green" />;
+        return (
+          <FaFileExcel
+            size={100}
+            color="green"
+            style={{ paddingTop: "20px" }}
+          />
+        );
       case "doc":
       case "docx":
-        return <FaFileWord size={50} color="blue" />;
+        return (
+          <FaFileWord size={100} color="blue" style={{ paddingTop: "20px" }} />
+        );
       case "jpg":
       case "jpeg":
       case "png":
       case "gif":
-        return <FaFileImage size={50} color="orange" />;
+        return (
+          <FaFileImage
+            size={100}
+            color="orange"
+            style={{ paddingTop: "20px" }}
+          />
+        );
       default:
         return null;
     }
@@ -92,24 +108,13 @@ const Document = () => {
       {uploadedFiles.length > 0 ? (
         <Row>
           {uploadedFiles.map((file, index) => {
-            const extension = file["File Name"].split(".").pop().toLowerCase();
-            const isImage = ["jpg", "jpeg", "png", "gif"].includes(extension);
-
             return (
               <Col lg={6} md={6} sm={12} key={index} className="mb-4">
                 <div className="file-container d-flex align-items-start justify-content-between">
-                  {/* Display file preview or icon */}
-                  {isImage ? (
-                    <img
-                      src={`${BASE_URL}/RetrieveFile/` + file["File Name"]}
-                      alt={`File ${file["File Name"]}`}
-                      className="file-image"
-                    />
-                  ) : (
-                    <div className="file-icon">
-                      {getFileIcon(file["File Name"])}
-                    </div>
-                  )}
+                  {/* Display file icon based on file type */}
+                  <div className="file-icon">
+                    {getFileIcon(file["File Name"])}
+                  </div>
 
                   {/* Display file details */}
                   <div className="file-details pt-4">

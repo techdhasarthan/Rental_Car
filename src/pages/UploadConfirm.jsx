@@ -21,14 +21,14 @@ function UploadConfirm() {
   const [nestedModal, setNestedModal] = useState(false);
   const [closeAll, setCloseAll] = useState(false);
   const [isOldFile, setIsOldFile] = useState(false);
-  const [isFileValid, setIsFileValid] = useState(false); // To check if the file is valid
+  const [isFileValid, setIsFileValid] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState(null);
   const [selectedDocumentType, setSelectedDocumentType] = useState("");
   const [documentNumber, setDocumentNumber] = useState("");
   const [nameOnDocument, setNameOnDocument] = useState("");
   const [issueDate, setIssueDate] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
-  const [errors, setErrors] = useState({}); // Validation errors
+  const [errors, setErrors] = useState({});
 
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
   const decryptedUserID = decrypt(localStorage.getItem("id"));
@@ -54,18 +54,21 @@ function UploadConfirm() {
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
-    const excelFile = files.some(
-      (file) =>
-        file.type ===
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-        file.type === "application/vnd.ms-excel"
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"]; // Add any other allowed file types here
+    const invalidFiles = files.filter(
+      (file) => !allowedTypes.includes(file.type)
     );
 
-    if (excelFile) {
-      message.error("Excel files are not allowed.");
-      event.target.value = null;
-      setSelectedFiles(null); // Clear the selected files
+    if (invalidFiles.length > 0) {
+      message.error("Only JPG and PNG files are allowed.");
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        files: "Only JPG and PNG files are allowed.",
+      }));
+      event.target.value = null; // Reset file input
+      setSelectedFiles(null); // Clear selected files
     } else {
+      setErrors((prevErrors) => ({ ...prevErrors, files: undefined })); // Clear any previous errors
       setSelectedFiles(event.target.files);
     }
   };
@@ -76,56 +79,73 @@ function UploadConfirm() {
 
   const validateForm = () => {
     const errors = {};
+
     if (!selectedDocumentType)
       errors.documentType = "Document type is required.";
     if (!documentNumber) errors.documentNumber = "Document number is required.";
     if (!nameOnDocument)
       errors.nameOnDocument = "Name on document is required.";
-    if (selectedDocumentType === "Driving License" && !issueDate)
+
+    if (selectedDocumentType === "Driving License" && !issueDate) {
       errors.issueDate = "Issue date is required for Driving License.";
-    if (selectedDocumentType === "Driving License" && !expiryDate)
+    }
+
+    if (selectedDocumentType === "Driving License" && !expiryDate) {
       errors.expiryDate = "Expiry date is required for Driving License.";
-    if (!selectedFiles || selectedFiles.length === 0)
+    }
+
+    if (!selectedFiles || selectedFiles.length === 0) {
       errors.files = "At least one file must be uploaded.";
+    }
 
     setErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
   const handleFileUpload = async () => {
-    if (validateForm()) {
-      const formData = new FormData();
-      Array.from(selectedFiles).forEach((file) => {
-        formData.append("files", file);
+    if (!validateForm()) {
+      message.error("Please complete all required fields before submitting.");
+      return;
+    }
+
+    const formData = new FormData();
+    Array.from(selectedFiles).forEach((file) => {
+      formData.append("files", file);
+    });
+    formData.append("documentType", selectedDocumentType);
+    formData.append("documentNumber", documentNumber);
+    formData.append("nameOnDocument", nameOnDocument);
+    formData.append("customerId", id);
+    formData.append("issueDate", issueDate);
+    formData.append("expiryDate", expiryDate);
+
+    try {
+      const response = await fetch(`${BASE_URL}/uploadCustomerDocuments`, {
+        method: "POST",
+        body: formData,
       });
-      formData.append("documentType", selectedDocumentType);
-      formData.append("documentNumber", documentNumber);
-      formData.append("nameOnDocument", nameOnDocument);
-      formData.append("customerId", id);
-      formData.append("issueDate", issueDate);
-      formData.append("expiryDate", expiryDate);
 
-      try {
-        const response = await fetch(`${BASE_URL}/uploadCustomerDocuments`, {
-          method: "POST",
-          body: formData,
-        });
+      const result = await response.text();
 
-        const result = await response.text();
+      if (response.ok) {
+        message.success("Form submitted successfully!");
+        toggleNested();
+        setModal(false);
+        setIsFileValid(true);
 
-        if (response.ok) {
-          message.success("Form submitted successfully!");
-          toggleNested(); // Close the modal after upload
-          setModal(false);
-        } else {
-          message.error("Failed to upload document: " + result);
-        }
-      } catch (error) {
-        message.error("Something went wrong during the upload!");
-        console.error("Error uploading file:", error);
+        setSelectedFiles(null);
+        setSelectedDocumentType("");
+        setDocumentNumber("");
+        setNameOnDocument("");
+        setIssueDate("");
+        setExpiryDate("");
+        setErrors({}); // Clear any previous errors
+      } else {
+        message.error("Failed to upload document: " + result);
       }
-    } else {
-      setModal(false);
+    } catch (error) {
+      message.error("Something went wrong during the upload!");
+      console.error("Error uploading file:", error);
     }
   };
 
@@ -139,7 +159,7 @@ function UploadConfirm() {
     } else {
       setIsFileValid(false);
     }
-    toggleNested(); // Open the modal
+    toggleNested();
   };
 
   return (
@@ -220,9 +240,8 @@ function UploadConfirm() {
                       type="text"
                       value={nameOnDocument}
                       onChange={(e) => setNameOnDocument(e.target.value)}
-                      style={{ color: "black" }} // Set the text color to black
+                      style={{ color: "black" }}
                     />
-
                     {errors.nameOnDocument && (
                       <p className="error">{errors.nameOnDocument}</p>
                     )}
@@ -268,7 +287,10 @@ function UploadConfirm() {
             </ModalBody>
             <ModalFooter>
               <Button color="primary" onClick={handleFileUpload}>
-                Done
+                Submit
+              </Button>{" "}
+              <Button color="secondary" onClick={toggleAll}>
+                Cancel
               </Button>
             </ModalFooter>
           </Modal>

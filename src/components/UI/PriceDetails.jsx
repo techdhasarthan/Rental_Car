@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import "../../styles/priceDetails.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -36,6 +36,7 @@ const PriceDetails = ({
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
   const [TotalPayable, setTotalPayable] = useState(0);
   const [BaseFare, setBaseFare] = useState();
+  const navigate = useNavigate();
 
   // const name = decrypt(localStorage.getItem("name"));
   // const phoneNo = decrypt(localStorage.getItem("phone number"));
@@ -109,7 +110,8 @@ const PriceDetails = ({
           );
         }
       } catch (error) {
-        message.error(`An error occurred: ${error.message}`);
+        navigate("/sign-in"); // navigate to the Signin page
+
         console.error("Error fetching profile data:", error);
       }
     };

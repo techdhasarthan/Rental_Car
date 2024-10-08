@@ -344,7 +344,7 @@ $primary-color: #000d6b;
   width: 130px;
 }
 .nav_logo img {
-  width: 100px;
+  width: 50px;
   height: 50px;
 }
 
@@ -394,16 +394,23 @@ $primary-color: #000d6b;
     width: 120px;
   }
   .nav_logo_mobile img {
-    width: 150px;
+    width: 130px;
     height: 80px;
+    filter: grayscale(100%) brightness(0%);
   }
 
   .nav_logo {
     display: none;
   }
 
+  .profileName {
+    color: black;
+  }
   .profileMobileName {
     padding-bottom: 6px;
+    color: black; /* This makes the text color black */
+    font-size: 16px; /* Example font size */
+    font-weight: bold; /* Example font weight */
   }
   .mobile__menu {
     display: block;

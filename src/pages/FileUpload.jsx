@@ -160,7 +160,7 @@ const FileUpload = ({ id, onUploadSuccess }) => {
 
             <Form.Label>Name On Document</Form.Label>
             <Form.Control
-              className="custom-placeholder text-white"
+              className="custom-placeholder "
               type="text"
               placeholder="Enter Name On Document"
               value={nameOnDocument}

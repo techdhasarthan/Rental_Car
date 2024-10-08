@@ -220,13 +220,13 @@ const CarDetails = () => {
                     <div className="row mt-2">
                       <div className="col-12 col-md-6 mb-2">
                         <p style={{ fontWeight: "bold", color: "black" }}>
-                          <strong>Extra Kms : $ </strong> {extraKm || "N/A"} Per
+                          <strong>Extra Kms : ₹ </strong> {extraKm || "N/A"} Per
                           Km
                         </p>
                       </div>
                       <div className="col-12 col-md-6 mb-2">
                         <p style={{ fontWeight: "bold", color: "black" }}>
-                          <strong>Pricing Plan :</strong> {price || "N/A"}
+                          <strong>Pricing Plan :</strong> {price || "N/A"} Km
                         </p>
                       </div>
                     </div>

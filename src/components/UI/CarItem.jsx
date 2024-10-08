@@ -67,7 +67,7 @@ const CarItem = (props) => {
             <div className="d-flex justify-content-between align-items-center pb-2">
               <div className="text-center fs-7">
                 <div className="section__title text-center fs-6">Price</div>
-                <div>{price}</div>
+                <div> ₹ {price}</div>
               </div>
               <div className="text-center fs-6">
                 <div className="section__title text-center fs-6">Free Km</div>
@@ -75,7 +75,7 @@ const CarItem = (props) => {
               </div>
               <div className="text-center fs-7">
                 <div className="section__title text-center fs-6">Extra Km</div>
-                <div>{extraKm}</div>
+                <div>₹ {extraKm} Per Km</div>
               </div>
             </div>
 

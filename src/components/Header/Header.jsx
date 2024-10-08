@@ -6,7 +6,7 @@ import profile from "../../assets/all-images/slider-img/profile.jpg";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { encrypt, decrypt } from "../utils/cryptoUtils";
-import logo from "../../assets/all-images/logo/RentARide.png";
+import logo from "../../assets/all-images/logo/car_logo.png";
 
 const Header = () => {
   const [user, setUserName] = useState({ name: "Guest" });
@@ -108,7 +108,12 @@ const Header = () => {
               <div className="menu">
                 <div className="mobile_logo">
                   <NavLink to="/home" className="nav_logo_mobile ">
-                    <img src={logo} style={{ width: "100px" }} alt="Logo" />
+                    <img
+                      src={logo}
+                      style={{ width: "100px" }}
+                      alt="Logo"
+                      color="black"
+                    />
                   </NavLink>
                 </div>
 
@@ -234,7 +239,7 @@ const Header = () => {
                   </div>
 
                   <div
-                    className={`dropdown-menu `}
+                    className={`dropdown-menu ${showDropdown ? "show" : ""} `}
                     style={{
                       position: "absolute",
                       top: "100%", // Position dropdown below the image/name container
@@ -248,6 +253,9 @@ const Header = () => {
                       onClick={() => setShowDropdown(false)}>
                       <i className="ri-user-line"></i> My Profile
                     </Link>
+                    <span className="dropdown-item" onClick={handleSignOut}>
+                      <i className="ri-logout-box-line"></i> Logout
+                    </span>
                   </div>
                 </div>
               )}
