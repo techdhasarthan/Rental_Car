@@ -19,21 +19,16 @@ const HeroSlider = () => {
     pauseOnHover: false,
   };
   return (
-    <div className="slider">
-      <div className="slider__item slider__item-01 ">
-        <Container>
-          <div className="slider__content ">
-            <h1 className="text-light mb-4">
-              Reserve your ideal ride anytime !
-            </h1>
+    <div className="slider__item slider__item-01 ">
+      <div className="slider__content  ps-5">
+        <h1 className="text-light mb-4 ">Reserve your ideal ride anytime !</h1>
 
-            <button className="btn reserve__btn mt-4 hide-on-mobile">
-              <Link to="/cars">Book Now</Link>
-            </button>
-          </div>
-        </Container>
-        <FindCarForm />
+        <button className="btn reserve__btn mt-4 hide-on-mobile">
+          <Link to="/cars">Book Now</Link>
+        </button>
       </div>
+
+      <FindCarForm />
     </div>
   );
 };

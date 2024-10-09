@@ -1,7 +1,9 @@
 .slider__item {
   width: 100%;
-  height: 650px;
+  height: 550px;
 }
+
+
 
 
 
@@ -12,6 +14,7 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: calc(3000px);
+
 }
 
 .slider__item-02 {

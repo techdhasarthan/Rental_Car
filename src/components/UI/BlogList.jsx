@@ -3,8 +3,12 @@ import { Col } from "reactstrap";
 import "../../styles/blog-item.css";
 import { Link } from "react-router-dom";
 import blogData from "../../assets/data/blogData";
+import { useEffect } from "react";
 
 const BlogList = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to the top when component mounts
+  }, []);
   return (
     <>
       {blogData.map((item) => (

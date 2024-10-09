@@ -121,12 +121,8 @@ const Home = () => {
         <Container>
           <Row>
             <Col lg="12" className="mb-5 text-center">
-              <h6 className="section__subtitle" data-aos="flip-left">
-                See our
-              </h6>
-              <h2 className="section__title" data-aos="flip-left">
-                How We Works
-              </h2>
+              <h6 className="section__subtitle">See our</h6>
+              <h2 className="section__title">How We Works</h2>
             </Col>
             <div className="steps-container">
               {/* Your steps content here */}

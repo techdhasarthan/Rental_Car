@@ -7,12 +7,12 @@ import {
   FaFileWord,
   FaFileImage,
   FaFileDownload,
+  FaTrash, // Import the delete icon
 } from "react-icons/fa";
 import "remixicon/fonts/remixicon.css";
 import "./Document.css"; // Import the CSS file for styles
-import documentType from "../assets/all-images/document-img/document.png";
-import documentNo from "../assets/all-images/document-img/documentNo.png";
 import { decrypt } from "../components/utils/cryptoUtils";
+import { message } from "antd";
 
 const Document = () => {
   const decryptedUserName = decrypt(localStorage.getItem("name"));
@@ -59,10 +59,39 @@ const Document = () => {
   const handleDownload = (file) => {
     const link = document.createElement("a");
     link.href = `${BASE_URL}/RetrieveFile/` + file["File Name"];
-    link.download = file["File Name"];
+    link.target = "_blank"; // Open in new tab
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+  // Function to handle file deletion
+  const handleDelete = async (file) => {
+    try {
+      console.log("Attempting to delete:", file["File Name"]);
+
+      const response = await axios.post(
+        `${BASE_URL}/deleteCustomerDocumentsDetails`,
+        {
+          ID: file["ID"],
+        }
+      );
+
+      console.log("Response:", response.data);
+
+      if (response.data.status === "true") {
+        setUploadedFiles((prevFiles) =>
+          prevFiles.filter((item) => item["File Name"] !== file["File Name"])
+        );
+        message.success("Document deleted successfully.");
+        console.log("Document deleted successfully.");
+      } else {
+        message.error("Failed to delete document.");
+        console.log("Failed to delete document.");
+      }
+    } catch (error) {
+      message.error("Error deleting document:", error);
+      console.error("Error deleting document:", error);
+    }
   };
 
   // Function to return the correct icon based on file type
@@ -163,6 +192,15 @@ const Document = () => {
                     size={20}
                     className="download-icon"
                     onClick={() => handleDownload(file)}
+                    style={{ cursor: "pointer" }}
+                  />
+
+                  {/* Delete icon */}
+                  <FaTrash
+                    size={20}
+                    className="delete-icon"
+                    onClick={() => handleDelete(file)}
+                    style={{ cursor: "pointer", color: "red" }}
                   />
                 </div>
               </Col>

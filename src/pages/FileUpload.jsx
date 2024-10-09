@@ -4,7 +4,7 @@ import { Button } from "reactstrap";
 import "remixicon/fonts/remixicon.css";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import "aos/dist/aos.css"; // Import AOS styles
+import "aos/dist/aos.css";
 import AOS from "aos";
 import { message } from "antd";
 
@@ -13,7 +13,6 @@ const FileUpload = ({ id, onUploadSuccess }) => {
 
   const [show, setShow] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState(null);
-  const [uploadResponse, setUploadResponse] = useState(null);
   const [selectedDocumentType, setSelectedDocumentType] = useState("");
   const [documentNumber, setDocumentNumber] = useState("");
   const [nameOnDocument, setNameOnDocument] = useState("");
@@ -54,8 +53,8 @@ const FileUpload = ({ id, onUploadSuccess }) => {
 
     if (rejectedFiles.length > 0) {
       message.error("Excel files are not allowed.");
-      event.target.value = ""; // Reset the input value
-      setSelectedFiles(""); // Reset selected files state
+      event.target.value = "";
+      setSelectedFiles(null);
       return;
     }
 
@@ -66,23 +65,76 @@ const FileUpload = ({ id, onUploadSuccess }) => {
     setSelectedDocumentType(event.target.value);
   };
 
+  const validateForm = () => {
+    if (!selectedDocumentType) {
+      message.error("Please select a document type.");
+      return false;
+    }
+
+    // Validation based on document type
+    if (
+      selectedDocumentType === "Driving License" &&
+      documentNumber.length !== 16
+    ) {
+      message.error("Driving License number must be 16 digits.");
+      return false;
+    }
+    if (
+      selectedDocumentType === "Aadhar Card" &&
+      documentNumber.length !== 12
+    ) {
+      message.error("Aadhar Card number must be 12 digits.");
+      return false;
+    }
+    if (selectedDocumentType === "Pan Card") {
+      const panCardPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/; // PAN format validation
+      if (!panCardPattern.test(documentNumber)) {
+        message.error(
+          "PAN Card number must be 10 characters long and alphanumeric."
+        );
+        return false;
+      }
+    }
+
+    if (!documentNumber) {
+      message.error("Please enter a document number.");
+      return false;
+    }
+
+    if (!nameOnDocument) {
+      message.error("Please enter the name on the document.");
+      return false;
+    }
+
+    if (
+      selectedDocumentType === "Driving License" &&
+      (!issueDate || !expiryDate)
+    ) {
+      message.error("Please enter both issue and expiry dates.");
+      return false;
+    }
+
+    if (!selectedFiles) {
+      message.error("Please upload a file.");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleFileUpload = async (e) => {
     e.preventDefault();
 
-    // Check if necessary variables are defined
-    if (!selectedFiles || !id) {
-      console.error("No files selected or customer ID is missing.");
+    if (!validateForm()) {
       return;
     }
 
     const formData = new FormData();
 
-    // Append the selected files to the form data
     Array.from(selectedFiles).forEach((file) => {
       formData.append("files", file);
     });
 
-    // Append other document-related fields
     formData.append("documentType", selectedDocumentType || "");
     formData.append("documentNumber", documentNumber || "");
     formData.append("nameOnDocument", nameOnDocument || "");
@@ -90,30 +142,23 @@ const FileUpload = ({ id, onUploadSuccess }) => {
     formData.append("issueDate", issueDate || "");
     formData.append("expiryDate", expiryDate || "");
 
-    // Log form data for debugging purposes
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
-
     try {
       const response = await fetch(`${BASE_URL}/uploadCustomerDocuments`, {
         method: "POST",
         body: formData,
       });
 
-      // Since Spring Boot is returning a simple string, use response.text() to read it
       const result = await response.text();
 
       if (response.ok) {
-        message.success("Form submitted successfully:");
-        setUploadResponse(result); // You can set the "success" message in state or take further actions
+        message.success("Form submitted successfully.");
         handleClose();
-        onUploadSuccess(); // Call the success callback to notify parent
+        onUploadSuccess();
       } else {
-        message.error("Failed to submit form. Status:");
+        message.error("Failed to submit form.");
       }
     } catch (error) {
-      message.error("Error uploading file:", error);
+      message.error("Error uploading file.");
     }
   };
 
@@ -160,7 +205,7 @@ const FileUpload = ({ id, onUploadSuccess }) => {
 
             <Form.Label>Name On Document</Form.Label>
             <Form.Control
-              className="custom-placeholder "
+              className="custom-placeholder"
               type="text"
               placeholder="Enter Name On Document"
               value={nameOnDocument}

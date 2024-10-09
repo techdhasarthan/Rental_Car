@@ -12,6 +12,7 @@ const AboutSection = ({ aboutClass }) => {
       once: false, // Whether animation should happen only once
       mirror: false, // Whether elements should animate out while scrolling past them
     });
+    window.scrollTo(0, 0); // Scroll to the top when component mounts
   }, []);
   return (
     <section

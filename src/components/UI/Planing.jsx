@@ -49,6 +49,7 @@ const PricingPlan = ({ setStartDateProp, setEndDateProp }) => {
             id="startDate"
             className="form-control3"
             value={startDate}
+            min={getMinDateTime()}
             // Set min to current date/time
             onChange={handleStartDateChange} // Handle start date change
           />
@@ -61,7 +62,7 @@ const PricingPlan = ({ setStartDateProp, setEndDateProp }) => {
             id="endDate"
             className="form-control4"
             value={endDate}
-            // Set min to startDate or current date/time
+            min={startDate || getMinDateTime()} // Set min to startDate or current date/time
             onChange={handleEndDateChange} // Handle end date change
           />
         </div>

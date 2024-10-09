@@ -189,10 +189,13 @@ const UserProfile = () => {
       );
 
       if (response.status === 200) {
+        message.success("Profile updated successfully!"); // Show success message immediately
+
+        // Reload after 2 seconds
         setTimeout(() => {
           window.location.reload();
-        }, 2000); // 2000 milliseconds = 2 seconds
-        message.success("Profile updated successfully!");
+        }, 1000); // 2000 milliseconds = 2 seconds
+
         setOriginalUserInfo(userInfo); // Update original info with new profile image
         setIsEditing(false); // Exit editing mode
       } else {

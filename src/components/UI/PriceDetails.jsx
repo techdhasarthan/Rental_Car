@@ -7,6 +7,7 @@ import { message, Spin } from "antd";
 import { encrypt, decrypt } from "../utils/cryptoUtils";
 import axios from "axios";
 import HashLoader from "react-spinners/HashLoader";
+import encBase64 from "crypto-js/enc-base64";
 
 const PriceDetails = ({
   totalPayable,
@@ -193,86 +194,132 @@ const PriceDetails = ({
   }, [price]); // Recalculate whenever price changes
 
   if (error) return <div>Error: {error}</div>;
-
   const handleReserveClick = async () => {
-    setReservationLoading(true); // Start the reservation loading overlay
-    const decryptedDocumentCheckStatus = decrypt(
-      localStorage.getItem("status")
-    );
-    const documentCheckStatus = decryptedDocumentCheckStatus;
+    const options = {
+      key: "rzp_test_RcJak5fcO3zfR9", // Replace with your Razorpay Key ID
+      amount: TotalPayable * 100, // Amount in smallest currency unit
+      currency: "INR",
+      name: "Your Company Name",
+      description: "Test Transaction",
+      handler: async function (response) {
+        const razorpayPaymentId = response.razorpay_payment_id;
 
-    if ("true" === documentCheckStatus) {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, "0");
-      const day = String(now.getDate()).padStart(2, "0");
-      const hours = String(now.getHours()).padStart(2, "0");
-      const minutes = String(now.getMinutes()).padStart(2, "0");
+        if (razorpayPaymentId) {
+          // Make an authenticated API call to Razorpay to verify the payment
+          try {
+            const verifyResponse = await fetch(`${BASE_URL}/verify`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ razorPay: razorpayPaymentId }),
+            });
 
-      const currentDateTime = `${year}-${month}-${day} ${hours}:${minutes}`;
-      console.log(currentDateTime); // Output: YYYY-MM-DD HH:MM
+            if (!verifyResponse.ok) {
+              alert("Error verifying payment");
+              throw new Error(`Error: ${verifyResponse.status}`);
+            }
 
-      const combinedRequestBody = {
-        ID: "",
-        "Ticket ID": "",
-        "Created Date": currentDateTime,
-        "Customer Name": name,
-        "Mobile Number": phoneNo,
-        "Email ID": email,
-        "Car Number": carNo,
-        "Car Name": carName,
-        "Pickup Date": startdate,
-        "Return Date": enddate,
-        "Pickup Type": fulfillmentType,
-        "Approve Status": "New Booking",
-        "Car Image Name": imgUrl,
-        Address: address,
-        "Extra Info": extraInfo,
-        Duration: differenceInHours,
-        "Free Km": freeKm,
-        "Plan Based Payable Charges": price["Plan Based Payable Charges"],
-        "Base Fare": price["Base Fare"],
-        "Delivery / pickup Charges": price["Delivery Charges"],
-        "Secuirty Deposite Charges": price["Secuirty Deposite Charges"],
-        "No of Leave Day Charges": price["No Of Leave Day Charges"],
-        "Charges Type": price["Additional Charges"],
-        "Charges Type Based Amount": price["Charge Type Based Amount"],
-        "Total Payable": TotalPayable,
-      };
+            const verifyData = await verifyResponse.json();
 
-      try {
-        const apiResponse = await fetch(
-          `${BASE_URL}/updateAdminViewCustomerCarRentBookingDetails`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(combinedRequestBody),
+            if (verifyData.status === "true") {
+              setReservationLoading(true); // Start the reservation loading overlay
+              const documentCheckStatus = decrypt(
+                localStorage.getItem("status")
+              );
+
+              if (documentCheckStatus === "true") {
+                const now = new Date();
+                const formattedDate = now
+                  .toISOString()
+                  .slice(0, 16)
+                  .replace("T", " ");
+
+                const combinedRequestBody = {
+                  ID: "",
+                  "Ticket ID": "",
+                  "Created Date": formattedDate,
+                  "Customer Name": name,
+                  "Mobile Number": phoneNo,
+                  "Email ID": email,
+                  "Car Number": carNo,
+                  "Car Name": carName,
+                  "Pickup Date": startdate,
+                  "Return Date": enddate,
+                  "Pickup Type": fulfillmentType,
+                  "Approve Status": "New Booking",
+                  "Car Image Name": imgUrl,
+                  Address: address,
+                  "Extra Info": extraInfo,
+                  Duration: differenceInHours,
+                  "Free Km": freeKm,
+                  "Plan Based Payable Charges":
+                    price["Plan Based Payable Charges"],
+                  "Base Fare": price["Base Fare"],
+                  "Delivery / pickup Charges": price["Delivery Charges"],
+                  "Secuirty Deposite Charges":
+                    price["Secuirty Deposite Charges"],
+                  "No of Leave Day Charges": price["No Of Leave Day Charges"],
+                  "Charges Type": price["Additional Charges"],
+                  "Charges Type Based Amount":
+                    price["Charge Type Based Amount"],
+                  "Total Payable": TotalPayable,
+                };
+
+                try {
+                  const reservationResponse = await fetch(
+                    `${BASE_URL}/updateAdminViewCustomerCarRentBookingDetails`,
+                    {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify(combinedRequestBody),
+                    }
+                  );
+
+                  const reservationData = await reservationResponse.json();
+
+                  if (reservationData.status === "true") {
+                    message.success("Car reservation successful!");
+                    localStorage.removeItem("fulfillment");
+                    localStorage.removeItem("deliveryInfo");
+                    localStorage.removeItem("extraInfo");
+                  } else {
+                    message.error(
+                      "Car is not available, please schedule for another time period."
+                    );
+                  }
+                } catch (error) {
+                  console.error("Error occurred during reservation:", error);
+                } finally {
+                  setIsReserving(false);
+                  setReservationLoading(false);
+                }
+              } else {
+                message.error("Please upload Document file!");
+                setReservationLoading(false);
+              }
+            } else {
+              alert("Payment verification failed.");
+            }
+          } catch (error) {
+            console.error("Error verifying payment:", error);
+            alert("Error verifying payment.");
           }
-        );
-
-        const responseData = await apiResponse.json();
-        setResData(responseData.data);
-
-        if (responseData.status === "true") {
-          message.success("Car reservation successful!");
-          localStorage.removeItem("fulfillment");
-          localStorage.removeItem("deliveryInfo");
-          localStorage.removeItem("extraInfo");
-        } else {
-          message.error(
-            "Car is not available, please schedule for another time period."
-          );
         }
-      } catch (error) {
-        console.error("Error occurred during reservation:", error);
-      } finally {
-        setIsReserving(false); // End the reservation loading state
-        setReservationLoading(false); // Hide the reservation overlay
-      }
-    } else {
-      message.error("Please upload Document file!");
-      setReservationLoading(false); // Hide the reservation overlay
-    }
+      },
+      prefill: {
+        name: name,
+        email: email,
+        contact: phoneNo,
+      },
+      notes: {
+        address: fulfillmentType,
+      },
+      theme: {
+        color: "#F37254",
+      },
+    };
+
+    const razorpay = new window.Razorpay(options);
+    razorpay.open();
   };
 
   return (

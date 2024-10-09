@@ -170,8 +170,8 @@ const CarListing = () => {
       kmLimit: selectedKmPlan || "", // Selected plan or empty
       location: selectedLocations.length > 0 ? selectedLocations.join(",") : "",
       sortByPrice: sortByPrice,
-      fromDate: startdate ? startdate : Fromdate,
-      toDate: enddate ? enddate : Todate,
+      fromDate: startdate ? startdate : fromdate,
+      toDate: enddate ? enddate : todate,
     };
 
     try {

@@ -151,8 +151,8 @@ const Header = () => {
 
                 <NavLink
                   to="/home"
-                  className="nav__item nav_home d-flex align-items-center gap-2 text-white">
-                  <div className="MobileViewIcon d-flex align-items-center gap-2">
+                  className="nav__item nav_home d-flex align-items-center gap-2 text-white ">
+                  <div className="MobileViewIcon d-flex align-items-center gap-2 nav_item_home">
                     <i className="ri-home-4-fill"></i>
                     <span className="pt-1">Home</span>
                   </div>

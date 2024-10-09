@@ -79,19 +79,52 @@ function UploadConfirm() {
 
   const validateForm = () => {
     const errors = {};
-
-    if (!selectedDocumentType)
-      errors.documentType = "Document type is required.";
-    if (!documentNumber) errors.documentNumber = "Document number is required.";
-    if (!nameOnDocument)
-      errors.nameOnDocument = "Name on document is required.";
-
-    if (selectedDocumentType === "Driving License" && !issueDate) {
-      errors.issueDate = "Issue date is required for Driving License.";
+    if (!selectedDocumentType) {
+      message.error("Please select a document type.");
+      return false;
     }
 
-    if (selectedDocumentType === "Driving License" && !expiryDate) {
-      errors.expiryDate = "Expiry date is required for Driving License.";
+    // Validation based on document type
+    if (
+      selectedDocumentType === "Driving License" &&
+      documentNumber.length !== 16
+    ) {
+      message.error("Driving License number must be 16 digits.");
+      return false;
+    }
+    if (
+      selectedDocumentType === "Aadhar Card" &&
+      documentNumber.length !== 12
+    ) {
+      message.error("Aadhar Card number must be 12 digits.");
+      return false;
+    }
+    if (selectedDocumentType === "Pan Card") {
+      const panCardPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/; // PAN format validation
+      if (!panCardPattern.test(documentNumber)) {
+        message.error(
+          "PAN Card number must be 10 characters long and alphanumeric."
+        );
+        return false;
+      }
+    }
+
+    if (!documentNumber) {
+      message.error("Please enter a document number.");
+      return false;
+    }
+
+    if (!nameOnDocument) {
+      message.error("Please enter the name on the document.");
+      return false;
+    }
+
+    if (
+      selectedDocumentType === "Driving License" &&
+      (!issueDate || !expiryDate)
+    ) {
+      message.error("Please enter both issue and expiry dates.");
+      return false;
     }
 
     if (!selectedFiles || selectedFiles.length === 0) {
@@ -218,7 +251,6 @@ function UploadConfirm() {
                       <option value="Driving License">Driving License</option>
                       <option value="Aadhar Card">Aadhar Card</option>
                       <option value="Pan Card">Pan Card</option>
-                      <option value="Voter ID">Voter ID</option>
                     </Form.Control>
                     {errors.documentType && (
                       <p className="error">{errors.documentType}</p>
